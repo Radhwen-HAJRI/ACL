@@ -1,0 +1,71 @@
+Objectifs du Sprint 1
+
+-   Mettre en place une première version jouable du projet avec
+    interface graphique simple.
+-   Permettre au héros de se déplacer et d’interagir basiquement avec
+    l’environnement.
+-   Ajouter les premiers éléments : monstres, labyrinthe, clés et points
+    de santé.
+-   Avoir une base stable pour évoluer vers des fonctionnalités plus
+    complexes (attaques, niveaux, score…).
+
+------------------------------------------------------------------------
+Backlog Sprint 1 
+
+  ----------------------------------------------------------------------------------------------------
+  Fonctionnalité   Critères d’acceptation    Sous-tâches techniques         Estimation   Responsable
+  ---------------- ------------------------- ------------------------------ ------------ -------------
+  Déplacement du   Le héros peut se déplacer - Créer classe Heros  -        3 pts        Nada
+  héros            dans 4 directions (haut,  Implémenter méthode deplacer()              
+                   bas, gauche, droite)       - Lier les touches clavier                 
+
+  Interface        Afficher une fenêtre      - Créer classe Interface  -    3 pts        Nada
+  graphique simple permettant de voir le     Intégrer le héros dans                      
+                   héros et tester ses       l’interface  - Tester                       
+                   déplacements              déplacements basiques                       
+
+  Placement de     Monstres placés           - Créer classe Monstre  -      2 pts        Maram
+  monstres         aléatoirement dans        Définir attributs (position,                
+                   l’interface, avec un      type)  - Méthode                            
+                   nombre défini à l’avance  placerAleatoirement()                       
+
+  Labyrinthe de    Labyrinthe affiché dans   - Créer classe Labyrinthe  -   3 pts        Maram
+  base             l’interface, cohérent     Méthodes cheminsValides() et                
+                   avec héros et monstres    cheminsInvalides()  -                       
+                                             Affichage grille                            
+
+  Gestion des clés Générer un nombre fixe de - Créer classe Key  - Générer  3 pts        Redone
+                   clés par niveau,          répartition aléatoire  -                    
+                   réparties aléatoirement.  Détection collision héros/clé               
+                   Victoire = toutes          - Vérifier condition de                    
+                   collectées                victoire                                    
+
+  Points de santé  Le héros perd des PV en   - Créer classe HealthPoints  - 2 pts        Redone
+                   cas de collision avec un  Attribut points  - Décrémenter              
+                   monstre. Game Over si PV  en cas de collision  -                      
+                   = 0                       Déclencher fin de partie si 0               
+                                             PV                                          
+  ----------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+Comparatif Prévision vs Réalité
+
+  -------------------------------------------------------------------------
+  Fonctionnalité           Prévu             Réalisé          Commentaire             
+  ------------------------ ----------------- ---------------- -------------
+  Déplacement du héros     3 pts                              
+
+  Interface graphique      3 pts                              
+  simple                                                      
+
+  Placement de monstres    2 pts                              
+
+  Labyrinthe de base       3 pts                              
+
+  Gestion des clés         3 pts                              
+
+  Points de santé          2 pts                              
+  -------------------------------------------------------------------------
+
+
