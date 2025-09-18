@@ -1,0 +1,10 @@
+Objectifs du Sprint 0
+
+-   Mettre en place une première version jouable du projet avec
+    interface graphique simple.
+-   Permettre au héros de se déplacer et d’interagir basiquement avec
+    l’environnement.
+-   Ajouter les premiers éléments : monstres, labyrinthe, clés et points
+    de santé.
+-   Avoir une base stable pour évoluer vers des fonctionnalités plus
+    complexes (attaques, niveaux, score…).
