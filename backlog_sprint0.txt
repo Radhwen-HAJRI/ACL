@@ -1,16 +1,6 @@
-Objectifs du Sprint 1
-
--   Mettre en place une première version jouable du projet avec
-    interface graphique simple.
--   Permettre au héros de se déplacer et d’interagir basiquement avec
-    l’environnement.
--   Ajouter les premiers éléments : monstres, labyrinthe, clés et points
-    de santé.
--   Avoir une base stable pour évoluer vers des fonctionnalités plus
-    complexes (attaques, niveaux, score…).
 
 ------------------------------------------------------------------------
-Backlog Sprint 1 
+Backlog Sprint 0
 
   ----------------------------------------------------------------------------------------------------
   Fonctionnalité   Critères d’acceptation    Sous-tâches techniques         Estimation   Responsable
