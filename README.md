@@ -7,5 +7,5 @@ Cette première version (v0) est simple : elle permet de créer un héros (repr�
 
 ##  Compilation et exécution
 **Langage :** Java  
-**Version du JDK :** OpenJDK 17 ou supéri
+**Version du JDK :** OpenJDK 25
 
