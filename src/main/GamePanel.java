@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    // SCREEN SETTINGS
+    
     final int originalTileSize = 32;
     final int scale = 2;
 
@@ -23,7 +23,7 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     int FPS = 60;
 
-    // Position du carré
+    
     int squareX = 100;
     int squareY = 100;
     int speed = 4;
@@ -62,7 +62,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        // Déplacement selon les touches pressées
+        
         if (keyH.upPressed) squareY -= speed;
         if (keyH.downPressed) squareY += speed;
         if (keyH.leftPressed) squareX -= speed;
