@@ -8,6 +8,12 @@ public class KeyHandler implements KeyListener{
      
     
 
+     @Override
+    public void keyTyped(KeyEvent e) {
+    // Optionnel : laisse vide si tu n’as rien à faire ici
+    }
+
+    
     @Override
     public void keyPressed(KeyEvent e) {
         
