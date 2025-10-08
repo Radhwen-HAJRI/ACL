@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    
     final int originalTileSize = 32;
     final int scale = 2;
 
@@ -23,7 +22,6 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     int FPS = 60;
 
-    
     int squareX = 100;
     int squareY = 100;
     int speed = 4;
@@ -52,7 +50,8 @@ public class GamePanel extends JPanel implements Runnable {
 
             try {
                 double remainingTime = nextDrawTime - System.nanoTime();
-                if (remainingTime < 0) remainingTime = 0;
+                if (remainingTime < 0)
+                    remainingTime = 0;
                 Thread.sleep((long) (remainingTime / 1000000));
                 nextDrawTime += drawInterval;
             } catch (InterruptedException e) {
@@ -62,11 +61,15 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        
-        if (keyH.upPressed) squareY -= speed;
-        if (keyH.downPressed) squareY += speed;
-        if (keyH.leftPressed) squareX -= speed;
-        if (keyH.rightPressed) squareX += speed;
+
+        if (keyH.upPressed)
+            squareY -= speed;
+        if (keyH.downPressed)
+            squareY += speed;
+        if (keyH.leftPressed)
+            squareX -= speed;
+        if (keyH.rightPressed)
+            squareX += speed;
     }
 
     @Override
@@ -74,7 +77,6 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        // Dessine le carré
         g2.setColor(Color.white);
         g2.fillRect(squareX, squareY, tileSize, tileSize);
 
