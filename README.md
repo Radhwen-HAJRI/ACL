@@ -1,4 +1,4 @@
-# Balade dans un Labyrinthe — Sprint 0
+# Balade dans un Labyrinthe 
 
 ### HOW TO RUN
 
