@@ -1,4 +1,5 @@
 tile\TileManager.class
+main\java\Labyrinthe.class
 main\KeyHandler.class
 entity\Entity.class
 main\GamePanel.class

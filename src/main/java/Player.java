@@ -43,9 +43,56 @@ public final class Player extends Entity {
         }
     }
 
-
-
     public void update() {
+        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
+            // Reset sprite si pas de mouvement (idle plus tard)
+            spriteCounter++;
+            if (spriteCounter > 12) {
+                spriteNum = (spriteNum == 1) ? 2 : 1;
+                spriteCounter = 0;
+            }
+
+            // Check et bouge par direction (priorité : une seule à la fois, mais tolère diag)
+            if (keyH.upPressed) {
+                int nextY = y - speed;  // Nouvelle pos test
+                if (gp.canMoveHere(x, nextY)) {  // Si libre
+                    y = nextY;
+                }
+                direction = "up";
+            }
+            else if (keyH.downPressed) {  // 'else' pour éviter diag trop rapide ? Optionnel, enlève si tu veux diag
+                int nextY = y + speed;
+                if (gp.canMoveHere(x, nextY)) {
+                    y = nextY;
+                }
+                direction = "down";
+            }
+            if (keyH.leftPressed) {
+                int nextX = x - speed;
+                if (gp.canMoveHere(nextX, y)) {
+                    x = nextX;
+                }
+                direction = "left";
+            }
+            else if (keyH.rightPressed) {
+                int nextX = x + speed;
+                if (gp.canMoveHere(nextX, y)) {
+                    x = nextX;
+                }
+                direction = "right";
+            }
+
+            spriteCounter++;
+            if (spriteCounter > 12) {
+                spriteNum = (spriteNum == 1) ? 2 : 1;
+                spriteCounter = 0;
+            }
+        }
+    }
+
+
+
+    /*public void update() {
     
     if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
 
@@ -73,7 +120,7 @@ public final class Player extends Entity {
             spriteCounter = 0;
         }
     }
-}
+}*/
 
 
     public void draw(Graphics2D g2) {
