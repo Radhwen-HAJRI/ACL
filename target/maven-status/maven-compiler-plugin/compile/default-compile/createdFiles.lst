@@ -1,5 +1,7 @@
-main\GamePanel.class
+tile\TileManager.class
 main\KeyHandler.class
-entity\Player.class
 entity\Entity.class
+main\GamePanel.class
+tile\Tile.class
+entity\Player.class
 main\main.class

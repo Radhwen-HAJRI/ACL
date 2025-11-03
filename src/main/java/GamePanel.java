@@ -4,23 +4,31 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+
 import javax.swing.JPanel;
+
+import entity.Player;
+import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    final int originalTileSize = 32;
-    final int scale = 2;
+    public final int originalTileSize = 16;
+    public final int scale = 2;
 
     public final int tileSize = originalTileSize * scale;
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 16;
+    public final int maxScreenCol = 16;
+    public final int maxScreenRow = 16;
 
-    final int screenWidth = tileSize * maxScreenCol;
-    final int screenHeight = tileSize * maxScreenRow;
+    public final int screenWidth = tileSize * maxScreenCol;
+    public final int screenHeight = tileSize * maxScreenRow;
 
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
+
+    Player player = new Player(this, keyH);
+
     int FPS = 60;
+    TileManager tileM = new TileManager(this);
 
     int squareX = 100;
     int squareY = 100;
@@ -62,23 +70,16 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
 
-        if (keyH.upPressed)
-            squareY -= speed;
-        if (keyH.downPressed)
-            squareY += speed;
-        if (keyH.leftPressed)
-            squareX -= speed;
-        if (keyH.rightPressed)
-            squareX += speed;
+        player.update();
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-
-        g2.setColor(Color.white);
-        g2.fillRect(squareX, squareY, tileSize, tileSize);
+        tileM.draw(g2);
+        
+        player.draw(g2);
 
         g2.dispose();
     }
