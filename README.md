@@ -12,6 +12,11 @@ git@github.com:Radhwen-HAJRI/ACL.git
 ```
 
 ## STEP 01 - DOWNLOAD MAVEN AND JAVA
+
+OpenJDK 25
+
+
+## STEP 02 - RUN THE FOLLOWING COMMAND
 ```bash 
 
 mvn clean package
