@@ -14,6 +14,13 @@ git@github.com:Radhwen-HAJRI/ACL.git
 ## STEP 01 - DOWNLOAD MAVEN AND JAVA
 ```bash 
 
+mvn clean package
+
+```
+
+
+```bash 
+
 java -cp target/labyrinthe-1.0-SNAPSHOT.jar main.main
 
 ```
