@@ -1,4 +1,4 @@
-# Balade dans un Labyrinthe — Sprint 0
+# Balade dans un Labyrinthe 
 
 ### HOW TO RUN
 
@@ -12,6 +12,18 @@ git@github.com:Radhwen-HAJRI/ACL.git
 ```
 
 ## STEP 01 - DOWNLOAD MAVEN AND JAVA
+
+OpenJDK 25
+
+
+## STEP 02 - RUN THE FOLLOWING COMMAND
+```bash 
+
+mvn clean package
+
+```
+
+
 ```bash 
 
 java -cp target/labyrinthe-1.0-SNAPSHOT.jar main.main
