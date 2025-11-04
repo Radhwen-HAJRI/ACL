@@ -1,0 +1,35 @@
+Backlog_Sprint_2.txt
+------------------------------------------------------------------------
+Backlog Sprint 2
+
+  ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Fonctionnalité              Critères d’acceptation                            Sous-tâches techniques                                  Estimation   Responsable
+  --------------------------- ------------------------------------------------- ------------------------------------------------------- ------------ ------------
+  Victoire au trésor          Quand le héros atteint le point d'arrivée        - Détecter proximité héros-trésor dans Player.update().     2 pts        Radhwen
+                             (trésor), un écran "Jeu Gagné" s'affiche,         - Ajouter flag gameWon dans GamePanel.               
+                             avec option de rejouer ; le jeu s'arrête          - Overlay texte "Gagné !" + reset (R pour rejouer). 
+                             et reset les états.                               - Tester avec chemin complet.                      
+
+  Système de points de vie    Le héros a 3 PV initiaux ; chaque collision      - Ajouter int health=3 dans Player.                         3 pts        Maram
+  (PV)                        monstre -1 PV ; à 0 PV, game over (écran fin,    - Dans check collision héros-monstre : health-- ; 
+                             reset). Pas de mort instantanée.                  si health<=0, gameOver=true.
+                                                                              - Afficher PV en HUD simple (texte).
+                                                                              - Reset health au rejouer.    
+
+  Affichage HUD (PV + Score)  Barre d'UI en haut/coin : montre PV actuels      - Ajouter drawHUD() dans GamePanel.paintComponent().        2 pts        Nada
+                             et score (ex: temps joué ou monstres évités).     - Score basique (ex: +10 pts par monstre évité).
+                             Mise à jour en temps réel.                        - Police/position fixe, non intrusive.
+
+  Sons basiques               Sons pour mouvements, collision monstre,         - Créer classe SoundManager (load/play).                    2 pts        Maram
+                             victoire/défaite (WAV simples).                   - Intégrer playSound() dans update() 
+                             Joués via Java Sound API.                         (mouvement/collision). 
+                                                                              - Assets sons dans /resources/sounds/.
+
+  Amélioration IA monstres    Monstres suivent un pathfinding simple           - Ajouter moveTowardsPlayer() dans Monstre.update().        3 pts        Nada
+                             vers héros (A* basique ou random walk             - Utiliser canMoveHere() pour paths.
+                             amélioré), respectent toujours les murs.          - Limiter vitesse pour équilibrer.
+
+  Système de niveaux          Après victoire, charge une nouvelle map          - Ajouter liste maps dans Labyrinthe.                       3 pts        Radhwen
+  multiples                   (/maps/map2.txt) plus dure ; menu simple         - Méthode loadNextLevel() après win.
+                             pour sélectionner niveau.                         - Spawn reset + monstres adaptés.
+  --------------------------------------------------------------------------------------------------------------------------------------------------------------
