@@ -24,8 +24,8 @@ public class Monster extends Entity {
     }
 
     public void setDefaultValues() {
-        x = gp.tileSize * 8;  // Milieu du labyrinthe
-        y = gp.tileSize * 8;
+        worldx = gp.tileSize * 8;  // Milieu du labyrinthe
+        worldy = gp.tileSize * 8;
         speed = 2; // Plus lent que le joueur
         direction = "down";
     }
@@ -51,10 +51,10 @@ public class Monster extends Entity {
 
         // Déplacement SANS vérification de collision
         switch (direction) {
-            case "up":    y -= speed; break;
-            case "down":  y += speed; break;
-            case "left":  x -= speed; break;
-            case "right": x += speed; break;
+            case "up":    screenX -= speed; break;
+            case "down":  screenY += speed; break;
+            case "left":  screenX -= speed; break;
+            case "right": screenX += speed; break;
         }
 
         // Animation simple (même sprite, mais on garde le système)
@@ -65,10 +65,10 @@ public class Monster extends Entity {
         }
 
         // Optionnel : garder dans l'écran (rebond ou wrap-around)
-        if (x < 0) x = 0;
-        if (x > gp.screenWidth - gp.tileSize) x = gp.screenWidth - gp.tileSize;
-        if (y < 0) y = 0;
-        if (y > gp.screenHeight - gp.tileSize) y = gp.screenHeight - gp.tileSize;
+        if (screenX < 0) screenX = 0;
+        if (screenX > gp.screenWidth - gp.tileSize) screenX = gp.screenWidth - gp.tileSize;
+        if (screenY < 0) screenY = 0;
+        if (screenY > gp.screenHeight - gp.tileSize) screenY = gp.screenHeight - gp.tileSize;
     }
 
     public void draw(Graphics2D g2) {
@@ -79,6 +79,6 @@ public class Monster extends Entity {
             case "left":  image = left1; break;
             case "right": image = right1; break;
         }
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
 }

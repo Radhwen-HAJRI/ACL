@@ -11,16 +11,22 @@ public final class Player extends Entity {
     GamePanel gp;
     KeyHandler keyH;
 
+    public final int screenX;
+    public final int screenY;
+
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyH = keyH;
+
+        screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
+        screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
         setDefaultValues();
         getPlayerImage();
     }
 
     public void setDefaultValues() {
-        x = 100;
-        y = 100;
+        worldx = gp.tileSize * 23;
+        worldy = gp.tileSize * 21;
         speed = 4;
         direction = "down";
 
@@ -54,30 +60,30 @@ public final class Player extends Entity {
 
             // Check et bouge par direction (priorité : une seule à la fois, mais tolère diag)
             if (keyH.upPressed) {
-                int nextY = y - speed;  // Nouvelle pos test
-                if (gp.canMoveHere(x, nextY)) {  // Si libre
-                    y = nextY;
+                int nextY = worldy - speed;  // Nouvelle pos test
+                if (gp.canMoveHere(worldx, nextY)) {  // Si libre
+                    worldy = nextY;
                 }
                 direction = "up";
             }
             else if (keyH.downPressed) {  // 'else' pour éviter diag trop rapide ? Optionnel, enlève si tu veux diag
-                int nextY = y + speed;
-                if (gp.canMoveHere(x, nextY)) {
-                    y = nextY;
+                int nextY = worldy + speed;
+                if (gp.canMoveHere(worldx, nextY)) {
+                    worldy = nextY;
                 }
                 direction = "down";
             }
             if (keyH.leftPressed) {
-                int nextX = x - speed;
-                if (gp.canMoveHere(nextX, y)) {
-                    x = nextX;
+                int nextX = worldx - speed;
+                if (gp.canMoveHere(nextX, worldy)) {
+                    worldx = nextX;
                 }
                 direction = "left";
             }
             else if (keyH.rightPressed) {
-                int nextX = x + speed;
-                if (gp.canMoveHere(nextX, y)) {
-                    x = nextX;
+                int nextX = worldx + speed;
+                if (gp.canMoveHere(nextX, worldy)) {
+                    worldx = nextX;
                 }
                 direction = "right";
             }
@@ -164,7 +170,7 @@ public final class Player extends Entity {
 
                 break;
         }
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
     }
 }

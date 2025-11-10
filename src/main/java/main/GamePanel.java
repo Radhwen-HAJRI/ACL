@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import entity.Monster; 
 import entity.Player;
 import main.java.Labyrinthe;
-import tile.TileManager;
 
 
 public class GamePanel extends JPanel implements Runnable {
@@ -26,10 +25,19 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
 
+
+    // world map parameters
+
+    public final int maxWorldCol = 50;
+    public final int maxWorldRow = 50;
+    public final int worldWidth = tileSize * maxWorldCol;
+    public final int worldHeight = tileSize * maxWorldRow;
+
+
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
 
-    Player player = new Player(this, keyH);
+    public Player player = new Player(this, keyH);
    // Monster monster ; 
    Monster[] monsters;
    int nbMonsters;
@@ -50,8 +58,9 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyH);
         this.setFocusable(true);
 
-        player.x = labyrinthM.getPointDepart().x;
-        player.y = labyrinthM.getPointDepart().y;
+        player.worldx = (maxWorldCol * tileSize) / 2;
+        player.worldy = (maxWorldRow * tileSize) / 2;
+
 
         //Monster monster = new Monster(this); // Crée le monstre
     Random rand = new Random();
@@ -62,8 +71,8 @@ public class GamePanel extends JPanel implements Runnable {
     for (int i = 0; i < nbMonsters; i++) {
         monsters[i] = new Monster(this);
         // Position aléatoire dans le labyrinthe (évite le spawn du joueur)
-        monsters[i].x = this.tileSize * rand.nextInt(this.maxScreenCol - 1) + this.tileSize;
-        monsters[i].y = this.tileSize * rand.nextInt(this.maxScreenRow - 1) + this.tileSize;
+        monsters[i].worldx = this.tileSize * rand.nextInt(this.maxScreenCol - 1) + this.tileSize;
+        monsters[i].worldy = this.tileSize * rand.nextInt(this.maxScreenRow - 1) + this.tileSize;
     }
     }
 
@@ -78,8 +87,8 @@ public class GamePanel extends JPanel implements Runnable {
         int bottomRow = (nextY + tileSize - 1) / tileSize;
 
         // Vérifie limites écran (pas hors map)
-        if (leftCol < 0 || rightCol >= maxScreenCol || topRow < 0 || bottomRow >= maxScreenRow) {
-            return false;
+        if (leftCol < 0 || rightCol >= maxWorldCol || topRow < 0 || bottomRow >= maxWorldRow) {
+        return false;
         }
 
         // Check collision sur les 4 coins (via map de labyrinthM)
@@ -132,8 +141,8 @@ public class GamePanel extends JPanel implements Runnable {
     // Détecte collision joueur-monstre
     for (int i = 0; i < nbMonsters; i++) {
         // Distance < tileSize/2 → collision
-        int dx = Math.abs(player.x - monsters[i].x);
-        int dy = Math.abs(player.y - monsters[i].y);
+        int dx = Math.abs(player.worldx - monsters[i].worldx);
+        int dy = Math.abs(player.worldy - monsters[i].worldy);
         if (dx < this.tileSize && dy < this.tileSize) {
             gameOver = true;
             System.out.println("GAME OVER ! 😵");
