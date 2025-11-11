@@ -27,6 +27,12 @@ public class Monster extends Entity {
     public ArrayList<BufferedImage> runAnimLeft;
     public ArrayList<BufferedImage> attackAnimLeft;
 
+
+
+    public int health = 3;
+    public boolean alive = true;
+
+
     public String state = "wandering";
     public int attackRange;
 
@@ -92,6 +98,9 @@ public class Monster extends Entity {
     }
 
     public void update() {
+
+        if (!alive) { return; }
+
         // Calcul de la distance avec le joueur
         int dx = Math.abs(gp.player.worldx - this.worldx);
         int dy = Math.abs(gp.player.worldy - this.worldy);
@@ -248,6 +257,8 @@ public class Monster extends Entity {
     }
 
     public void draw(Graphics2D g2) {
+
+        if (!alive) { return; }
         BufferedImage image = null;
         ArrayList<BufferedImage> currentAnim = null;
         ArrayList<BufferedImage> currentAnimLeft = null;

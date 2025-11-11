@@ -90,7 +90,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.worldy = (int) labyrinthM.getPointDepart().y;
 
         Random rand = new Random();
-        nbMonsters = 2 + rand.nextInt(3);  // 4,5,6,7,8
+        nbMonsters = 7 + rand.nextInt(8);  // 4,5,6,7,8
         System.out.println("Nombre de monstres créés : " + nbMonsters);
         
         monsters = new Monster[nbMonsters];
@@ -172,47 +172,114 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
     }
-
-    public void update() {
-    
-        player.update();
-
-        if (!gameWon && !gameOver) { 
-            int dx = Math.abs(player.worldx - (int)labyrinthM.pointArrivee.x);
-            int dy = Math.abs(player.worldy - (int)labyrinthM.pointArrivee.y);
-            if (dx < labyrinthM.gp.tileSize && dy < labyrinthM.gp.tileSize) { 
-                gameWon = true;
-                System.out.println("YOU WON!");  
-            }
-        } else {
+/**
+     * Vérifie si le joueur (en état d'attaque) touche un monstre.
+     * C'est ici qu'est gérée la "demi-case" de portée.
+     */
+    public void checkPlayerAttack() {
+        // On ne vérifie que si le joueur est EN TRAIN d'attaquer
+        // ET s'il n'a pas déjà touché qqn avec ce coup
+        if (!player.state.equals("attacking") || player.hasHitThisSwing) {
             return;
         }
 
-        // Détecte collision joueur-monstre (perte PV)
-        if (!gameOver && !gameWon) {
-            for (int i = 0; i < nbMonsters; i++) {
+        // 1. Définir la portée d'attaque (demi-case, comme demandé)
+        int attackDistance =  this.tileSize  ;
+
+        // 2. Parcourir tous les monstres
+        for (int i = 0; i < nbMonsters; i++) {
+            if (monsters[i] != null && monsters[i].alive) {
+                
+                // 3. Calculer la distance entre le joueur et le monstre
                 int dx = Math.abs(player.worldx - monsters[i].worldx);
                 int dy = Math.abs(player.worldy - monsters[i].worldy);
-                if (dx < this.tileSize && dy < this.tileSize) {  
-                    if (player.invincibleCounter == 0) { 
+
+                // 4. Vérifier la collision
+                // On vérifie si les DEUX distances (dx et dy) sont DANS la "hitbox"
+                // ET si la distance totale est assez petite (demi-case)
+                if (dx < this.tileSize && dy < this.tileSize && 
+                    (dx*dx + dy*dy) < (attackDistance * attackDistance)) {
+                    
+                    // C'EST TOUCHÉ !
+                    monsters[i].health--; // Le monstre perd 1 PV
+                    System.out.println("Monstre touché ! Vie restante : " + monsters[i].health);
+                    player.hasHitThisSwing = true; // Le joueur a touché, son coup est "fini"
+                    
+                    // Optionnel : un monstre ne peut pas être un "Chaser" s'il est touché
+                    // monsters[i].isChaser = false; 
+                    // monsters[i].setState("wandering");
+                    
+                    // On sort de la boucle (1 coup = 1 monstre touché max)
+                    break; 
+                }
+            }
+        }
+    }
+ 
+    public void update() {
+    
+        if (gameOver || gameWon) {
+            return; // Arrête tout si le jeu est fini
+        }
+
+        // --- 1. Mettre à jour le joueur ---
+        player.update();
+
+        // --- 2. Vérifier si le joueur attaque un monstre ---
+        checkPlayerAttack(); // Notre nouvelle méthode
+
+        // --- 3. Mettre à jour les monstres ---
+        for (int i = 0; i < nbMonsters; i++) {
+            if (monsters[i] != null) {
+                
+                // Si le monstre n'a plus de vie, il est mort
+                if (monsters[i].health <= 0) {
+                    monsters[i].alive = false;
+                }
+                
+                // Seuls les monstres en vie sont mis à jour
+                if (monsters[i].alive) {
+                    monsters[i].update();
+                }
+            }
+        }
+
+        // --- 4. Vérifier les collisions et conditions de fin ---
+        
+        // Détecte collision joueur-monstre (le joueur prend des dégâts)
+        if (player.invincibleCounter == 0 && !player.state.equals("attacking")) {
+            for (int i = 0; i < nbMonsters; i++) {
+                // On vérifie seulement si le monstre est VIVANT
+                if (monsters[i] != null && monsters[i].alive) {
+                    
+                    // C'est votre "demi-case" pour le GAME OVER
+                    int dx = Math.abs(player.worldx - monsters[i].worldx);
+                    int dy = Math.abs(player.worldy - monsters[i].worldy);
+                    int hitRange = this.tileSize / 2; // Demi-case
+
+                    if (dx < hitRange && dy < hitRange) {  
                         player.health--;
-                        player.invincibleCounter = player.invincibleDuration;  // Active i-frames
+                        player.invincibleCounter = player.invincibleDuration; // Active i-frames
                         System.out.println("Collision ! PV restants: " + player.health);
+                        
                         if (player.health <= 0) {
                             gameOver = true;
                             System.out.println("GAME OVER ! PV à 0 😵");
+                            return; // Sort de update()
                         }
+                        break; // Une seule collision par frame
                     }
-                    break;  // Une collision par frame max
                 }
             }
-        } else {
-            return;
         }
 
-        // Met à jour les monstres
-        for (int i = 0; i < nbMonsters; i++) {
-            monsters[i].update();
+        // Condition de victoire
+        int dx = Math.abs(player.worldx - (int)labyrinthM.pointArrivee.x);
+        int dy = Math.abs(player.worldy - (int)labyrinthM.pointArrivee.y);
+        if (dx < this.tileSize && dy < this.tileSize) {
+            gameWon = true;
+            System.out.println("YOU WON! 🎉");
+            return; // Sort de update()
         }
     }
 
@@ -288,7 +355,9 @@ public class GamePanel extends JPanel implements Runnable {
 
             
             for (int i = 0; i < nbMonsters; i++) {
-                monsters[i].draw(g2);
+              if (monsters[i] != null && monsters[i].alive) { // <-- LIGNE MODIFIÉE
+                    monsters[i].draw(g2);
+                }
             }
         }
         

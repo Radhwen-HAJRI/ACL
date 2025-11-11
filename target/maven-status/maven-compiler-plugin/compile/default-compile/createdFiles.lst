@@ -1,9 +1,9 @@
-entity\Monster.class
 entity\Player.class
-tile\TileManager.class
 main\KeyHandler.class
-entity\Entity.class
 main\GamePanel.class
-main\Labyrinthe.class
 tile\Tile.class
 main\main.class
+entity\Monster.class
+tile\TileManager.class
+entity\Entity.class
+main\Labyrinthe.class
