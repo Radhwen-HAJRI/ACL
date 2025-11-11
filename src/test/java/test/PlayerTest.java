@@ -1,15 +1,17 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.lang.reflect.Modifier;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import entity.Player;
 import main.GamePanel;
 import main.KeyHandler;
-import entity.Player;
 
 class PlayerTest {
 
@@ -150,5 +152,5 @@ class PlayerTest {
         assertEquals(initialWorldY, player.worldy);
     }
 
-    // Les tests qui accèdent aux champs non-publics ont été supprimés
+    
 }
