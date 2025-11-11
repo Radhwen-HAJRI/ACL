@@ -48,20 +48,18 @@ public class Monster extends Entity {
     public void setDefaultValues() {
         speed = 1;
         direction = "down";
-        worldx = 100; // Position initiale par défaut
+        worldx = 100; 
         worldy = 100;
     }
 
     public void getMonsterImage() {
         try {
-            // Charger les 6 frames de course
             for (int i = 1; i <= 6; i++) {
                 BufferedImage runFrame = ImageIO.read(getClass().getResourceAsStream("/monsters/run_" + i + ".png"));
                 runAnim.add(runFrame);
                 runAnimLeft.add(flipImage(runFrame));
             }
 
-            // Charger les 5 frames d'attaque
             for (int i = 1; i <= 5; i++) {
                 BufferedImage attackFrame = ImageIO.read(getClass().getResourceAsStream("/monsters/attack_" + i + ".png"));
                 attackAnim.add(attackFrame);
@@ -88,7 +86,7 @@ public class Monster extends Entity {
     public void setState(String newState) {
         if (!this.state.equals(newState)) {
             this.state = newState;
-            this.spriteNum = 1; // Commencer à 1 au lieu de 0 pour éviter IndexOutOfBounds
+            this.spriteNum = 1;
             this.spriteCounter = 0;
         }
     }

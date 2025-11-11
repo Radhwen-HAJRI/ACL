@@ -10,7 +10,7 @@ import java.awt.Graphics2D;
 
 import tile.TileManager;
 
-public class Labyrinthe extends TileManager {  // Étend TileManager pour réutiliser loadMap/draw/getTileImage
+public class Labyrinthe extends TileManager {
     
     public Point pointDepart;
     public Point pointArrivee;
@@ -24,12 +24,11 @@ public class Labyrinthe extends TileManager {  // Étend TileManager pour réuti
         super(gp); 
         loadMap("/maps/map01.txt");  
         setPoints(); 
-        // Charge les images pour porte et trésor
         try {
             doorFrames = new BufferedImage[3];
             doorFrames[0] = ImageIO.read(getClass().getResourceAsStream("/door/door_closed.png"));   // Frame 1: Closed
-            doorFrames[1] = ImageIO.read(getClass().getResourceAsStream("/door/door_opening.png")); // Frame 2: Opening
-            doorFrames[2] = ImageIO.read(getClass().getResourceAsStream("/door/door_opening.png"));    // Frame 3: Open
+            doorFrames[1] = ImageIO.read(getClass().getResourceAsStream("/door/door_opening.png"));  // Frame 2: Opening
+            doorFrames[2] = ImageIO.read(getClass().getResourceAsStream("/door/door_opening.png"));  // Frame 3: Open
             imgTresor = ImageIO.read(getClass().getResourceAsStream("/tiles/key.png"));
             System.out.println("Porte animée et trésor chargées !");
         } catch (IOException e) {
@@ -50,7 +49,6 @@ public class Labyrinthe extends TileManager {  // Étend TileManager pour réuti
         pointArrivee = new Point(endCol * gp.tileSize, endRow * gp.tileSize);
     }
     
-    // Méthodes du backlog
     public Point getPointDepart() {
         return pointDepart;
     }
@@ -59,9 +57,8 @@ public class Labyrinthe extends TileManager {  // Étend TileManager pour réuti
         return pointArrivee;
     }
     
-    // Optionnel : Méthode pour get la grille entière (pour debug ou futures tâches)
     public int[][] getGrille() {
-        return mapTileNum;  // Retourne la map 16x16
+        return mapTileNum; 
     }
     
     @Override
@@ -73,7 +70,7 @@ public class Labyrinthe extends TileManager {  // Étend TileManager pour réuti
         int arriveeScreenX = pointArrivee.x - gp.player.worldx + gp.player.screenX;
         int arriveeScreenY = pointArrivee.y - gp.player.worldy + gp.player.screenY;
         
-        // Animation porte (idle cycle)
+        // Animation porte
         doorSpriteCounter++;
         if (doorSpriteCounter > doorAnimationDelay) {
             doorSpriteNum = (doorSpriteNum % 3) + 1;  // 1→2→3→1
@@ -86,18 +83,15 @@ public class Labyrinthe extends TileManager {  // Étend TileManager pour réuti
         if (doorFrames != null) {
             BufferedImage currentFrame = doorFrames[doorSpriteNum - 1];
             if (currentFrame != null) {
-                // Dessine frame scalée (centre-la sur le tile si besoin)
                 g2.drawImage(currentFrame, departScreenX + offsetX, departScreenY + offsetY, doorWidth, doorHeight, null);
             } else {
-                // Fallback scalé
                 g2.setColor(Color.BLACK);
                 g2.fillRect(departScreenX + offsetX, departScreenY + offsetY, doorWidth, doorHeight);
                 g2.setColor(Color.WHITE);
-                g2.setFont(new Font("Arial", Font.BOLD, 14));  // Police plus grande pour matcher
+                g2.setFont(new Font("Arial", Font.BOLD, 14)); 
                 g2.drawString("PORTE", departScreenX + 5, departScreenY + doorHeight / 2);
             }
         } else {
-            // Fallback total scalé
             g2.setColor(Color.BLACK);
             g2.fillRect(departScreenX + offsetX, departScreenY + offsetY, doorWidth, doorHeight);
             g2.setColor(Color.WHITE);
@@ -105,13 +99,11 @@ public class Labyrinthe extends TileManager {  // Étend TileManager pour réuti
             g2.drawString("PORTE", departScreenX + 5, departScreenY + doorHeight / 2);
         }
         
-        // Trésor à l'arrivée (superposé sur herbe)
         if (imgTresor != null) {
             g2.drawImage(imgTresor, arriveeScreenX, arriveeScreenY, gp.tileSize, gp.tileSize, null);
         } else {
-            // Fallback : Coffre jaune/or avec texte
             g2.setColor(Color.YELLOW);
-            g2.fillRect(arriveeScreenX + 4, arriveeScreenY + 4, gp.tileSize - 8, gp.tileSize - 8);  // Cadre coffre
+            g2.fillRect(arriveeScreenX + 4, arriveeScreenY + 4, gp.tileSize - 8, gp.tileSize - 8); 
             g2.setColor(Color.ORANGE);
             g2.fillRect(arriveeScreenX, arriveeScreenY, 4, gp.tileSize);
             g2.setColor(Color.BLACK);

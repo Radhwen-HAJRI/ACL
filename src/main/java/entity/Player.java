@@ -57,22 +57,22 @@ public final class Player extends Entity {
 
     public void update() {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
-            // Reset sprite si pas de mouvement (idle plus tard)
+            // Reset sprite si pas de mouvement
             spriteCounter++;
             if (spriteCounter > 12) {
                 spriteNum = (spriteNum == 1) ? 2 : 1;
                 spriteCounter = 0;
             }
 
-            // Check et bouge par direction (priorité : une seule à la fois, mais tolère diag)
+            // Check et bouge par direction
             if (keyH.upPressed) {
-                int nextY = worldy - speed;  // Nouvelle pos test
-                if (gp.canMoveHere(worldx, nextY)) {  // Si libre
+                int nextY = worldy - speed; 
+                if (gp.canMoveHere(worldx, nextY)) {  
                     worldy = nextY;
                 }
                 direction = "up";
             }
-            else if (keyH.downPressed) {  // 'else' pour éviter diag trop rapide ? Optionnel, enlève si tu veux diag
+            else if (keyH.downPressed) {  
                 int nextY = worldy + speed;
                 if (gp.canMoveHere(worldx, nextY)) {
                     worldy = nextY;
@@ -100,24 +100,21 @@ public final class Player extends Entity {
                 spriteCounter = 0;
             }
         }
-        // Gère invincibilité (décompte si actif)
+        // Gère invincibilité 
         if (invincibleCounter > 0) {
             invincibleCounter--; 
         }
     }
 
     public void draw(Graphics2D g2) {
-        // Flash rouge sur collision (feedback visuel)
+        // Flash rouge sur collision 
         if (invincibleCounter > 0) {
-            // Flash rouge pendant i-frames 
             float alpha = (invincibleCounter / (float) invincibleDuration);  
             g2.setColor(new Color(1.0f, 0.0f, 0.0f, alpha * 0.5f));  
             g2.fillRect(screenX, screenY, gp.tileSize, gp.tileSize);  
             
-            // Clignotement supplémentaire (optionnel, pour punch)
-            if (invincibleCounter % 4 < 2) {  // Clignote toutes 4 frames
-                // Skip draw sprite (invisible brièvement)
-                return;  // ← Pas de drawImage, player "disparaît" flash
+            if (invincibleCounter % 4 < 2) {  
+                return;  
             }
         }
         BufferedImage image = null;

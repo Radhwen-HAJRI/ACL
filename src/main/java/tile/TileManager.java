@@ -104,7 +104,6 @@ public class TileManager {
         int screenX = worldX - gp.player.worldx + gp.player.screenX;
         int screenY = worldY - gp.player.worldy + gp.player.screenY;
 
-        //  Optimisation : ne dessine que les tuiles visibles à l’écran
         if (worldX + gp.tileSize > gp.player.worldx - gp.player.screenX &&
             worldX - gp.tileSize < gp.player.worldx + gp.player.screenX &&
             worldY + gp.tileSize > gp.player.worldy - gp.player.screenY &&
@@ -121,5 +120,4 @@ public class TileManager {
         }
     }
 }
-
 }
