@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\DELL\Documents\ACL3\ACL\src\main\java\main\main.java
 C:\Users\DELL\Documents\ACL3\ACL\src\main\java\tile\TileManager.java
 C:\Users\DELL\Documents\ACL3\ACL\src\main\java\tile\Tile.java
@@ -8,3 +9,15 @@ C:\Users\DELL\Documents\ACL3\ACL\src\main\java\entity\Entity.java
 C:\Users\DELL\Documents\ACL3\ACL\src\main\java\test.java
 C:\Users\DELL\Documents\ACL3\ACL\src\main\java\entity\Monster.java
 C:\Users\DELL\Documents\ACL3\ACL\src\main\java\main\KeyHandler.java
+=======
+C:\ACL2\ACL\src\main\java\tile\Tile.java
+C:\ACL2\ACL\src\main\java\main\GamePanel.java
+C:\ACL2\ACL\src\main\java\main\main.java
+C:\ACL2\ACL\src\main\java\main\KeyHandler.java
+C:\ACL2\ACL\src\main\java\main\Labyrinthe.java
+C:\ACL2\ACL\src\main\java\entity\Monster.java
+C:\ACL2\ACL\src\main\java\entity\Player.java
+C:\ACL2\ACL\src\main\java\tile\TileManager.java
+C:\ACL2\ACL\src\main\java\entity\Entity.java
+C:\ACL2\ACL\src\main\java\test.java
+>>>>>>> e0ba6b1 (test updated)

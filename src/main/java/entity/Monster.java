@@ -8,36 +8,33 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import main.GamePanel;
-
 import javax.imageio.ImageIO;
+
+import main.GamePanel;
 
 public class Monster extends Entity {
 
     GamePanel gp;
-    public boolean isChaser = false; // Par défaut, un monstre n'est pas un chaser
-    public int detectionRange;     // La distance à laquelle il vous "voit"
+    public boolean isChaser = false;
+    public int detectionRange = 300; // Ajout d'une valeur par défaut
     Random random = new Random();
     private int actionLockCounter = 0;
-    private final int moveDelay = 60; // Change de direction toutes les 2s
+    private final int moveDelay = 60;
 
     // Listes pour les animations
     public ArrayList<BufferedImage> runAnim;
     public ArrayList<BufferedImage> attackAnim;
-
-    // Listes pour les animations retournées (vers la gauche)
     public ArrayList<BufferedImage> runAnimLeft;
     public ArrayList<BufferedImage> attackAnimLeft;
 
-    public String state = "wandering"; // "wandering" ou "attacking"
-    public int attackRange ; // Attaque si le joueur est à 2 cases
+    public String state = "wandering";
+    public int attackRange;
 
     public Monster(GamePanel gp) {
-        super(); // Appelle le constructeur de Entity
+        super();
         this.gp = gp;
         this.attackRange = gp.tileSize * 2;
-        // Initialisation déplacée ICI :
-        this.attackRange = gp.tileSize * 2; // <-- en utilisant 'this.gp'
+        
         // Initialiser les listes
         runAnim = new ArrayList<>();
         attackAnim = new ArrayList<>();
@@ -51,36 +48,35 @@ public class Monster extends Entity {
     public void setDefaultValues() {
         speed = 1;
         direction = "down";
+        worldx = 100; // Position initiale par défaut
+        worldy = 100;
     }
 
-    /**
-     * Charge les *séries* d'images dans les listes d'animation.
-     */
     public void getMonsterImage() {
         try {
             // Charger les 6 frames de course
             for (int i = 1; i <= 6; i++) {
                 BufferedImage runFrame = ImageIO.read(getClass().getResourceAsStream("/monsters/run_" + i + ".png"));
                 runAnim.add(runFrame);
-                runAnimLeft.add(flipImage(runFrame)); // Ajouter la version retournée
+                runAnimLeft.add(flipImage(runFrame));
             }
 
             // Charger les 5 frames d'attaque
             for (int i = 1; i <= 5; i++) {
                 BufferedImage attackFrame = ImageIO.read(getClass().getResourceAsStream("/monsters/attack_" + i + ".png"));
                 attackAnim.add(attackFrame);
-                attackAnimLeft.add(flipImage(attackFrame)); // Ajouter la version retournée
+                attackAnimLeft.add(flipImage(attackFrame));
             }
 
         } catch (IOException e) {
-            System.err.println("ERREUR: Impossible de charger un sprite de monstre. Avez-vous découpé les images ?");
+            System.err.println("ERREUR: Impossible de charger un sprite de monstre.");
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("ERREUR: Problème avec les ressources d'image.");
             e.printStackTrace();
         }
     }
 
-    /**
-     * Fonction utilitaire pour retourner une image horizontalement
-     */
     private BufferedImage flipImage(BufferedImage image) {
         if (image == null) return null;
         AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
@@ -89,72 +85,59 @@ public class Monster extends Entity {
         return op.filter(image, null);
     }
 
-    /**
-     * Change l'état du monstre et réinitialise l'animation.
-     */
     public void setState(String newState) {
         if (!this.state.equals(newState)) {
             this.state = newState;
-            this.spriteNum = 0; // Réinitialise l'index de l'animation
-            this.spriteCounter = 0; // Réinitialise le compteur de temps
+            this.spriteNum = 1; // Commencer à 1 au lieu de 0 pour éviter IndexOutOfBounds
+            this.spriteCounter = 0;
         }
     }
- 
 
+    public void update() {
+        // Calcul de la distance avec le joueur
+        int dx = Math.abs(gp.player.worldx - this.worldx);
+        int dy = Math.abs(gp.player.worldy - this.worldy);
+        double distance = Math.sqrt(dx * dx + dy * dy);
 
-    /**
-     * IA pour les monstres "Chaser" (Poursuiveurs)
-     * Gère les 3 états : balade, poursuite, attaque.
-     */
+        if (isChaser) {
+            updateChaserAI(distance);
+        } else {
+            updateWandererAI(distance);
+        }
+    }
+
     private void updateChaserAI(double distance) {
-        
         if (state.equals("attacking")) {
-            // Si le joueur s'échappe pendant l'attaque, on le poursuit
             if (distance > attackRange) {
                 setState("chasing");
             }
-            updateAttacking(); // Joue l'animation d'attaque
+            updateAttacking();
 
         } else if (state.equals("chasing")) {
-            // Le joueur est-il assez proche pour ATTAQUER ?
             if (distance < attackRange) {
                 setState("attacking");
-            }
-            // Le joueur s'est-il enfui trop loin ? (hors de vue)
-            else if (distance > detectionRange) {
+            } else if (distance > detectionRange) {
                 setState("wandering");
-            }
-            // SINON, on continue de poursuivre
-            else {
-                updateChasingMovement(); // NOUVELLE méthode de poursuite
+            } else {
+                updateChasingMovement();
             }
 
         } else if (state.equals("wandering")) {
-            // Le joueur est-il entré dans la zone de DÉTECTION ?
             if (distance < detectionRange) {
                 setState("chasing");
-            }
-            // Sinon, on se balade
-            else {
-                updateWandering(); // L'ancienne méthode de balade (rebond)
+            } else {
+                updateWandering();
             }
         }
     }
 
-
-    /**
-     * Calcule le mouvement optimal pour se rapprocher du joueur
-     * (IA "Greedy" simple)
-     */
     private void updateChasingMovement() {
-        // Calcule la direction vers le joueur
         int dx = gp.player.worldx - this.worldx;
         int dy = gp.player.worldy - this.worldy;
 
         String primaryDirection = direction;
         String secondaryDirection = direction;
 
-        // Choisit la direction principale (horizontale ou verticale)
         if (Math.abs(dx) > Math.abs(dy)) {
             primaryDirection = (dx > 0) ? "right" : "left";
             secondaryDirection = (dy > 0) ? "down" : "up";
@@ -174,22 +157,15 @@ public class Monster extends Entity {
             case "right": nextWorldX += speed; break;
         }
 
-        // Vérifie si la voie est libre
         if (gp.canMoveHere(nextWorldX, nextWorldY)) {
             worldx = nextWorldX;
             worldy = nextWorldY;
-            direction = primaryDirection; // Confirme la direction
-            
-            // Animation de course
-            spriteCounter++;
-            if (spriteCounter > 10) {
-                spriteNum = (spriteNum + 1) % runAnim.size();
-                spriteCounter = 0;
-            }
-            return; // Mouvement réussi
+            direction = primaryDirection;
+            updateAnimation();
+            return;
         }
 
-        // SINON, la voie principale est bloquée. On tente la direction secondaire.
+        // Tente la direction secondaire
         nextWorldX = worldx;
         nextWorldY = worldy;
         switch (secondaryDirection) {
@@ -202,69 +178,28 @@ public class Monster extends Entity {
         if (gp.canMoveHere(nextWorldX, nextWorldY)) {
             worldx = nextWorldX;
             worldy = nextWorldY;
-            direction = secondaryDirection; // Confirme la direction
-            
-            // Animation de course
-            spriteCounter++;
-            if (spriteCounter > 10) {
-                spriteNum = (spriteNum + 1) % runAnim.size();
-                spriteCounter = 0;
-            }
-        }
-        // Si les deux sont bloqués, le monstre ne bouge pas cette frame.
-    }
-    /**
-     * La logique principale du monstre, gère les états.
-     */
-   
-    public void update() {
-        // Calcul de la distance avec le joueur
-        int dx = Math.abs(gp.player.worldx - this.worldx);
-        int dy = Math.abs(gp.player.worldy - this.worldy);
-        double distance = Math.sqrt(dx * dx + dy * dy);
-
-        // --- IA Basée sur le type de monstre ---
-        if (isChaser) {
-            // Ce monstre est un "Chaser" (Poursuiveur)
-            updateChaserAI(distance);
-        } else {
-            // Ce monstre est un "Wanderer" (Errant)
-            updateWandererAI(distance);
+            direction = secondaryDirection;
+            updateAnimation();
         }
     }
 
-
-/**
-     * IA pour les monstres "Wanderer" (Errants)
-     * (C'est votre ancienne logique de update())
-     */
     private void updateWandererAI(double distance) {
-        // 1. Vérifier la distance avec le joueur pour changer d'état
-        // Si le joueur est proche ET qu'on n'attaque pas déjà, on attaque
         if (distance < attackRange && !state.equals("attacking")) {
             setState("attacking");
-            // Le monstre se tourne vers le joueur (simplifié)
             if(gp.player.worldx < this.worldx) direction = "left";
             else direction = "right";
-
-        } // Si le joueur est loin ET qu'on n'est pas en train d'attaquer, on se balade
-        else if (distance >= attackRange && !state.equals("attacking")) {
+        } else if (distance >= attackRange && !state.equals("attacking")) {
             setState("wandering");
         }
 
-        // 2. Exécuter la logique de l'état actuel
         if (state.equals("wandering")) {
-            updateWandering(); // Logique de balade (rebondit sur les murs)
+            updateWandering();
         } else if (state.equals("attacking")) {
-            updateAttacking(); // Logique d'animation d'attaque
+            updateAttacking();
         }
     }
-   /**
-     * Logique de l'état "Wandering" (se balader) - AMÉLIORÉE
-     */
+
     private void updateWandering() {
-        
-        // --- Physique (collisions) ---
         int nextWorldX = worldx;
         int nextWorldY = worldy;
 
@@ -275,28 +210,15 @@ public class Monster extends Entity {
             case "right": nextWorldX += speed; break;
         }
 
-        // On vérifie la collision
         if (gp.canMoveHere(nextWorldX, nextWorldY)) {
-            
-            // C'EST LIBRE : On bouge
             worldx = nextWorldX;
             worldy = nextWorldY;
-
-            // --- Animation (course) ---
-            spriteCounter++;
-            if (spriteCounter > 10) { // Vitesse de l'animation de course
-                spriteNum = (spriteNum + 1) % runAnim.size(); // Boucle sur 6 frames
-                spriteCounter = 0;
-            }
+            updateAnimation();
         } else {
-            // C'EST BLOQUÉ (MUR) : On choisit une nouvelle direction IMMÉDIATEMENT
             String[] directions = {"up", "down", "left", "right"};
             direction = directions[random.nextInt(4)];
         }
 
-        // --- IA (changement aléatoire) ---
-        // Pour qu'ils n'aillent pas en ligne droite pour toujours,
-        // on ajoute un changement de direction aléatoire après un certain temps.
         actionLockCounter++;
         if (actionLockCounter >= moveDelay) {
             String[] directions = {"up", "down", "left", "right"};
@@ -305,36 +227,34 @@ public class Monster extends Entity {
         }
     }
 
-    /**
-     * Logique de l'état "Attacking" (joue l'animation d'attaque)
-     */
     private void updateAttacking() {
-        // Le monstre s'arrête de bouger
-        // Il joue son animation d'attaque
         spriteCounter++;
-        if (spriteCounter > 8) { // Vitesse de l'animation d'attaque
-            spriteNum = spriteNum + 1; // Avance à la frame suivante
-
-            // Si l'animation est terminée
+        if (spriteCounter > 8) {
+            spriteNum = spriteNum + 1;
             if (spriteNum >= attackAnim.size()) {
-                spriteNum = 0; // Réinitialise
-                setState("wandering"); // Retourne se balader
+                spriteNum = 0;
+                setState("wandering");
             }
             spriteCounter = 0;
         }
     }
 
-    /**
-     * Dessine le bon sprite pour l'état actuel.
-     */
-   
+    private void updateAnimation() {
+        spriteCounter++;
+        if (spriteCounter > 10) {
+            if (state.equals("wandering") || state.equals("chasing")) {
+                spriteNum = (spriteNum + 1) % runAnim.size();
+            }
+            spriteCounter = 0;
+        }
+    }
+
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         ArrayList<BufferedImage> currentAnim = null;
         ArrayList<BufferedImage> currentAnimLeft = null;
 
-        // Choisir le bon set d'animation (course ou attaque)
-        if (state.equals("wandering")) {
+        if (state.equals("wandering") || state.equals("chasing")) {
             currentAnim = runAnim;
             currentAnimLeft = runAnimLeft;
         } else if (state.equals("attacking")) {
@@ -342,34 +262,36 @@ public class Monster extends Entity {
             currentAnimLeft = attackAnimLeft;
         }
 
-        // S'assurer qu'on ne plante pas
-        if (currentAnim == null || currentAnim.isEmpty()) return;
-        if (spriteNum >= currentAnim.size()) spriteNum = 0; // Sécurité
+        if (currentAnim == null || currentAnim.isEmpty() || 
+            spriteNum >= currentAnim.size() || spriteNum < 0) {
+            return;
+        }
 
-        // Choisir l'image (frame) et la direction
         switch (direction) {
             case "left":
                 image = currentAnimLeft.get(spriteNum);
                 break;
             case "right":
-            case "up": // On réutilise 'right' pour 'up' et 'down'
+            case "up":
             case "down":
                 image = currentAnim.get(spriteNum);
                 break;
         }
 
-        // Calcul de la position à l'écran (caméra)
-        int screenX = worldx - gp.player.worldx + gp.player.screenX;
-        int screenY = worldy - gp.player.worldy + gp.player.screenY;
+        if (image != null) {
+            int screenX = worldx - gp.player.worldx + gp.player.screenX;
+            int screenY = worldy - gp.player.worldy + gp.player.screenY;
 
-        // Optimisation (ne pas dessiner si hors écran)
-        if (worldx + gp.tileSize > gp.player.worldx - gp.player.screenX &&
-            worldx - gp.tileSize < gp.player.worldx + gp.player.screenX &&
-            worldy + gp.tileSize > gp.player.worldy - gp.player.screenY &&
-            worldy - gp.tileSize < gp.player.worldy + gp.player.screenY) {
-            
-            g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+            if (isOnScreen(screenX, screenY)) {
+                g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+            }
         }
     }
-}
 
+    private boolean isOnScreen(int screenX, int screenY) {
+        return screenX + gp.tileSize > 0 &&
+               screenX - gp.tileSize < gp.screenWidth &&
+               screenY + gp.tileSize > 0 &&
+               screenY - gp.tileSize < gp.screenHeight;
+    }
+}
