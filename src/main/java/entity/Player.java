@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -13,6 +14,9 @@ public final class Player extends Entity {
 
     public final int screenX;
     public final int screenY;
+    public int health = 3; 
+    public int invincibleCounter = 0;  
+    public final int invincibleDuration = 60;  
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -22,6 +26,7 @@ public final class Player extends Entity {
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
         setDefaultValues();
         getPlayerImage();
+        health = 3;
 
     }
 
@@ -95,9 +100,26 @@ public final class Player extends Entity {
                 spriteCounter = 0;
             }
         }
+        // Gère invincibilité (décompte si actif)
+        if (invincibleCounter > 0) {
+            invincibleCounter--; 
+        }
     }
 
     public void draw(Graphics2D g2) {
+        // Flash rouge sur collision (feedback visuel)
+        if (invincibleCounter > 0) {
+            // Flash rouge pendant i-frames 
+            float alpha = (invincibleCounter / (float) invincibleDuration);  
+            g2.setColor(new Color(1.0f, 0.0f, 0.0f, alpha * 0.5f));  
+            g2.fillRect(screenX, screenY, gp.tileSize, gp.tileSize);  
+            
+            // Clignotement supplémentaire (optionnel, pour punch)
+            if (invincibleCounter % 4 < 2) {  // Clignote toutes 4 frames
+                // Skip draw sprite (invisible brièvement)
+                return;  // ← Pas de drawImage, player "disparaît" flash
+            }
+        }
         BufferedImage image = null;
         switch(direction) {
             case "up":

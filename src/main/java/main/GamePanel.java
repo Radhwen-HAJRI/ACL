@@ -81,7 +81,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         //Monster monster = new Monster(this); // Crée le monstre
         Random rand = new Random();
-        nbMonsters = 6 + rand.nextInt(7);  // 4,5,6,7,8
+        nbMonsters = 2 + rand.nextInt(3);  // 4,5,6,7,8
         System.out.println("Nombre de monstres créés : " + nbMonsters);
         
         // DANS GamePanel.java - constructeur GamePanel()
@@ -117,13 +117,9 @@ public class GamePanel extends JPanel implements Runnable {
                 foundSpot = true; 
             }
             
-            // Si c'est un mur (collision == true), la boucle 'while' recommence
-            // et va tester de nouvelles coordonnées au hasard.
         }
     }
     }
-
-   
 
     // Méthode pour checker si une position collide avec un tile obstacle
     public boolean canMoveHere(int nextX, int nextY) {
@@ -186,25 +182,34 @@ public class GamePanel extends JPanel implements Runnable {
         if (!gameWon && !gameOver) {  // Seulement si pas déjà fini
             int dx = Math.abs(player.worldx - (int)labyrinthM.pointArrivee.x);
             int dy = Math.abs(player.worldy - (int)labyrinthM.pointArrivee.y);
-            //Object gp;
             if (dx < labyrinthM.gp.tileSize && dy < labyrinthM.gp.tileSize) {  // Dans le même tile (tolérance)
                 gameWon = true;
-                System.out.println("YOU WON! 🎉");  // Debug console
+                System.out.println("YOU WON!");  
             }
         } else {
             return;
         }
 
-        // Détecte collision joueur-monstre
-        for (int i = 0; i < nbMonsters; i++) {
-            // Distance < tileSize/2 → collision
-            int dx = Math.abs(player.worldx - monsters[i].worldx);
-            int dy = Math.abs(player.worldy - monsters[i].worldy);
-            if (dx < this.tileSize && dy < this.tileSize) {
-                gameOver = true;
-                System.out.println("GAME OVER ! 😵");
-                return;
+        // Détecte collision joueur-monstre (perte PV avec i-frames)
+        if (!gameOver && !gameWon) {
+            for (int i = 0; i < nbMonsters; i++) {
+                int dx = Math.abs(player.worldx - monsters[i].worldx);
+                int dy = Math.abs(player.worldy - monsters[i].worldy);
+                if (dx < this.tileSize && dy < this.tileSize) {  // Collision
+                    if (player.invincibleCounter == 0) {  // ← NOUVEAU : Seulement si vulnérable
+                        player.health--;
+                        player.invincibleCounter = player.invincibleDuration;  // Active i-frames
+                        System.out.println("Collision ! PV restants: " + player.health);
+                        if (player.health <= 0) {
+                            gameOver = true;
+                            System.out.println("GAME OVER ! PV à 0 😵");
+                        }
+                    }
+                    break;  // Une collision par frame max
+                }
             }
+        } else {
+            return;
         }
         
         // Met à jour les monstres seulement si pas Game Over
@@ -256,11 +261,6 @@ public class GamePanel extends JPanel implements Runnable {
         g2.drawString(winText, x + 5, y + 5);
         g2.setColor(Color.GREEN);  // Texte vert
         g2.drawString(winText, x, y);
-        
-        // Optionnel : Instructions rejouer
-        g2.setFont(g2.getFont().deriveFont(24f));
-        g2.setColor(Color.WHITE);
-        g2.drawString("Appuie sur R pour recommencer", x - 50, y + 50);
         
     } else {
         // Jeu normal (déjà là)
