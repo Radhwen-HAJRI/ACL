@@ -22,6 +22,7 @@ public final class Player extends Entity {
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
         setDefaultValues();
         getPlayerImage();
+
     }
 
     public void setDefaultValues() {
@@ -96,42 +97,7 @@ public final class Player extends Entity {
         }
     }
 
-
-
-    /*public void update() {
-    
-    if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
-
-        if (keyH.upPressed) {
-            direction = "up";
-            y -= speed;
-        }
-        if (keyH.downPressed) {
-            direction = "down";
-            y += speed;
-        }
-        if (keyH.leftPressed) {
-            direction = "left";
-            x -= speed;
-        }
-        if (keyH.rightPressed) {
-            direction = "right";
-            x += speed;
-        }
-
-        
-        spriteCounter++;
-        if (spriteCounter > 12) {
-            spriteNum = (spriteNum == 1) ? 2 : 1;
-            spriteCounter = 0;
-        }
-    }
-}*/
-
-
     public void draw(Graphics2D g2) {
-        //g2.setColor(java.awt.Color.white);
-        //g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
         BufferedImage image = null;
         switch(direction) {
             case "up":

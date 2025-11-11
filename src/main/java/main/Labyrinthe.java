@@ -1,56 +1,53 @@
-package main.java;
+package main;
 
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.awt.Font;
-import java.awt.BasicStroke;
 import java.awt.Point;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import main.GamePanel;
 import tile.TileManager;
 
 public class Labyrinthe extends TileManager {  // Étend TileManager pour réutiliser loadMap/draw/getTileImage
     
     private Point pointDepart;
     private Point pointArrivee;
-    private BufferedImage imgPorte, imgTresor;
+    private BufferedImage imgTresor;
+    private BufferedImage[] doorFrames;  
+    private int doorSpriteCounter = 0;
+    private int doorSpriteNum = 1; // 1=closed, 2=opening, 3=open
+    private final int doorAnimationDelay = 20;
     
     public Labyrinthe(GamePanel gp) {
         super(gp); 
-        loadMap("/maps/map.txt");  
+        loadMap("/maps/map01.txt");  
         setPoints(); 
         // Charge les images pour porte et trésor
         try {
-            imgPorte = ImageIO.read(getClass().getResourceAsStream("/tiles/door.png"));
+            doorFrames = new BufferedImage[3];
+            doorFrames[0] = ImageIO.read(getClass().getResourceAsStream("/door/door_closed.png"));   // Frame 1: Closed
+            doorFrames[1] = ImageIO.read(getClass().getResourceAsStream("/door/door_opening.png")); // Frame 2: Opening
+            doorFrames[2] = ImageIO.read(getClass().getResourceAsStream("/door/door_opening.png"));    // Frame 3: Open
             imgTresor = ImageIO.read(getClass().getResourceAsStream("/tiles/key.png"));
-            System.out.println("Images porte et trésor chargées !");
+            System.out.println("Porte animée et trésor chargées !");
         } catch (IOException e) {
             e.printStackTrace();
-            imgPorte = null;
+            doorFrames = null;
             imgTresor = null;
             System.out.println("Fallback : Images porte/trésor manquantes");
         }
     }
     
-    // Méthode pour définir les points (hardcodé pour ce labyrinthe simple ; plus tard, cherche les 0 libres)
     private void setPoints() {
-        // Départ : premier chemin accessible (tile 1,1 → pixels)
-        pointDepart = new Point(1 * gp.tileSize, 1 * gp.tileSize);  // (32, 32)
+        int startCol = 10;  
+        int startRow = 7;  
+        pointDepart = new Point(startCol * gp.tileSize, startRow * gp.tileSize);
         
-        // Arrivée : Cherche le tile 0 le plus bas-droite possible (scan inverse pour "fin" du labyrinthe)
-        pointArrivee = new Point(0, 0);  // Default si rien trouvé
-        for (int row = gp.maxScreenRow - 1; row >= 0; row--) {  // Du bas vers haut
-            for (int col = gp.maxScreenCol - 1; col >= 0; col--) {  // De droite vers gauche
-                if (mapTileNum[col][row] == 0) {  // Tile herbe (libre)
-                    pointArrivee = new Point(col * gp.tileSize, row * gp.tileSize);
-                    System.out.println("Arrivée trouvée à tile [" + col + "][" + row + "] = (" + pointArrivee.x + "," + pointArrivee.y + ")");
-                    return;  // Prend le premier trouvé (le plus bas-droite)
-                }
-            }
-        }
+        int endCol = 37;  
+        int endRow = 43;    
+        pointArrivee = new Point(endCol * gp.tileSize, endRow * gp.tileSize);
     }
     
     // Méthodes du backlog
@@ -69,35 +66,57 @@ public class Labyrinthe extends TileManager {  // Étend TileManager pour réuti
     
     @Override
     public void draw(Graphics2D g2) {
-        super.draw(g2);  // Dessine d'abord la map (herbe/eau)
+        super.draw(g2);  
+
+        int departScreenX = pointDepart.x - gp.player.worldx + gp.player.screenX;
+        int departScreenY = pointDepart.y - gp.player.worldy + gp.player.screenY;
+        int arriveeScreenX = pointArrivee.x - gp.player.worldx + gp.player.screenX;
+        int arriveeScreenY = pointArrivee.y - gp.player.worldy + gp.player.screenY;
         
-        // Porte au départ (superposée sur herbe)
-        if (imgPorte != null) {
-            g2.drawImage(imgPorte, pointDepart.x, pointDepart.y, gp.tileSize, gp.tileSize, null);
+        // Animation porte (idle cycle)
+        doorSpriteCounter++;
+        if (doorSpriteCounter > doorAnimationDelay) {
+            doorSpriteNum = (doorSpriteNum % 3) + 1;  // 1→2→3→1
+            doorSpriteCounter = 0;
+        }
+        int doorWidth = gp.tileSize * 3;  
+        int doorHeight = gp.tileSize * 3;
+        int offsetX = (gp.tileSize - doorWidth) / 2;  
+        int offsetY = (gp.tileSize - doorHeight) / 2; 
+        if (doorFrames != null) {
+            BufferedImage currentFrame = doorFrames[doorSpriteNum - 1];
+            if (currentFrame != null) {
+                // Dessine frame scalée (centre-la sur le tile si besoin)
+                g2.drawImage(currentFrame, departScreenX + offsetX, departScreenY + offsetY, doorWidth, doorHeight, null);
+            } else {
+                // Fallback scalé
+                g2.setColor(Color.BLACK);
+                g2.fillRect(departScreenX + offsetX, departScreenY + offsetY, doorWidth, doorHeight);
+                g2.setColor(Color.WHITE);
+                g2.setFont(new Font("Arial", Font.BOLD, 14));  // Police plus grande pour matcher
+                g2.drawString("PORTE", departScreenX + 5, departScreenY + doorHeight / 2);
+            }
         } else {
-            // Fallback : Rectangle bois-vert avec texte
-            g2.setColor(new Color(139, 69, 19));  // Marron bois
-            g2.fillRect(pointDepart.x, pointDepart.y, gp.tileSize, gp.tileSize);
-            g2.setColor(Color.GREEN);  // Bord vert
-            g2.setStroke(new BasicStroke(3));  // Bord épais
-            g2.drawRect(pointDepart.x, pointDepart.y, gp.tileSize, gp.tileSize);
+            // Fallback total scalé
+            g2.setColor(Color.BLACK);
+            g2.fillRect(departScreenX + offsetX, departScreenY + offsetY, doorWidth, doorHeight);
             g2.setColor(Color.WHITE);
-            g2.setFont(new Font("Arial", Font.BOLD, 10));
-            g2.drawString("PORTE", pointDepart.x + 5, pointDepart.y + 20);
+            g2.setFont(new Font("Arial", Font.BOLD, 14));
+            g2.drawString("PORTE", departScreenX + 5, departScreenY + doorHeight / 2);
         }
         
         // Trésor à l'arrivée (superposé sur herbe)
         if (imgTresor != null) {
-            g2.drawImage(imgTresor, pointArrivee.x, pointArrivee.y, gp.tileSize, gp.tileSize, null);
+            g2.drawImage(imgTresor, arriveeScreenX, arriveeScreenY, gp.tileSize, gp.tileSize, null);
         } else {
             // Fallback : Coffre jaune/or avec texte
-            g2.setColor(Color.YELLOW);  // Or
-            g2.fillRect(pointArrivee.x + 4, pointArrivee.y + 4, gp.tileSize - 8, gp.tileSize - 8);  // Cadre coffre
-            g2.setColor(Color.ORANGE);  // Brillant
-            g2.fillRect(pointArrivee.x, pointArrivee.y, 4, gp.tileSize);  // "Couvercle"
+            g2.setColor(Color.YELLOW);
+            g2.fillRect(arriveeScreenX + 4, arriveeScreenY + 4, gp.tileSize - 8, gp.tileSize - 8);  // Cadre coffre
+            g2.setColor(Color.ORANGE);
+            g2.fillRect(arriveeScreenX, arriveeScreenY, 4, gp.tileSize);
             g2.setColor(Color.BLACK);
             g2.setFont(new Font("Arial", Font.BOLD, 10));
-            g2.drawString("TRESOR", pointArrivee.x + 5, pointArrivee.y + 20);
+            g2.drawString("CLE", arriveeScreenX + 5, arriveeScreenY + 20);
         }
     }
 }

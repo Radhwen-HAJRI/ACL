@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 import entity.Monster; 
 import entity.Player;
-import main.java.Labyrinthe;
+import main.Labyrinthe;
 
 
 public class GamePanel extends JPanel implements Runnable {
@@ -38,9 +38,10 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
 
     public Player player = new Player(this, keyH);
-   // Monster monster ; 
-   Monster[] monsters;
-   int nbMonsters;
+    
+    // Monster monster ; 
+    Monster[] monsters;
+    int nbMonsters;
 
     int FPS = 60;
     Labyrinthe labyrinthM = new Labyrinthe(this);
@@ -73,6 +74,9 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
         }
+
+        player.worldx = (int) labyrinthM.getPointDepart().x;
+        player.worldy = (int) labyrinthM.getPointDepart().y;
 
         //Monster monster = new Monster(this); // Crée le monstre
     Random rand = new Random();
@@ -203,5 +207,203 @@ public class GamePanel extends JPanel implements Runnable {
     }
     
     g2.dispose();
+    }
+
+
+
+    public int getOriginalTileSize() {
+        return originalTileSize;
+    }
+
+
+
+    public int getScale() {
+        return scale;
+    }
+
+
+
+    public int getTileSize() {
+        return tileSize;
+    }
+
+
+
+    public int getMaxScreenCol() {
+        return maxScreenCol;
+    }
+
+
+
+    public int getMaxScreenRow() {
+        return maxScreenRow;
+    }
+
+
+
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+
+
+    public int getScreenHeight() {
+        return screenHeight;
+    }
+
+
+
+    public int getMaxWorldCol() {
+        return maxWorldCol;
+    }
+
+
+
+    public int getMaxWorldRow() {
+        return maxWorldRow;
+    }
+
+
+
+    public int getWorldWidth() {
+        return worldWidth;
+    }
+
+
+
+    public int getWorldHeight() {
+        return worldHeight;
+    }
+
+
+
+    public KeyHandler getKeyH() {
+        return keyH;
+    }
+
+
+
+    public void setKeyH(KeyHandler keyH) {
+        this.keyH = keyH;
+    }
+
+
+
+    public Thread getGameThread() {
+        return gameThread;
+    }
+
+
+
+    public void setGameThread(Thread gameThread) {
+        this.gameThread = gameThread;
+    }
+
+
+
+    public Player getPlayer() {
+        return player;
+    }
+
+
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+
+
+    public Monster[] getMonsters() {
+        return monsters;
+    }
+
+
+
+    public void setMonsters(Monster[] monsters) {
+        this.monsters = monsters;
+    }
+
+
+
+    public int getNbMonsters() {
+        return nbMonsters;
+    }
+
+
+
+    public void setNbMonsters(int nbMonsters) {
+        this.nbMonsters = nbMonsters;
+    }
+
+
+
+    public int getFPS() {
+        return FPS;
+    }
+
+
+
+    public void setFPS(int fPS) {
+        FPS = fPS;
+    }
+
+
+
+    public Labyrinthe getLabyrinthM() {
+        return labyrinthM;
+    }
+
+
+
+    public void setLabyrinthM(Labyrinthe labyrinthM) {
+        this.labyrinthM = labyrinthM;
+    }
+
+
+
+    public int getSquareX() {
+        return squareX;
+    }
+
+
+
+    public void setSquareX(int squareX) {
+        this.squareX = squareX;
+    }
+
+
+
+    public int getSquareY() {
+        return squareY;
+    }
+
+
+
+    public void setSquareY(int squareY) {
+        this.squareY = squareY;
+    }
+
+
+
+    public int getSpeed() {
+        return speed;
+    }
+
+
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }
