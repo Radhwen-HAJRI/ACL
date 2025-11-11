@@ -80,15 +80,45 @@ public class GamePanel extends JPanel implements Runnable {
 
         //Monster monster = new Monster(this); // Crée le monstre
     Random rand = new Random();
-    nbMonsters = 4 + rand.nextInt(5);  // 4,5,6,7,8
+    nbMonsters = 10 + rand.nextInt(11);  // 4,5,6,7,8
     System.out.println("Nombre de monstres créés : " + nbMonsters);
     
+   // DANS GamePanel.java - constructeur GamePanel()
+
     monsters = new Monster[nbMonsters];
     for (int i = 0; i < nbMonsters; i++) {
         monsters[i] = new Monster(this);
-        // Position aléatoire dans le labyrinthe (évite le spawn du joueur)
-        monsters[i].worldx = this.tileSize * rand.nextInt(this.maxScreenCol - 1) + this.tileSize;
-        monsters[i].worldy = this.tileSize * rand.nextInt(this.maxScreenRow - 1) + this.tileSize;
+        
+    // Une chance sur deux d'être un "Chaser"
+        if (rand.nextBoolean()) {
+            monsters[i].isChaser = true;
+        }
+        // --- NOUVELLE LOGIQUE DE SPAWN SÉCURISÉ ---
+        boolean foundSpot = false;
+        while (!foundSpot) {
+            
+            // 1. Choisir des coordonnées de TILE (col, row) au hasard dans le MONDE ENTIER
+            int col = rand.nextInt(this.maxWorldCol);
+            int row = rand.nextInt(this.maxWorldRow);
+            
+            // 2. Récupérer le type de tile à cet endroit
+            int tileNum = this.labyrinthM.mapTileNum[col][row];
+            
+            // 3. Vérifier si ce tile n'est PAS un obstacle
+            // On vérifie que le tile existe et que sa propriété 'collision' est false
+            if (this.labyrinthM.tile[tileNum] != null && !this.labyrinthM.tile[tileNum].collision) {
+                
+                // 4. C'est un bon endroit ! On place le monstre (en pixels)
+                monsters[i].worldx = col * this.tileSize;
+                monsters[i].worldy = row * this.tileSize;
+                
+                // 5. On sort de la boucle (pour ce monstre)
+                foundSpot = true; 
+            }
+            
+            // Si c'est un mur (collision == true), la boucle 'while' recommence
+            // et va tester de nouvelles coordonnées au hasard.
+        }
     }
     }
 
@@ -159,7 +189,7 @@ public class GamePanel extends JPanel implements Runnable {
         // Distance < tileSize/2 → collision
         int dx = Math.abs(player.worldx - monsters[i].worldx);
         int dy = Math.abs(player.worldy - monsters[i].worldy);
-        if (dx < this.tileSize && dy < this.tileSize) {
+        if (dx < this.tileSize/2  && dy < this.tileSize/2) {
             gameOver = true;
             System.out.println("GAME OVER ! 😵");
             return;
