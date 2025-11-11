@@ -27,11 +27,8 @@ public class Monster extends Entity {
     public ArrayList<BufferedImage> runAnimLeft;
     public ArrayList<BufferedImage> attackAnimLeft;
 
-
-
     public int health = 3;
     public boolean alive = true;
-
 
     public String state = "wandering";
     public int attackRange;
