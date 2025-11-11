@@ -58,9 +58,21 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyH);
         this.setFocusable(true);
 
-        player.worldx = (maxWorldCol * tileSize) / 2;
-        player.worldy = (maxWorldRow * tileSize) / 2;
-
+        // --- Trouver le centre du labyrinthe ---
+        int centerCol = maxWorldCol / 2;
+        int centerRow = maxWorldRow / 2;
+        
+        boolean found = false;
+        for (int r = centerRow - 5; r <= centerRow + 5 && !found; r++) {
+            for (int c = centerCol - 5; c <= centerCol + 5 && !found; c++) {
+                if (labyrinthM.mapTileNum[c][r] == 0) { // 0 = tuile vide
+                    player.worldx = c * tileSize;
+                    player.worldy = r * tileSize;
+                    found = true;
+                    System.out.println("✅ Joueur placé en (" + c + "," + r + ")");
+                }
+            }
+        }
 
         //Monster monster = new Monster(this); // Crée le monstre
     Random rand = new Random();
