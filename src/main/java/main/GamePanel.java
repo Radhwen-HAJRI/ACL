@@ -4,8 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import entity.Monster; 
@@ -45,6 +48,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     int FPS = 60;
     Labyrinthe labyrinthM = new Labyrinthe(this);
+    private BufferedImage heartFull, heartEmpty;
 
     int squareX = 100;
     int squareY = 100;
@@ -59,6 +63,18 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+
+        // Charge images HUD cœurs
+        try {
+            heartFull = ImageIO.read(getClass().getResourceAsStream("/ui/heart_full.png"));
+            heartEmpty = ImageIO.read(getClass().getResourceAsStream("/ui/heart_empty.png"));
+            System.out.println("Images cœurs chargées");
+        } catch (IOException e) {
+            e.printStackTrace();
+            heartFull = null;
+            heartEmpty = null;
+            System.out.println("Images cœurs manquantes – Fallback cercles");
+}
 
         // --- Trouver le centre du labyrinthe ---
         int centerCol = maxWorldCol / 2;
@@ -84,8 +100,6 @@ public class GamePanel extends JPanel implements Runnable {
         nbMonsters = 2 + rand.nextInt(3);  // 4,5,6,7,8
         System.out.println("Nombre de monstres créés : " + nbMonsters);
         
-        // DANS GamePanel.java - constructeur GamePanel()
-
         monsters = new Monster[nbMonsters];
         for (int i = 0; i < nbMonsters; i++) {
             monsters[i] = new Monster(this);
@@ -220,57 +234,108 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void paintComponent(Graphics g) {
-      super.paintComponent(g);
-    Graphics2D g2 = (Graphics2D) g;
-    
-    // Dessine toujours le labyrinthe
-    labyrinthM.draw(g2);
-    
-    if (gameOver) {
-        // GAME OVER ROUGE ÉNORME
-        g2.setColor(Color.RED);
-        g2.setFont(g2.getFont().deriveFont(72f));  // TAILLE GÉANTE
-        String gameOverText = "GAME OVER";
-        int textWidth = (int)g2.getFontMetrics().stringWidth(gameOverText);
-        int textHeight = (int)g2.getFontMetrics().getHeight();
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
         
-        // Centre le texte
-        int x = (screenWidth - textWidth) / 2;
-        int y = (screenHeight + textHeight) / 2;
+        // Dessine toujours le labyrinthe
+        labyrinthM.draw(g2);
         
-        g2.drawString(gameOverText, x, y);
-        
-        // Effet ombre (optionnel, plus stylé)
-        g2.setColor(Color.BLACK);
-        g2.drawString(gameOverText, x + 5, y + 5);
-        
-    } else if (gameWon) {
-        // YOU WON VERT/JAUNE ÉNORME
-        g2.setColor(Color.YELLOW);  // Fond jaune
-        g2.setFont(g2.getFont().deriveFont(72f));  // TAILLE GÉANTE
-        String winText = "YOU WON!";
-        int textWidth = (int)g2.getFontMetrics().stringWidth(winText);
-        int textHeight = (int)g2.getFontMetrics().getHeight();
-        
-        // Centre le texte
-        int x = (screenWidth - textWidth) / 2;
-        int y = (screenHeight + textHeight) / 2;
-        
-        // Effet ombre (optionnel)
-        g2.setColor(Color.BLACK);
-        g2.drawString(winText, x + 5, y + 5);
-        g2.setColor(Color.GREEN);  // Texte vert
-        g2.drawString(winText, x, y);
-        
-    } else {
-        // Jeu normal (déjà là)
-        player.draw(g2);
-        for (int i = 0; i < nbMonsters; i++) {
-            monsters[i].draw(g2);
+        if (gameOver) {
+            // GAME OVER ROUGE ÉNORME
+            g2.setColor(Color.RED);
+            g2.setFont(g2.getFont().deriveFont(72f));  // TAILLE GÉANTE
+            String gameOverText = "GAME OVER";
+            int textWidth = (int)g2.getFontMetrics().stringWidth(gameOverText);
+            int textHeight = (int)g2.getFontMetrics().getHeight();
+            
+            // Centre le texte
+            int x = (screenWidth - textWidth) / 2;
+            int y = (screenHeight + textHeight) / 2;
+            
+            g2.drawString(gameOverText, x, y);
+            
+            // Effet ombre (optionnel, plus stylé)
+            g2.setColor(Color.BLACK);
+            g2.drawString(gameOverText, x + 5, y + 5);
+            
+        } else if (gameWon) {
+            // YOU WON VERT/JAUNE ÉNORME
+            g2.setColor(Color.YELLOW);  // Fond jaune
+            g2.setFont(g2.getFont().deriveFont(72f));  // TAILLE GÉANTE
+            String winText = "YOU WON!";
+            int textWidth = (int)g2.getFontMetrics().stringWidth(winText);
+            int textHeight = (int)g2.getFontMetrics().getHeight();
+            
+            // Centre le texte
+            int x = (screenWidth - textWidth) / 2;
+            int y = (screenHeight + textHeight) / 2;
+            
+            // Effet ombre 
+            g2.setColor(Color.BLACK);
+            g2.drawString(winText, x + 5, y + 5);
+            g2.setColor(Color.GREEN);  // Texte vert
+            g2.drawString(winText, x, y);
+            
+        } else {
+            // Jeu normal 
+            player.draw(g2);
+            // HUD PV 
+            /*g2.setColor(Color.WHITE);
+            g2.setFont(g2.getFont().deriveFont(24f)); 
+            g2.drawString("PV: " + player.health + "/3", 20, 30);  // Position haut-gauche
+
+            // Optionnel : Barre visuelle (3 cœurs ou bar)
+            g2.setColor(Color.RED);
+            for (int i = 0; i < 3; i++) {
+                if (i < player.health) {
+                    g2.setColor(Color.GREEN);  // Cœur plein
+                } else {
+                    g2.setColor(Color.GRAY);  // Cœur vide
+                }
+                g2.fillOval(20 + i * 25, 50, 20, 20);  // 3 petits cercles (cœurs)
+                g2.setColor(Color.BLACK);
+                g2.drawOval(20 + i * 25, 50, 20, 20);  // Bord
+            }*/
+            int heartSize = 24;  // ← Taille cœurs (ajustable, 16-32 px)
+            int startX = 20;     // ← Position haut-gauche X
+            int startY = 30;     // ← Y (haut écran)
+
+            g2.setFont(g2.getFont().deriveFont(18f));  // Police pour "PV"
+            g2.setColor(Color.WHITE);
+            g2.drawString("PV:", startX, startY - 5);  // Label "PV:"
+
+            for (int i = 0; i < 3; i++) {  // 3 cœurs max
+                int heartX = startX + i * (heartSize + 5);  // Espacement 5px
+                int heartY = startY;
+                
+                if (heartFull != null && heartEmpty != null) {
+                    // Images
+                    if (i < player.health) {
+                        g2.drawImage(heartFull, heartX, heartY, heartSize, heartSize, null);  // Plein rouge
+                    } else {
+                        g2.drawImage(heartEmpty, heartX, heartY, heartSize, heartSize, null);  // Vide gris
+                    }
+                } else {
+                    // Fallback cercles (si images null)
+                    if (i < player.health) {
+                        g2.setColor(Color.RED);  // Rouge plein
+                    } else {
+                        g2.setColor(Color.GRAY);  // Gris vide
+                    }
+                    g2.fillOval(heartX, heartY, heartSize, heartSize);
+                    g2.setColor(Color.BLACK);
+                    g2.drawOval(heartX, heartY, heartSize, heartSize);  // Bord
+                }
+                g2.setColor(Color.WHITE);  // Reset
+            }
+
+            
+            for (int i = 0; i < nbMonsters; i++) {
+                monsters[i].draw(g2);
+            }
         }
-    }
-    
-    g2.dispose();
+        
+        g2.dispose();
     }
 
 
