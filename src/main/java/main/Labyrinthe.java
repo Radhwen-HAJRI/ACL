@@ -12,8 +12,8 @@ import tile.TileManager;
 
 public class Labyrinthe extends TileManager {  // Étend TileManager pour réutiliser loadMap/draw/getTileImage
     
-    private Point pointDepart;
-    private Point pointArrivee;
+    public Point pointDepart;
+    public Point pointArrivee;
     private BufferedImage imgTresor;
     private BufferedImage[] doorFrames;  
     private int doorSpriteCounter = 0;

@@ -50,7 +50,8 @@ public class GamePanel extends JPanel implements Runnable {
     int squareY = 100;
     int speed = 4;
 
-    boolean gameOver = false;  // ← NOUVEAU
+    boolean gameOver = false;  
+    boolean gameWon = false;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -79,17 +80,17 @@ public class GamePanel extends JPanel implements Runnable {
         player.worldy = (int) labyrinthM.getPointDepart().y;
 
         //Monster monster = new Monster(this); // Crée le monstre
-    Random rand = new Random();
-    nbMonsters = 10 + rand.nextInt(11);  // 4,5,6,7,8
-    System.out.println("Nombre de monstres créés : " + nbMonsters);
-    
-   // DANS GamePanel.java - constructeur GamePanel()
-
-    monsters = new Monster[nbMonsters];
-    for (int i = 0; i < nbMonsters; i++) {
-        monsters[i] = new Monster(this);
+        Random rand = new Random();
+        nbMonsters = 6 + rand.nextInt(7);  // 4,5,6,7,8
+        System.out.println("Nombre de monstres créés : " + nbMonsters);
         
-    // Une chance sur deux d'être un "Chaser"
+        // DANS GamePanel.java - constructeur GamePanel()
+
+        monsters = new Monster[nbMonsters];
+        for (int i = 0; i < nbMonsters; i++) {
+            monsters[i] = new Monster(this);
+            
+        // Une chance sur deux d'être un "Chaser"
         if (rand.nextBoolean()) {
             monsters[i].isChaser = true;
         }
@@ -179,27 +180,37 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
+    
+        player.update();
 
-       if (gameOver) return;  // Arrête tout si Game Over
-    
-    player.update();
-    
-    // Détecte collision joueur-monstre
-    for (int i = 0; i < nbMonsters; i++) {
-        // Distance < tileSize/2 → collision
-        int dx = Math.abs(player.worldx - monsters[i].worldx);
-        int dy = Math.abs(player.worldy - monsters[i].worldy);
-        if (dx < this.tileSize/2  && dy < this.tileSize/2) {
-            gameOver = true;
-            System.out.println("GAME OVER ! 😵");
+        if (!gameWon && !gameOver) {  // Seulement si pas déjà fini
+            int dx = Math.abs(player.worldx - (int)labyrinthM.pointArrivee.x);
+            int dy = Math.abs(player.worldy - (int)labyrinthM.pointArrivee.y);
+            //Object gp;
+            if (dx < labyrinthM.gp.tileSize && dy < labyrinthM.gp.tileSize) {  // Dans le même tile (tolérance)
+                gameWon = true;
+                System.out.println("YOU WON! 🎉");  // Debug console
+            }
+        } else {
             return;
         }
-    }
-    
-    // Met à jour les monstres seulement si pas Game Over
-    for (int i = 0; i < nbMonsters; i++) {
-        monsters[i].update();
-    }
+
+        // Détecte collision joueur-monstre
+        for (int i = 0; i < nbMonsters; i++) {
+            // Distance < tileSize/2 → collision
+            int dx = Math.abs(player.worldx - monsters[i].worldx);
+            int dy = Math.abs(player.worldy - monsters[i].worldy);
+            if (dx < this.tileSize && dy < this.tileSize) {
+                gameOver = true;
+                System.out.println("GAME OVER ! 😵");
+                return;
+            }
+        }
+        
+        // Met à jour les monstres seulement si pas Game Over
+        for (int i = 0; i < nbMonsters; i++) {
+            monsters[i].update();
+        }
     }
 
     @Override
@@ -228,8 +239,31 @@ public class GamePanel extends JPanel implements Runnable {
         g2.setColor(Color.BLACK);
         g2.drawString(gameOverText, x + 5, y + 5);
         
+    } else if (gameWon) {
+        // YOU WON VERT/JAUNE ÉNORME
+        g2.setColor(Color.YELLOW);  // Fond jaune
+        g2.setFont(g2.getFont().deriveFont(72f));  // TAILLE GÉANTE
+        String winText = "YOU WON!";
+        int textWidth = (int)g2.getFontMetrics().stringWidth(winText);
+        int textHeight = (int)g2.getFontMetrics().getHeight();
+        
+        // Centre le texte
+        int x = (screenWidth - textWidth) / 2;
+        int y = (screenHeight + textHeight) / 2;
+        
+        // Effet ombre (optionnel)
+        g2.setColor(Color.BLACK);
+        g2.drawString(winText, x + 5, y + 5);
+        g2.setColor(Color.GREEN);  // Texte vert
+        g2.drawString(winText, x, y);
+        
+        // Optionnel : Instructions rejouer
+        g2.setFont(g2.getFont().deriveFont(24f));
+        g2.setColor(Color.WHITE);
+        g2.drawString("Appuie sur R pour recommencer", x - 50, y + 50);
+        
     } else {
-        // Jeu normal
+        // Jeu normal (déjà là)
         player.draw(g2);
         for (int i = 0; i < nbMonsters; i++) {
             monsters[i].draw(g2);
