@@ -1,3 +1,9 @@
+entity\Monster.class
 main\java\Labyrinthe.class
 tile\Tile.class
+entity\Player.class
+main\main.class
+tile\TileManager.class
+main\KeyHandler.class
 entity\Entity.class
+main\GamePanel.class
