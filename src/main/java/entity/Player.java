@@ -71,20 +71,17 @@ public final class Player extends Entity {
         }
     }
 
-/**
-     * Gère le timing de l'animation d'attaque (2 frames)
-     */
     public void runAttackAnimation() {
         attackSpriteCounter++;
         
-        // Vitesse de l'animation (change toutes les 10 frames de jeu)
+        // Vitesse de l'animation 
         if (attackSpriteCounter > 10) { 
             if (spriteNum == 1) {
-                spriteNum = 2; // Passe à la 2ème frame d'attaque
+                spriteNum = 2; 
             }
             else if (spriteNum == 2) {
-                spriteNum = 1; // Revient à la 1ère
-                state = "walking"; // L'animation d'attaque est terminée
+                spriteNum = 1; 
+                state = "walking"; 
             }
             attackSpriteCounter = 0;
         }
@@ -93,38 +90,34 @@ public final class Player extends Entity {
    
     public void update() {
         if (state.equals("attacking")) {
-            // Si on est en train d'attaquer, on joue l'animation
             runAttackAnimation();
         } 
         else if (keyH.attackPressed) {
-            // Si on appuie sur Espace (et qu'on n'attaque pas déjà)
             state = "attacking";
-            keyH.attackPressed = false; // "Consomme" la pression
-            attackSpriteCounter = 0;    // Réinitialise l'animation
-            spriteNum = 1;              // Commence à la frame 1
-            hasHitThisSwing = false;    // N'a pas encore touché
+            keyH.attackPressed = false; 
+            attackSpriteCounter = 0;    
+            spriteNum = 1;  
+            hasHitThisSwing = false; 
         }
         else if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
-            // --- C'est votre ancien code de mouvement, maintenant dans un "else if" ---
             state = "walking";
             
-            // Check et bouge par direction
             if (keyH.upPressed) {
                 int nextY = worldy - speed; 
                 if (gp.canMoveHere(worldx, nextY)) { worldy = nextY; }
                 direction = "up";
             }
-            else if (keyH.downPressed) {  
+            if (keyH.downPressed) {  
                 int nextY = worldy + speed;
                 if (gp.canMoveHere(worldx, nextY)) { worldy = nextY; }
                 direction = "down";
             }
-            else if (keyH.leftPressed) {
+            if (keyH.leftPressed) {
                 int nextX = worldx - speed;
                 if (gp.canMoveHere(nextX, worldy)) { worldx = nextX; }
                 direction = "left";
             }
-            else if (keyH.rightPressed) {
+            if (keyH.rightPressed) {
                 int nextX = worldx + speed;
                 if (gp.canMoveHere(nextX, worldy)) { worldx = nextX; }
                 direction = "right";
@@ -137,11 +130,10 @@ public final class Player extends Entity {
                 spriteCounter = 0;
             }
         } else {
-             state = "walking"; // Ou "idle"
-             // spriteNum = 1; // Optionnel : revenir à la frame 1 si immobile
+             state = "walking"; 
         }
         
-        // Gère l'invincibilité (votre code existant)
+        // Gère l'invincibilité
         if (invincibleCounter > 0) {
             invincibleCounter--; 
         }
@@ -150,22 +142,19 @@ public final class Player extends Entity {
 
     public void draw(Graphics2D g2) {
         
-        // --- 1. LOGIQUE D'INVINCIBILITÉ (votre code existant) ---
         if (invincibleCounter > 0) {
             float alpha = (invincibleCounter / (float) invincibleDuration);  
             g2.setColor(new Color(1.0f, 0.0f, 0.0f, alpha * 0.5f));  
             g2.fillRect(screenX, screenY, gp.tileSize, gp.tileSize);  
             
-            if (invincibleCounter % 4 < 2) { // Clignote
-                return;  // Ne dessine pas le sprite pour le faire "disparaître"
+            if (invincibleCounter % 4 < 2) { 
+                return;
             }
         }
 
-        // --- 2. LOGIQUE DE SÉLECTION D'IMAGE ---
         BufferedImage image = null;
 
         if (state.equals("attacking")) {
-            // Le joueur attaque : choisir les sprites d'attaque
             switch(direction) {
                 case "up":
                     image = (spriteNum == 1) ? attackUp1 : attackUp2;
@@ -181,7 +170,6 @@ public final class Player extends Entity {
                     break;
             }
         } else {
-            // Le joueur marche : choisir les sprites de marche (votre ancien code)
             switch(direction) {
                 case "up":
                     image = (spriteNum == 1) ? up1 : up2;
@@ -198,7 +186,6 @@ public final class Player extends Entity {
             }
         }
         
-        // --- 3. DESSIN FINAL ---
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
     }
 }
