@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 
 import entity.Monster; 
 import entity.Player;
-import main.SoundManager;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -28,7 +27,6 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
 
-    // world map parameters
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
     public final int worldWidth = tileSize * maxWorldCol;
@@ -67,8 +65,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyH);
         this.setFocusable(true);
 
-       
-        // Charge images HUD cœurs
         try {
             heartFull = ImageIO.read(getClass().getResourceAsStream("/ui/heart_full.png"));
             heartEmpty = ImageIO.read(getClass().getResourceAsStream("/ui/heart_empty.png"));
@@ -80,14 +76,13 @@ public class GamePanel extends JPanel implements Runnable {
             System.out.println("Images cœurs manquantes – Fallback cercles");
         }
 
-        // --- Trouver le centre du labyrinthe ---
         int centerCol = maxWorldCol / 2;
         int centerRow = maxWorldRow / 2;
         
         boolean found = false;
         for (int r = centerRow - 5; r <= centerRow + 5 && !found; r++) {
             for (int c = centerCol - 5; c <= centerCol + 5 && !found; c++) {
-                if (labyrinthM.mapTileNum[c][r] == 0) { // 0 = tuile vide
+                if (labyrinthM.mapTileNum[c][r] == 0) {
                     player.worldx = c * tileSize;
                     player.worldy = r * tileSize;
                     found = true;
@@ -100,14 +95,13 @@ public class GamePanel extends JPanel implements Runnable {
         player.worldy = (int) labyrinthM.getPointDepart().y;
 
         Random rand = new Random();
-        nbMonsters = 7 + rand.nextInt(8);  // 4,5,6,7,8
+        nbMonsters = 7 + rand.nextInt(8);
         System.out.println("Nombre de monstres créés : " + nbMonsters);
         
         monsters = new Monster[nbMonsters];
         for (int i = 0; i < nbMonsters; i++) {
             monsters[i] = new Monster(this);
             
-        // Une chance sur deux d'être un "Chaser"
         if (rand.nextBoolean()) {
             monsters[i].isChaser = true;
         }
@@ -133,7 +127,6 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public boolean canMoveHere(int nextX, int nextY) {
-        // Calcule les tiles touchés par la hitbox du héros 
         int leftCol = (nextX) / tileSize;
         int rightCol = (nextX + tileSize - 1) / tileSize;  
         int topRow = (nextY) / tileSize;
@@ -143,7 +136,6 @@ public class GamePanel extends JPanel implements Runnable {
         return false;
         }
 
-        // Check collision sur les 4 coins 
         int tileNum1 = labyrinthM.mapTileNum[leftCol][topRow]; 
         int tileNum2 = labyrinthM.mapTileNum[rightCol][topRow]; 
         int tileNum3 = labyrinthM.mapTileNum[leftCol][bottomRow]; 
@@ -215,20 +207,14 @@ public class GamePanel extends JPanel implements Runnable {
             return; 
         }
 
-      
         player.update();
-
-      
         checkPlayerAttack(); 
 
-       
         for (int i = 0; i < nbMonsters; i++) {
             if (monsters[i] != null) {
-                
                 if (monsters[i].health <= 0) {
                     monsters[i].alive = false;
                 }
-                
                 if (monsters[i].alive) {
                     monsters[i].update();
                 }
@@ -239,10 +225,19 @@ public class GamePanel extends JPanel implements Runnable {
         int playerRow = player.worldy / tileSize;
         int tileNum = labyrinthM.mapTileNum[playerCol][playerRow];
         
+        // Ramasser la clé de victoire
         if (tileNum == 6) { 
             player.keyCount++; 
             labyrinthM.mapTileNum[playerCol][playerRow] = 0; 
-            System.out.println("Clé ramassée ! Total = " + player.keyCount);
+            System.out.println("Clé de victoire ramassée !");
+        }
+        
+        // Ramasser une pièce
+        if (tileNum == 9) { 
+            player.coinCount++;
+            labyrinthM.mapTileNum[playerCol][playerRow] = 0; 
+            labyrinthM.removeCoin(playerCol, playerRow);
+            System.out.println("Pièce ramassée ! Total = " + player.coinCount);
         }
 
         if (player.invincibleCounter == 0 && !player.state.equals("attacking")) {
@@ -255,7 +250,6 @@ public class GamePanel extends JPanel implements Runnable {
 
                     if (dx < hitRange && dy < hitRange) {  
                         player.health--;
-                       
                         player.invincibleCounter = player.invincibleDuration; 
                         System.out.println("Collision ! PV restants: " + player.health);
                         
@@ -271,10 +265,9 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
-        
         int dx = Math.abs(player.worldx - (int)labyrinthM.pointArrivee.x);
         int dy = Math.abs(player.worldy - (int)labyrinthM.pointArrivee.y);
-        if (dx < this.tileSize && dy < this.tileSize) {
+        if (dx < this.tileSize && dy < this.tileSize && player.keyCount > 0) {
             gameWon = true;
             soundManager.playWin(); 
             System.out.println("YOU WON! 🎉");
@@ -300,7 +293,6 @@ public void paintComponent(Graphics g) {
         int y = (screenHeight + textHeight) / 2;
         
         g2.drawString(gameOverText, x, y);
-       
         g2.setColor(Color.BLACK);
         g2.drawString(gameOverText, x + 5, y + 5);
         
@@ -320,17 +312,15 @@ public void paintComponent(Graphics g) {
         g2.drawString(winText, x, y);
         
     } else {
-        // Dessinez d'abord les monstres
         for (int i = 0; i < nbMonsters; i++) {
             if (monsters[i] != null && monsters[i].alive) { 
                 monsters[i].draw(g2);
             }
         }
         
-        // Puis le joueur
         player.draw(g2);
         
-        // Enfin l'UI
+        // Affichage des cœurs (PV)
         int heartSize = 30;
         int startX = 20;
         int startY = 30; 
@@ -362,20 +352,25 @@ public void paintComponent(Graphics g) {
             g2.setColor(Color.WHITE);
         }
 
-        int keySize = 30;
-        int keyX = 20;
-        int keyY = startY + 60;
+        // Affichage des pièces seulement (compteur de clé supprimé)
+        int coinSize = 30;
+        int coinX = 20;
+        int coinY = startY + 60;
 
-        if (labyrinthM.imgTresor != null) {
-            g2.drawImage(labyrinthM.imgTresor, keyX, keyY, keySize, keySize, null);
+        if (labyrinthM.imgCoin != null) {
+            g2.drawImage(labyrinthM.imgCoin, coinX, coinY, coinSize, coinSize, null);
         } else {
-            g2.setColor(Color.YELLOW);
-            g2.fillRect(keyX, keyY, keySize, keySize);
+            g2.setColor(new Color(255, 215, 0));
+            g2.fillOval(coinX, coinY, coinSize, coinSize);
+            g2.setColor(new Color(218, 165, 32));
+            g2.drawOval(coinX, coinY, coinSize, coinSize);
         }
 
         g2.setFont(g2.getFont().deriveFont(22f));
         g2.setColor(Color.WHITE);
-        g2.drawString("x " + player.keyCount, keyX + keySize + 10, keyY + 24);
+        g2.drawString("x " + player.coinCount, coinX + coinSize + 10, coinY + 24);
+        
+        // Le compteur de clé a été supprimé de l'interface
     }
     
     g2.dispose();

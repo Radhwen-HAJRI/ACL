@@ -6,5 +6,4 @@ main\main.class
 entity\Monster.class
 tile\TileManager.class
 entity\Entity.class
-main\Labyrinthe.class
 main\SoundManager.class

@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import main.GamePanel;
 import main.KeyHandler;
-import main.SoundManager;
 
 public final class Player extends Entity {
     GamePanel gp;
@@ -23,6 +22,7 @@ public final class Player extends Entity {
     public boolean hasHitThisSwing = false; 
     public int attackSpriteCounter = 0; 
     public int keyCount = 0;  // nombre de clés que le joueur possède
+    public int coinCount = 0; 
 
 
     private String lastDirection = "";

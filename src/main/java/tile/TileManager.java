@@ -63,6 +63,10 @@ public class TileManager {
             tile[8].image = ImageIO.read(getClass().getResourceAsStream("/tiles/minidoor.png"));
             //tile[7].collision = true;
             
+            tile[9] = new Tile();
+            tile[9].image = ImageIO.read(getClass().getResourceAsStream("/tiles/coin.png"));
+            //tile[9].collision = true;
+            
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -97,30 +101,39 @@ public class TileManager {
     }
 
     public void draw(Graphics2D g2) {
-    int worldCol = 0;
-    int worldRow = 0;
+        int worldCol = 0;
+        int worldRow = 0;
 
-    while (worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow) {
-        int tileNum = mapTileNum[worldCol][worldRow];
-        int worldX = worldCol * gp.tileSize;
-        int worldY = worldRow * gp.tileSize;
-        int screenX = worldX - gp.player.worldx + gp.player.screenX;
-        int screenY = worldY - gp.player.worldy + gp.player.screenY;
+        while (worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow) {
+            int tileNum = mapTileNum[worldCol][worldRow];
+            int worldX = worldCol * gp.tileSize;
+            int worldY = worldRow * gp.tileSize;
+            int screenX = worldX - gp.player.worldx + gp.player.screenX;
+            int screenY = worldY - gp.player.worldy + gp.player.screenY;
 
-        if (worldX + gp.tileSize > gp.player.worldx - gp.player.screenX &&
-            worldX - gp.tileSize < gp.player.worldx + gp.player.screenX &&
-            worldY + gp.tileSize > gp.player.worldy - gp.player.screenY &&
-            worldY - gp.tileSize < gp.player.worldy + gp.player.screenY) {
+            if (worldX + gp.tileSize > gp.player.worldx - gp.player.screenX &&
+                worldX - gp.tileSize < gp.player.worldx + gp.player.screenX &&
+                worldY + gp.tileSize > gp.player.worldy - gp.player.screenY &&
+                worldY - gp.tileSize < gp.player.worldy + gp.player.screenY) {
 
-            g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
-        }
+                // NE PAS dessiner les clés (6) et pièces (9) - elles seront dessinées par Labyrinthe
+                if (tileNum != 6 && tileNum != 9) {
+                    g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+                } else {
+                    // Dessiner de l'herbe ou de la terre à la place des clés et pièces
+                    if (tileNum == 6 || tileNum == 9) {
+                        // Vous pouvez choisir de dessiner une tuile normale (0 = herbe) à la place
+                        g2.drawImage(tile[0].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+                    }
+                }
+            }
 
-        worldCol++;
+            worldCol++;
 
-        if (worldCol == gp.maxWorldCol) {
-            worldCol = 0;
-            worldRow++;
+            if (worldCol == gp.maxWorldCol) {
+                worldCol = 0;
+                worldRow++;
+            }
         }
     }
-}
 }
