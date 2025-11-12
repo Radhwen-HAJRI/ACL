@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import entity.Monster; 
 import entity.Player;
+import main.SoundManager;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -50,6 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
     
 
     private BufferedImage heartFull, heartEmpty;
+    public SoundManager soundManager = new SoundManager();
 
     int squareX = 100;
     int squareY = 100;
@@ -220,10 +222,52 @@ public class GamePanel extends JPanel implements Runnable {
             if (monsters[i].health <= 0) {
                 monsters[i].alive = false;
             }
+<<<<<<< HEAD
             if (monsters[i].alive) {
                 monsters[i].update();
             }
         }
+=======
+        }
+
+        // Détecte collision joueur-monstre
+        if (player.invincibleCounter == 0 && !player.state.equals("attacking")) {
+            for (int i = 0; i < nbMonsters; i++) {
+                if (monsters[i] != null && monsters[i].alive) {
+                    
+                    int dx = Math.abs(player.worldx - monsters[i].worldx);
+                    int dy = Math.abs(player.worldy - monsters[i].worldy);
+                    int hitRange = this.tileSize / 2; 
+
+                    if (dx < hitRange && dy < hitRange) {  
+                        player.health--;
+                        /*GamePanel gp = null;
+                        gp.soundManager.playHit();*/
+                        player.invincibleCounter = player.invincibleDuration; // Active i-frames
+                        System.out.println("Collision ! PV restants: " + player.health);
+                        
+                        if (player.health <= 0) {
+                            gameOver = true;
+                            soundManager.playLose();
+                            System.out.println("GAME OVER ! PV à 0 😵");
+                            return;
+                        }
+                        break; // Une seule collision par frame
+                    }
+                }
+            }
+        }
+
+        // Condition de victoire
+        int dx = Math.abs(player.worldx - (int)labyrinthM.pointArrivee.x);
+        int dy = Math.abs(player.worldy - (int)labyrinthM.pointArrivee.y);
+        if (dx < this.tileSize && dy < this.tileSize) {
+            gameWon = true;
+            soundManager.playWin();
+            System.out.println("YOU WON! 🎉");
+            return; 
+        }
+>>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
     }
 
     int playerCol = player.worldx / tileSize;

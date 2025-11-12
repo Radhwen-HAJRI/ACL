@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<<<<<<< HEAD
 <testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="test.MonsterTest" time="1.311" tests="4" errors="0" skipped="0" failures="0">
+=======
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="test.MonsterTest" time="1.622" tests="4" errors="0" skipped="0" failures="0">
+>>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
   <properties>
     <property name="java.specification.version" value="25"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -17,7 +21,11 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="FR"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-25\bin"/>
+<<<<<<< HEAD
     <property name="sun.java.command" value="C:\Users\Hajri\AppData\Local\Temp\surefire17589907699048543692\surefirebooter-20251112111228352_3.jar C:\Users\Hajri\AppData\Local\Temp\surefire17589907699048543692 2025-11-12T11-12-28_265-jvmRun1 surefire-20251112111228352_1tmp surefire_0-20251112111228352_2tmp"/>
+=======
+    <property name="sun.java.command" value="C:\Users\DELL\AppData\Local\Temp\surefire15550946088432751580\surefirebooter-20251112011757358_3.jar C:\Users\DELL\AppData\Local\Temp\surefire15550946088432751580 2025-11-12T01-17-57_236-jvmRun1 surefire-20251112011757358_1tmp surefire_0-20251112011757358_2tmp"/>
+>>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\ACL\ACL\target\test-classes;C:\ACL\ACL\target\classes;C:\Users\Hajri\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.0\junit-jupiter-5.10.0.jar;C:\Users\Hajri\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.0\junit-jupiter-api-5.10.0.jar;C:\Users\Hajri\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Hajri\.m2\repository\org\junit\platform\junit-platform-commons\1.10.0\junit-platform-commons-1.10.0.jar;C:\Users\Hajri\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Hajri\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.0\junit-jupiter-params-5.10.0.jar;C:\Users\Hajri\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.0\junit-jupiter-engine-5.10.0.jar;C:\Users\Hajri\.m2\repository\org\junit\platform\junit-platform-engine\1.10.0\junit-platform-engine-1.10.0.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -32,7 +40,11 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
+<<<<<<< HEAD
     <property name="surefire.real.class.path" value="C:\Users\Hajri\AppData\Local\Temp\surefire17589907699048543692\surefirebooter-20251112111228352_3.jar"/>
+=======
+    <property name="surefire.real.class.path" value="C:\Users\DELL\AppData\Local\Temp\surefire15550946088432751580\surefirebooter-20251112011757358_3.jar"/>
+>>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="25+37-LTS-3491"/>
@@ -61,13 +73,22 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="69.0"/>
   </properties>
+<<<<<<< HEAD
   <testcase name="testMonsterImagesLoaded" classname="test.MonsterTest" time="0.43">
+=======
+  <testcase name="testMonsterImagesLoaded" classname="test.MonsterTest" time="0.612">
+>>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
     <system-out><![CDATA[Porte animée et trésor chargées !
+Son chargé: move
+Son chargé: hit
+Son chargé: win
+Son chargé: lose
 Images cœurs chargées
  Joueur placé en (20,20)
 Nombre de monstres créés : 10
 ]]></system-out>
   </testcase>
+<<<<<<< HEAD
   <testcase name="testStateChange" classname="test.MonsterTest" time="0.293">
     <system-out><![CDATA[Porte animée et trésor chargées !
 Images cœurs chargées
@@ -76,17 +97,47 @@ Nombre de monstres créés : 10
 ]]></system-out>
   </testcase>
   <testcase name="testMonsterInitialization" classname="test.MonsterTest" time="0.297">
+=======
+  <testcase name="testStateChange" classname="test.MonsterTest" time="0.378">
+>>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
     <system-out><![CDATA[Porte animée et trésor chargées !
+Son chargé: move
+Son chargé: hit
+Son chargé: win
+Son chargé: lose
+Images cœurs chargées
+ Joueur placé en (20,20)
+Nombre de monstres créés : 9
+]]></system-out>
+  </testcase>
+  <testcase name="testMonsterInitialization" classname="test.MonsterTest" time="0.336">
+    <system-out><![CDATA[Porte animée et trésor chargées !
+Son chargé: move
+Son chargé: hit
+Son chargé: win
+Son chargé: lose
 Images cœurs chargées
  Joueur placé en (20,20)
 Nombre de monstres créés : 13
 ]]></system-out>
   </testcase>
+<<<<<<< HEAD
   <testcase name="testChaserMonsterInitialization" classname="test.MonsterTest" time="0.272">
+=======
+  <testcase name="testChaserMonsterInitialization" classname="test.MonsterTest" time="0.274">
+>>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
     <system-out><![CDATA[Porte animée et trésor chargées !
+Son chargé: move
+Son chargé: hit
+Son chargé: win
+Son chargé: lose
 Images cœurs chargées
  Joueur placé en (20,20)
+<<<<<<< HEAD
 Nombre de monstres créés : 13
+=======
+Nombre de monstres créés : 7
+>>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
 ]]></system-out>
   </testcase>
 </testsuite>

@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: test.MonsterTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.311 s -- in test.MonsterTest
+=======
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.622 s -- in test.MonsterTest
+>>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
