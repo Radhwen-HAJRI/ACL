@@ -14,6 +14,8 @@ Transformer le prototype en un véritable jeu fonctionnel en implémentant les m
 * Ajout d'un système de score via la collecte de "coins".
 * Ajout d'un système de combat permettant au héros d'attaquer et de tuer les monstres.
 * Implémentation d'une caméra dynamique qui suit le joueur.
+* Implémentation des tests unitaires automatisés (JUnit) pour valider les fonctionnalités des classes Player et Monster. Tous les tests (12 au total) passent avec succès lors du build mvn package
+
 
 ## Fonctionnalités non réalisées
 

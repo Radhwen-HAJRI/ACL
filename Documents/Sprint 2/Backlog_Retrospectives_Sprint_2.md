@@ -29,6 +29,7 @@ Fonctionnalités ajoutées (non prévues) :
 
 * Système de combat : La plus grosse addition. Le héros peut désormais attaquer les monstres (3 coups pour tuer) au lieu de simplement les éviter.
 * Caméra dynamique : Nous avons amélioré la carte pour qu'elle soit "mobile" (la caméra suit le joueur), ce qui rend le visuel plus dynamique et le monde plus grand.
+* Implémentation des tests unitaires automatisés (JUnit) pour valider les fonctionnalités des classes Player et Monster. Tous les tests (12 au total) passent avec succès lors du build mvn package
 
 Fonctionnalités reportées :
 

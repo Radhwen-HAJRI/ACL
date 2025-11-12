@@ -2,7 +2,7 @@
 
 Ce projet est un jeu d'aventure 2D développé en Java où le joueur incarne un héros explorant un labyrinthe tout en évitant des monstres.
 
-## 🕹️ Déroulement du Jeu
+##  Déroulement du Jeu
 
 Incarnez un héros et explorez un labyrinthe mystérieux. Le but est de vous déplacer (avec les touches **WASD**  ou bien les touches fléchées du clavier) à travers les chemins (l'herbe) tout en évitant les obstacles infranchissables (l'eau).
 
@@ -30,27 +30,32 @@ Ouvrez votre terminal, créez un dossier pour le projet (par exemple, `MesJeux`)
 ```bash
 mkdir MesJeux
 cd MesJeux
-2. Cloner le dépôt Téléchargez le code source depuis GitHub.
+```
+## 2. Cloner le dépôt Téléchargez le code source depuis GitHub.
 
-Bash
-
+```Bash
 git clone [https://github.com/Radhwen-HAJRI/ACL.git](https://github.com/Radhwen-HAJRI/ACL.git)
-3. Accéder au dossier du projet Une fois le clonage terminé, déplacez-vous dans le dossier du projet.
+```
+## 3. Accéder au dossier du projet Une fois le clonage terminé, déplacez-vous dans le dossier du projet.
 
-Bash
-
+```Bash
 cd ACL
-4. Compiler le projet (Packaging) Utilisez Maven pour créer le fichier .jar exécutable.
+```
 
-Bash
+## 4. Compiler le projet (Packaging) Utilisez Maven pour créer le fichier .jar exécutable.
+
+```Bash
 
 mvn clean package
-5. Lancer le jeu ! Exécutez le jeu avec la commande Java suivante :
+```
 
-Bash
+## 5. Lancer le jeu ! Exécutez le jeu avec la commande suivante :
 
+```Bash
 java -cp target/labyrinthe-1.0-SNAPSHOT.jar main.main
-Informations Techniques
+```
+
+## Informations Techniques
 Langage : Java
 
 Version du JDK : OpenJDK 25
