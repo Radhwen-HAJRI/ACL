@@ -1,47 +1,56 @@
-# Balade dans un Labyrinthe 
+#  Balade dans un Labyrinthe - Sprint 02 
 
-### HOW TO RUN
+Ce projet est un jeu d'aventure 2D développé en Java où le joueur incarne un héros explorant un labyrinthe tout en évitant des monstres.
 
-## STEPS
+## 🕹️ Déroulement du Jeu
 
-clone the repository
+Incarnez un héros et explorez un labyrinthe mystérieux. Le but est de vous déplacer (avec les touches **WASD**  ou bien les touches fléchées du clavier) à travers les chemins (l'herbe) tout en évitant les obstacles infranchissables (l'eau).
 
-```bash 
-git@github.com:Radhwen-HAJRI/ACL.git
+Pour attequer le monstre et le tuer , le joueur doit appuyer au moins 3 fois sur la touche espace du clavier à une case prés du monstre : ET LE MONSRE DISPARAIT ! 
 
-```
+Des monstres rôdent également dans le labyrinthe et se déplacent de manière aléatoire. Si vous entrez en collision avec l'un d'eux, votre aventure prend fin et un écran "Game Over" s'affiche. Votre objectif est de naviguer prudemment , d'éviter la rencontre fatale de collecter le maximum de "coins" et d'atteindre le point d'arrivée ! .
+ 
+---
 
-## STEP 01 - DOWNLOAD MAVEN AND JAVA
+##  Installation et Lancement
 
-OpenJDK 25
+Suivez ces étapes pour compiler et jouer au jeu sur votre machine locale.
 
+### Prérequis
 
-## STEP 02 - RUN THE FOLLOWING COMMAND
-```bash 
+* **Git**
+* **Java (JDK) :** OpenJDK 25
+* **Maven**
+
+### Étapes d'Installation
+
+**1. Créer un dossier de travail**
+Ouvrez votre terminal, créez un dossier pour le projet (par exemple, `MesJeux`) et entrez-y.
+
+```bash
+mkdir MesJeux
+cd MesJeux
+2. Cloner le dépôt Téléchargez le code source depuis GitHub.
+
+Bash
+
+git clone [https://github.com/Radhwen-HAJRI/ACL.git](https://github.com/Radhwen-HAJRI/ACL.git)
+3. Accéder au dossier du projet Une fois le clonage terminé, déplacez-vous dans le dossier du projet.
+
+Bash
+
+cd ACL
+4. Compiler le projet (Packaging) Utilisez Maven pour créer le fichier .jar exécutable.
+
+Bash
 
 mvn clean package
+5. Lancer le jeu ! Exécutez le jeu avec la commande Java suivante :
 
-```
-
-
-```bash 
+Bash
 
 java -cp target/labyrinthe-1.0-SNAPSHOT.jar main.main
+Informations Techniques
+Langage : Java
 
-```
-
-##  Description
-Jeu en Java où le joueur incarne un héros explorant un labyrinthe fixe à la recherche d’un trésor tout en évitant les monstres mobiles.
-
-Cette version (v1.0) inclut :
-
-* Un labyrinthe fixe (grille 16x16 avec tiles herbe pour chemins et eau pour obstacles).
-* Héros customisé avec sprites animés (mouvements WASD, animations directionnelles).
-* Respect des obstacles : Le héros ne peut pas traverser les murs (eau).
-* Monstres mobiles qui se déplacent aléatoirement sur les chemins valides.
-* Game Over : Collision avec un monstre arrête le jeu et affiche un écran de fin.
-
-##  Compilation et exécution
-**Langage :** Java  
-**Version du JDK :** OpenJDK 25
-
+Version du JDK : OpenJDK 25

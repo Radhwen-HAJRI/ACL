@@ -1,0 +1,11 @@
+Objectifs du Sprint 1
+
+- Intégrer un nombre aléatoire de monstres dans le labyrinthe.
+
+- Mettre en place la gestion des collisions entre le héros et les monstres.
+
+- Gérer l’état Game Over.
+
+- Mise en place du labyrinthe avec les obstacles, le point de départ et le point d'arrivée 
+
+- Remplacer le petit carreaux simple représentant le héro par une image 
