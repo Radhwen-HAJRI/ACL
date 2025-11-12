@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import main.GamePanel;
 import main.KeyHandler;
+import main.SoundManager;
 
 public final class Player extends Entity {
     GamePanel gp;
@@ -21,6 +22,8 @@ public final class Player extends Entity {
     public String state = "walking"; 
     public boolean hasHitThisSwing = false; 
     public int attackSpriteCounter = 0; 
+
+    private String lastDirection = "";
 
     // Images d'attaque
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2,
@@ -132,6 +135,12 @@ public final class Player extends Entity {
         } else {
              state = "walking"; 
         }
+
+        // Son mouvement sur changement de direction
+        if (!direction.equals(lastDirection) && (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed)) {
+            gp.soundManager.playMove();  // Joue si direction changée
+        }
+        lastDirection = direction;
         
         // Gère l'invincibilité
         if (invincibleCounter > 0) {

@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import entity.Monster; 
 import entity.Player;
+import main.SoundManager;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -43,6 +44,7 @@ public class GamePanel extends JPanel implements Runnable {
     int FPS = 60;
     Labyrinthe labyrinthM = new Labyrinthe(this);
     private BufferedImage heartFull, heartEmpty;
+    public SoundManager soundManager = new SoundManager();
 
     int squareX = 100;
     int squareY = 100;
@@ -233,11 +235,14 @@ public class GamePanel extends JPanel implements Runnable {
 
                     if (dx < hitRange && dy < hitRange) {  
                         player.health--;
+                        /*GamePanel gp = null;
+                        gp.soundManager.playHit();*/
                         player.invincibleCounter = player.invincibleDuration; // Active i-frames
                         System.out.println("Collision ! PV restants: " + player.health);
                         
                         if (player.health <= 0) {
                             gameOver = true;
+                            soundManager.playLose();
                             System.out.println("GAME OVER ! PV à 0 😵");
                             return;
                         }
@@ -252,6 +257,7 @@ public class GamePanel extends JPanel implements Runnable {
         int dy = Math.abs(player.worldy - (int)labyrinthM.pointArrivee.y);
         if (dx < this.tileSize && dy < this.tileSize) {
             gameWon = true;
+            soundManager.playWin();
             System.out.println("YOU WON! 🎉");
             return; 
         }
