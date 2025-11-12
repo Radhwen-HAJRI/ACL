@@ -1,24 +1,11 @@
-<<<<<<< HEAD
-C:\ACL\ACL\src\main\java\tile\Tile.java
-C:\ACL\ACL\src\main\java\entity\Monster.java
-C:\ACL\ACL\src\main\java\main\KeyHandler.java
-C:\ACL\ACL\src\main\java\main\Labyrinthe.java
-C:\ACL\ACL\src\main\java\test.java
-C:\ACL\ACL\src\main\java\main\main.java
-C:\ACL\ACL\src\main\java\entity\Player.java
-C:\ACL\ACL\src\main\java\entity\Entity.java
-C:\ACL\ACL\src\main\java\main\GamePanel.java
-C:\ACL\ACL\src\main\java\tile\TileManager.java
-=======
-C:\Users\DELL\Documents\ACL3\ACL\src\main\java\main\main.java
-C:\Users\DELL\Documents\ACL3\ACL\src\main\java\tile\TileManager.java
-C:\Users\DELL\Documents\ACL3\ACL\src\main\java\tile\Tile.java
-C:\Users\DELL\Documents\ACL3\ACL\src\main\java\main\Labyrinthe.java
-C:\Users\DELL\Documents\ACL3\ACL\src\main\java\entity\Player.java
-C:\Users\DELL\Documents\ACL3\ACL\src\main\java\main\SoundManager.java
-C:\Users\DELL\Documents\ACL3\ACL\src\main\java\main\GamePanel.java
-C:\Users\DELL\Documents\ACL3\ACL\src\main\java\entity\Entity.java
-C:\Users\DELL\Documents\ACL3\ACL\src\main\java\test.java
-C:\Users\DELL\Documents\ACL3\ACL\src\main\java\entity\Monster.java
-C:\Users\DELL\Documents\ACL3\ACL\src\main\java\main\KeyHandler.java
->>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
+C:\ACL_PROJECT_EXP\ACL\src\main\java\entity\Entity.java
+C:\ACL_PROJECT_EXP\ACL\src\main\java\entity\Player.java
+C:\ACL_PROJECT_EXP\ACL\src\main\java\main\GamePanel.java
+C:\ACL_PROJECT_EXP\ACL\src\main\java\main\KeyHandler.java
+C:\ACL_PROJECT_EXP\ACL\src\main\java\entity\Monster.java
+C:\ACL_PROJECT_EXP\ACL\src\main\java\tile\Tile.java
+C:\ACL_PROJECT_EXP\ACL\src\main\java\test.java
+C:\ACL_PROJECT_EXP\ACL\src\main\java\main\main.java
+C:\ACL_PROJECT_EXP\ACL\src\main\java\tile\TileManager.java
+C:\ACL_PROJECT_EXP\ACL\src\main\java\main\Labyrinthe.java
+C:\ACL_PROJECT_EXP\ACL\src\main\java\main\SoundManager.java

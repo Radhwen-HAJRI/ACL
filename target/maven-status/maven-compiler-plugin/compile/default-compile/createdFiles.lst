@@ -1,8 +1,10 @@
 entity\Player.class
+main\KeyHandler.class
+main\GamePanel.class
+tile\Tile.class
 main\main.class
+entity\Monster.class
+tile\TileManager.class
 entity\Entity.class
-<<<<<<< HEAD
-=======
 main\Labyrinthe.class
 main\SoundManager.class
->>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c

@@ -209,28 +209,42 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
  
-    public void update() {
-    if (gameOver || gameWon) {
-        return; 
-    }
-
-    player.update();
-    checkPlayerAttack(); 
-
-    for (int i = 0; i < nbMonsters; i++) {
-        if (monsters[i] != null) {
-            if (monsters[i].health <= 0) {
-                monsters[i].alive = false;
-            }
-<<<<<<< HEAD
-            if (monsters[i].alive) {
-                monsters[i].update();
-            }
-        }
-=======
+   public void update() {
+    
+        if (gameOver || gameWon) {
+            return; 
         }
 
-        // Détecte collision joueur-monstre
+      
+        player.update();
+
+      
+        checkPlayerAttack(); 
+
+       
+        for (int i = 0; i < nbMonsters; i++) {
+            if (monsters[i] != null) {
+                
+                if (monsters[i].health <= 0) {
+                    monsters[i].alive = false;
+                }
+                
+                if (monsters[i].alive) {
+                    monsters[i].update();
+                }
+            }
+        }
+
+        int playerCol = player.worldx / tileSize;
+        int playerRow = player.worldy / tileSize;
+        int tileNum = labyrinthM.mapTileNum[playerCol][playerRow];
+        
+        if (tileNum == 6) { 
+            player.keyCount++; 
+            labyrinthM.mapTileNum[playerCol][playerRow] = 0; 
+            System.out.println("Clé ramassée ! Total = " + player.keyCount);
+        }
+
         if (player.invincibleCounter == 0 && !player.state.equals("attacking")) {
             for (int i = 0; i < nbMonsters; i++) {
                 if (monsters[i] != null && monsters[i].alive) {
@@ -241,87 +255,38 @@ public class GamePanel extends JPanel implements Runnable {
 
                     if (dx < hitRange && dy < hitRange) {  
                         player.health--;
-                        /*GamePanel gp = null;
-                        gp.soundManager.playHit();*/
-                        player.invincibleCounter = player.invincibleDuration; // Active i-frames
+                       
+                        player.invincibleCounter = player.invincibleDuration; 
                         System.out.println("Collision ! PV restants: " + player.health);
                         
                         if (player.health <= 0) {
                             gameOver = true;
-                            soundManager.playLose();
+                            soundManager.playLose(); 
                             System.out.println("GAME OVER ! PV à 0 😵");
                             return;
                         }
-                        break; // Une seule collision par frame
+                        break; 
                     }
                 }
             }
         }
 
-        // Condition de victoire
+        
         int dx = Math.abs(player.worldx - (int)labyrinthM.pointArrivee.x);
         int dy = Math.abs(player.worldy - (int)labyrinthM.pointArrivee.y);
         if (dx < this.tileSize && dy < this.tileSize) {
             gameWon = true;
-            soundManager.playWin();
+            soundManager.playWin(); 
             System.out.println("YOU WON! 🎉");
             return; 
         }
->>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
     }
-
-    int playerCol = player.worldx / tileSize;
-    int playerRow = player.worldy / tileSize;
-
-    // Vérifie si le joueur est sur une tuile de clé dans le labyrinthe
-    int tileNum = labyrinthM.mapTileNum[playerCol][playerRow];
-    if (tileNum == 6) { // 6 correspond à la clé
-        player.keyCount++;  // ajoute une clé
-        labyrinthM.mapTileNum[playerCol][playerRow] = 0; // remplace la clé par du sol
-        System.out.println("Clé ramassée ! Total = " + player.keyCount);
-    }
-
-    // Détecte collision joueur-monstre
-    if (player.invincibleCounter == 0 && !player.state.equals("attacking")) {
-        for (int i = 0; i < nbMonsters; i++) {
-            if (monsters[i] != null && monsters[i].alive) {
-                
-                int dx = Math.abs(player.worldx - monsters[i].worldx);
-                int dy = Math.abs(player.worldy - monsters[i].worldy);
-                int hitRange = this.tileSize / 2; 
-
-                if (dx < hitRange && dy < hitRange) {  
-                    player.health--;
-                    player.invincibleCounter = player.invincibleDuration; // Active i-frames
-                    System.out.println("Collision ! PV restants: " + player.health);
-                    
-                    if (player.health <= 0) {
-                        gameOver = true;
-                        System.out.println("GAME OVER ! PV à 0 😵");
-                        return;
-                    }
-                    break; // Une seule collision par frame
-                }
-            }
-        }
-    }
-
-    // Condition de victoire
-    int dx = Math.abs(player.worldx - (int)labyrinthM.pointArrivee.x);
-    int dy = Math.abs(player.worldy - (int)labyrinthM.pointArrivee.y);
-    if (dx < this.tileSize && dy < this.tileSize) {
-        gameWon = true;
-        System.out.println("YOU WON! 🎉");
-        return; 
-    }
-}
 
     @Override
 public void paintComponent(Graphics g) {
     super.paintComponent(g);
     Graphics2D g2 = (Graphics2D) g;
     
-    // Supprimez labyrinthM2.draw(g2) - gardez seulement un labyrinthe
     labyrinthM.draw(g2);
     
     if (gameOver) {

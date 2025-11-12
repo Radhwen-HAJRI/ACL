@@ -1,70 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="test.PlayerTest" time="1.866" tests="8" errors="0" skipped="0" failures="0">
-=======
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="test.PlayerTest" time="2.341" tests="8" errors="0" skipped="0" failures="0">
->>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="test.PlayerTest" time="3.44" tests="8" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="25"/>
     <property name="sun.cpu.isalist" value="amd64"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
     <property name="sun.awt.enableExtraMouseButtons" value="true"/>
-    <property name="java.class.path" value="C:\ACL\ACL\target\test-classes;C:\ACL\ACL\target\classes;C:\Users\Hajri\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.0\junit-jupiter-5.10.0.jar;C:\Users\Hajri\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.0\junit-jupiter-api-5.10.0.jar;C:\Users\Hajri\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Hajri\.m2\repository\org\junit\platform\junit-platform-commons\1.10.0\junit-platform-commons-1.10.0.jar;C:\Users\Hajri\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Hajri\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.0\junit-jupiter-params-5.10.0.jar;C:\Users\Hajri\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.0\junit-jupiter-engine-5.10.0.jar;C:\Users\Hajri\.m2\repository\org\junit\platform\junit-platform-engine\1.10.0\junit-platform-engine-1.10.0.jar;"/>
+    <property name="java.class.path" value="C:\ACL_PROJECT_EXP\ACL\target\test-classes;C:\ACL_PROJECT_EXP\ACL\target\classes;C:\Users\USER\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.0\junit-jupiter-5.10.0.jar;C:\Users\USER\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.0\junit-jupiter-api-5.10.0.jar;C:\Users\USER\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\USER\.m2\repository\org\junit\platform\junit-platform-commons\1.10.0\junit-platform-commons-1.10.0.jar;C:\Users\USER\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\USER\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.0\junit-jupiter-params-5.10.0.jar;C:\Users\USER\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.0\junit-jupiter-engine-5.10.0.jar;C:\Users\USER\.m2\repository\org\junit\platform\junit-platform-engine\1.10.0\junit-platform-engine-1.10.0.jar;"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="user.variant" value=""/>
     <property name="java.vendor.url" value="https://java.oracle.com/"/>
     <property name="user.timezone" value="Europe/Paris"/>
-    <property name="user.country.format" value="TN"/>
     <property name="os.name" value="Windows 11"/>
     <property name="java.vm.specification.version" value="25"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="FR"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-25\bin"/>
-<<<<<<< HEAD
-    <property name="sun.java.command" value="C:\Users\Hajri\AppData\Local\Temp\surefire17589907699048543692\surefirebooter-20251112111228352_3.jar C:\Users\Hajri\AppData\Local\Temp\surefire17589907699048543692 2025-11-12T11-12-28_265-jvmRun1 surefire-20251112111228352_1tmp surefire_0-20251112111228352_2tmp"/>
-=======
-    <property name="sun.java.command" value="C:\Users\DELL\AppData\Local\Temp\surefire15550946088432751580\surefirebooter-20251112011757358_3.jar C:\Users\DELL\AppData\Local\Temp\surefire15550946088432751580 2025-11-12T01-17-57_236-jvmRun1 surefire-20251112011757358_1tmp surefire_0-20251112011757358_2tmp"/>
->>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
+    <property name="sun.java.command" value="C:\Users\USER\AppData\Local\Temp\surefire13534527994385546112\surefirebooter-20251112120107902_3.jar C:\Users\USER\AppData\Local\Temp\surefire13534527994385546112 2025-11-12T12-01-07_767-jvmRun1 surefire-20251112120107902_1tmp surefire_0-20251112120107902_2tmp"/>
     <property name="jdk.debug" value="release"/>
-    <property name="surefire.test.class.path" value="C:\ACL\ACL\target\test-classes;C:\ACL\ACL\target\classes;C:\Users\Hajri\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.0\junit-jupiter-5.10.0.jar;C:\Users\Hajri\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.0\junit-jupiter-api-5.10.0.jar;C:\Users\Hajri\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Hajri\.m2\repository\org\junit\platform\junit-platform-commons\1.10.0\junit-platform-commons-1.10.0.jar;C:\Users\Hajri\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Hajri\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.0\junit-jupiter-params-5.10.0.jar;C:\Users\Hajri\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.0\junit-jupiter-engine-5.10.0.jar;C:\Users\Hajri\.m2\repository\org\junit\platform\junit-platform-engine\1.10.0\junit-platform-engine-1.10.0.jar;"/>
+    <property name="surefire.test.class.path" value="C:\ACL_PROJECT_EXP\ACL\target\test-classes;C:\ACL_PROJECT_EXP\ACL\target\classes;C:\Users\USER\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.0\junit-jupiter-5.10.0.jar;C:\Users\USER\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.0\junit-jupiter-api-5.10.0.jar;C:\Users\USER\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\USER\.m2\repository\org\junit\platform\junit-platform-commons\1.10.0\junit-platform-commons-1.10.0.jar;C:\Users\USER\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\USER\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.0\junit-jupiter-params-5.10.0.jar;C:\Users\USER\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.0\junit-jupiter-engine-5.10.0.jar;C:\Users\USER\.m2\repository\org\junit\platform\junit-platform-engine\1.10.0\junit-platform-engine-1.10.0.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
-    <property name="user.home" value="C:\Users\Hajri"/>
+    <property name="user.home" value="C:\Users\USER"/>
     <property name="user.language" value="fr"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
     <property name="java.version.date" value="2025-09-16"/>
     <property name="java.home" value="C:\Program Files\Java\jdk-25"/>
     <property name="file.separator" value="\"/>
-    <property name="basedir" value="C:\ACL\ACL"/>
+    <property name="basedir" value="C:\ACL_PROJECT_EXP\ACL"/>
     <property name="java.vm.compressedOopsMode" value="Zero based"/>
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-<<<<<<< HEAD
-    <property name="surefire.real.class.path" value="C:\Users\Hajri\AppData\Local\Temp\surefire17589907699048543692\surefirebooter-20251112111228352_3.jar"/>
-=======
-    <property name="surefire.real.class.path" value="C:\Users\DELL\AppData\Local\Temp\surefire15550946088432751580\surefirebooter-20251112011757358_3.jar"/>
->>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
+    <property name="surefire.real.class.path" value="C:\Users\USER\AppData\Local\Temp\surefire13534527994385546112\surefirebooter-20251112120107902_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="25+37-LTS-3491"/>
-    <property name="user.name" value="Hajri"/>
+    <property name="user.name" value="USER"/>
     <property name="stdout.encoding" value="Cp1252"/>
     <property name="path.separator" value=";"/>
     <property name="os.version" value="10.0"/>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="file.encoding" value="UTF-8"/>
     <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
-    <property name="localRepository" value="C:\Users\Hajri\.m2\repository"/>
+    <property name="localRepository" value="C:\Users\USER\.m2\repository"/>
     <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
-    <property name="java.io.tmpdir" value="C:\Users\Hajri\AppData\Local\Temp\"/>
+    <property name="java.io.tmpdir" value="C:\Users\USER\AppData\Local\Temp\"/>
     <property name="java.version" value="25"/>
-    <property name="user.dir" value="C:\ACL\ACL"/>
+    <property name="user.dir" value="C:\ACL_PROJECT_EXP\ACL"/>
     <property name="os.arch" value="amd64"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
     <property name="sun.os.patch.level" value=""/>
     <property name="native.encoding" value="Cp1252"/>
-    <property name="java.library.path" value="C:\Program Files\Java\jdk-25\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Users\Hajri\anaconda3;C:\Users\Hajri\anaconda3\Library\mingw-w64\bin;C:\Users\Hajri\anaconda3\Library\usr\bin;C:\Users\Hajri\anaconda3\Library\bin;C:\Users\Hajri\anaconda3\Scripts;C:\Users\Hajri\anaconda3\bin;C:\Users\Hajri\anaconda3\condabin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Python310\Scripts;C:\Program Files\Python310;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\dotnet;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\ProgramData\ComposerSetup\bin;C:\Program Files\Git\cmd;C:\Program Files\MiKTeX\miktex\bin\x64;C:\Program Files\NVIDIA Corporation\NVIDIA App\NvDLISR;C:\MinGW\bin;C:\Program Files\apache-maven-3.9.11\bin;C:\Users\Hajri\scoop\shims;C:\Users\Hajri\AppData\Local\Microsoft\WindowsApps;C:\xampp\php;C:\Users\Hajri\AppData\Roaming\Composer\vendor\bin;C:\Users\Hajri\AppData\Local\Programs\MiKTeX\miktex\bin\x64;C:\Users\Hajri\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Hajri\anaconda3;C:\Users\Hajri\anaconda3\Scripts;C:\Users\Hajri\anaconda3\Library\bin;C:\Program Files\Java\jdk-25\bin;C:\Users\Hajri\Downloads\winlibs-x86_64-posix-seh-gcc-15.2.0-mingw-w64ucrt-13.0.0-r1.7z\mingw64\bin;C:\Program Files\apache-maven-3.9.11\bin;.;."/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk-25\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk-25\bin;C:\Program Files\apache-maven-3.9.11\bin;C:\Users\USER\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\USER\AppData\Local\Programs\Python\Python313\;C:\Users\USER\AppData\Local\Programs\Python\Launcher\;C:\Users\USER\AppData\Local\Microsoft\WindowsApps;C:\Users\USER\AppData\Local\Programs\Microsoft VS Code\bin;."/>
     <property name="java.vm.info" value="mixed mode, sharing"/>
     <property name="stderr.encoding" value="Cp1252"/>
     <property name="java.vendor" value="Oracle Corporation"/>
@@ -73,25 +60,7 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="69.0"/>
   </properties>
-<<<<<<< HEAD
-  <testcase name="testDefaultPosition" classname="test.PlayerTest" time="0.285">
-    <system-out><![CDATA[Porte animée et trésor chargées !
-Images cœurs chargées
- Joueur placé en (20,20)
-Nombre de monstres créés : 14
-]]></system-out>
-  </testcase>
-  <testcase name="testPlayerInitialization" classname="test.PlayerTest" time="0.236">
-    <system-out><![CDATA[Porte animée et trésor chargées !
-Images cœurs chargées
- Joueur placé en (20,20)
-Nombre de monstres créés : 10
-]]></system-out>
-  </testcase>
-  <testcase name="testPlayerMovementUpdate" classname="test.PlayerTest" time="0.196">
-=======
-  <testcase name="testDefaultPosition" classname="test.PlayerTest" time="0.284">
->>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
+  <testcase name="testDefaultPosition" classname="test.PlayerTest" time="0.43">
     <system-out><![CDATA[Porte animée et trésor chargées !
 Son chargé: move
 Son chargé: hit
@@ -99,14 +68,10 @@ Son chargé: win
 Son chargé: lose
 Images cœurs chargées
  Joueur placé en (20,20)
-Nombre de monstres créés : 8
+Nombre de monstres créés : 12
 ]]></system-out>
   </testcase>
-<<<<<<< HEAD
-  <testcase name="testPlayerImagesLoaded" classname="test.PlayerTest" time="0.202">
-=======
-  <testcase name="testPlayerInitialization" classname="test.PlayerTest" time="0.314">
->>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
+  <testcase name="testPlayerInitialization" classname="test.PlayerTest" time="0.463">
     <system-out><![CDATA[Porte animée et trésor chargées !
 Son chargé: move
 Son chargé: hit
@@ -114,49 +79,21 @@ Son chargé: win
 Son chargé: lose
 Images cœurs chargées
  Joueur placé en (20,20)
-Nombre de monstres créés : 13
+Nombre de monstres créés : 14
 ]]></system-out>
   </testcase>
-  <testcase name="testPlayerMovementUpdate" classname="test.PlayerTest" time="0.419">
+  <testcase name="testPlayerMovementUpdate" classname="test.PlayerTest" time="0.495">
     <system-out><![CDATA[Porte animée et trésor chargées !
 Son chargé: move
 Son chargé: hit
 Son chargé: win
 Son chargé: lose
-Images cœurs chargées
- Joueur placé en (20,20)
-Nombre de monstres créés : 8
-]]></system-out>
-  </testcase>
-  <testcase name="testPlayerFinalClass" classname="test.PlayerTest" time="0.198">
-    <system-out><![CDATA[Porte animée et trésor chargées !
-Images cœurs chargées
- Joueur placé en (20,20)
-Nombre de monstres créés : 8
-]]></system-out>
-  </testcase>
-  <testcase name="testSpriteAnimation" classname="test.PlayerTest" time="0.262">
-    <system-out><![CDATA[Porte animée et trésor chargées !
-Images cœurs chargées
- Joueur placé en (20,20)
-Nombre de monstres créés : 14
-]]></system-out>
-  </testcase>
-  <testcase name="testDirectionChange" classname="test.PlayerTest" time="0.263">
-    <system-out><![CDATA[Porte animée et trésor chargées !
-Images cœurs chargées
- Joueur placé en (20,20)
-Nombre de monstres créés : 14
-]]></system-out>
-  </testcase>
-  <testcase name="testMultipleUpdatesWithoutMovement" classname="test.PlayerTest" time="0.218">
-    <system-out><![CDATA[Porte animée et trésor chargées !
 Images cœurs chargées
  Joueur placé en (20,20)
 Nombre de monstres créés : 9
 ]]></system-out>
   </testcase>
-  <testcase name="testPlayerImagesLoaded" classname="test.PlayerTest" time="0.235">
+  <testcase name="testPlayerImagesLoaded" classname="test.PlayerTest" time="0.426">
     <system-out><![CDATA[Porte animée et trésor chargées !
 Son chargé: move
 Son chargé: hit
@@ -164,10 +101,10 @@ Son chargé: win
 Son chargé: lose
 Images cœurs chargées
  Joueur placé en (20,20)
-Nombre de monstres créés : 8
+Nombre de monstres créés : 9
 ]]></system-out>
   </testcase>
-  <testcase name="testPlayerFinalClass" classname="test.PlayerTest" time="0.251">
+  <testcase name="testPlayerFinalClass" classname="test.PlayerTest" time="0.378">
     <system-out><![CDATA[Porte animée et trésor chargées !
 Son chargé: move
 Son chargé: hit
@@ -175,32 +112,10 @@ Son chargé: win
 Son chargé: lose
 Images cœurs chargées
  Joueur placé en (20,20)
-Nombre de monstres créés : 10
+Nombre de monstres créés : 9
 ]]></system-out>
   </testcase>
-  <testcase name="testSpriteAnimation" classname="test.PlayerTest" time="0.22">
-    <system-out><![CDATA[Porte animée et trésor chargées !
-Son chargé: move
-Son chargé: hit
-Son chargé: win
-Son chargé: lose
-Images cœurs chargées
- Joueur placé en (20,20)
-Nombre de monstres créés : 8
-]]></system-out>
-  </testcase>
-  <testcase name="testDirectionChange" classname="test.PlayerTest" time="0.325">
-    <system-out><![CDATA[Porte animée et trésor chargées !
-Son chargé: move
-Son chargé: hit
-Son chargé: win
-Son chargé: lose
-Images cœurs chargées
- Joueur placé en (20,20)
-Nombre de monstres créés : 14
-]]></system-out>
-  </testcase>
-  <testcase name="testMultipleUpdatesWithoutMovement" classname="test.PlayerTest" time="0.285">
+  <testcase name="testSpriteAnimation" classname="test.PlayerTest" time="0.413">
     <system-out><![CDATA[Porte animée et trésor chargées !
 Son chargé: move
 Son chargé: hit
@@ -209,6 +124,28 @@ Son chargé: lose
 Images cœurs chargées
  Joueur placé en (20,20)
 Nombre de monstres créés : 13
+]]></system-out>
+  </testcase>
+  <testcase name="testDirectionChange" classname="test.PlayerTest" time="0.412">
+    <system-out><![CDATA[Porte animée et trésor chargées !
+Son chargé: move
+Son chargé: hit
+Son chargé: win
+Son chargé: lose
+Images cœurs chargées
+ Joueur placé en (20,20)
+Nombre de monstres créés : 13
+]]></system-out>
+  </testcase>
+  <testcase name="testMultipleUpdatesWithoutMovement" classname="test.PlayerTest" time="0.416">
+    <system-out><![CDATA[Porte animée et trésor chargées !
+Son chargé: move
+Son chargé: hit
+Son chargé: win
+Son chargé: lose
+Images cœurs chargées
+ Joueur placé en (20,20)
+Nombre de monstres créés : 14
 ]]></system-out>
   </testcase>
 </testsuite>

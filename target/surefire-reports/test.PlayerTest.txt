@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: test.PlayerTest
 -------------------------------------------------------------------------------
-<<<<<<< HEAD
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.866 s -- in test.PlayerTest
-=======
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.341 s -- in test.PlayerTest
->>>>>>> 3df9652b9f6080cd64aad117252ac7ea355f7f7c
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.440 s -- in test.PlayerTest
