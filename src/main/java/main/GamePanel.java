@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
@@ -32,6 +33,10 @@ public class GamePanel extends JPanel implements Runnable {
     public final int worldWidth = tileSize * maxWorldCol;
     public final int worldHeight = tileSize * maxWorldRow;
 
+    public Rectangle solidArea = new Rectangle(0,0,48,48);
+    public int solidAreaDefaultX = 0;
+    public int solidAreaDefaultY = 0;
+
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
 
@@ -42,6 +47,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     int FPS = 60;
     Labyrinthe labyrinthM = new Labyrinthe(this);
+    
+
     private BufferedImage heartFull, heartEmpty;
 
     int squareX = 100;
@@ -58,6 +65,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyH);
         this.setFocusable(true);
 
+       
         // Charge images HUD cœurs
         try {
             heartFull = ImageIO.read(getClass().getResourceAsStream("/ui/heart_full.png"));
@@ -200,143 +208,169 @@ public class GamePanel extends JPanel implements Runnable {
     }
  
     public void update() {
-    
-        if (gameOver || gameWon) {
-            return; 
-        }
+    if (gameOver || gameWon) {
+        return; 
+    }
 
-        player.update();
+    player.update();
+    checkPlayerAttack(); 
 
-        checkPlayerAttack(); 
-
-        for (int i = 0; i < nbMonsters; i++) {
-            if (monsters[i] != null) {
-                
-                if (monsters[i].health <= 0) {
-                    monsters[i].alive = false;
-                }
-                
-                if (monsters[i].alive) {
-                    monsters[i].update();
-                }
+    for (int i = 0; i < nbMonsters; i++) {
+        if (monsters[i] != null) {
+            if (monsters[i].health <= 0) {
+                monsters[i].alive = false;
             }
-        }
-
-        // Détecte collision joueur-monstre
-        if (player.invincibleCounter == 0 && !player.state.equals("attacking")) {
-            for (int i = 0; i < nbMonsters; i++) {
-                if (monsters[i] != null && monsters[i].alive) {
-                    
-                    int dx = Math.abs(player.worldx - monsters[i].worldx);
-                    int dy = Math.abs(player.worldy - monsters[i].worldy);
-                    int hitRange = this.tileSize / 2; 
-
-                    if (dx < hitRange && dy < hitRange) {  
-                        player.health--;
-                        player.invincibleCounter = player.invincibleDuration; // Active i-frames
-                        System.out.println("Collision ! PV restants: " + player.health);
-                        
-                        if (player.health <= 0) {
-                            gameOver = true;
-                            System.out.println("GAME OVER ! PV à 0 😵");
-                            return;
-                        }
-                        break; // Une seule collision par frame
-                    }
-                }
+            if (monsters[i].alive) {
+                monsters[i].update();
             }
-        }
-
-        // Condition de victoire
-        int dx = Math.abs(player.worldx - (int)labyrinthM.pointArrivee.x);
-        int dy = Math.abs(player.worldy - (int)labyrinthM.pointArrivee.y);
-        if (dx < this.tileSize && dy < this.tileSize) {
-            gameWon = true;
-            System.out.println("YOU WON! 🎉");
-            return; 
         }
     }
+
+    int playerCol = player.worldx / tileSize;
+    int playerRow = player.worldy / tileSize;
+
+    // Vérifie si le joueur est sur une tuile de clé dans le labyrinthe
+    int tileNum = labyrinthM.mapTileNum[playerCol][playerRow];
+    if (tileNum == 6) { // 6 correspond à la clé
+        player.keyCount++;  // ajoute une clé
+        labyrinthM.mapTileNum[playerCol][playerRow] = 0; // remplace la clé par du sol
+        System.out.println("Clé ramassée ! Total = " + player.keyCount);
+    }
+
+    // Détecte collision joueur-monstre
+    if (player.invincibleCounter == 0 && !player.state.equals("attacking")) {
+        for (int i = 0; i < nbMonsters; i++) {
+            if (monsters[i] != null && monsters[i].alive) {
+                
+                int dx = Math.abs(player.worldx - monsters[i].worldx);
+                int dy = Math.abs(player.worldy - monsters[i].worldy);
+                int hitRange = this.tileSize / 2; 
+
+                if (dx < hitRange && dy < hitRange) {  
+                    player.health--;
+                    player.invincibleCounter = player.invincibleDuration; // Active i-frames
+                    System.out.println("Collision ! PV restants: " + player.health);
+                    
+                    if (player.health <= 0) {
+                        gameOver = true;
+                        System.out.println("GAME OVER ! PV à 0 😵");
+                        return;
+                    }
+                    break; // Une seule collision par frame
+                }
+            }
+        }
+    }
+
+    // Condition de victoire
+    int dx = Math.abs(player.worldx - (int)labyrinthM.pointArrivee.x);
+    int dy = Math.abs(player.worldy - (int)labyrinthM.pointArrivee.y);
+    if (dx < this.tileSize && dy < this.tileSize) {
+        gameWon = true;
+        System.out.println("YOU WON! 🎉");
+        return; 
+    }
+}
 
     @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-      
-        labyrinthM.draw(g2);
+public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    Graphics2D g2 = (Graphics2D) g;
+    
+    // Supprimez labyrinthM2.draw(g2) - gardez seulement un labyrinthe
+    labyrinthM.draw(g2);
+    
+    if (gameOver) {
+        g2.setColor(Color.RED);
+        g2.setFont(g2.getFont().deriveFont(72f)); 
+        String gameOverText = "GAME OVER";
+        int textWidth = (int)g2.getFontMetrics().stringWidth(gameOverText);
+        int textHeight = (int)g2.getFontMetrics().getHeight();
         
-        if (gameOver) {
-            g2.setColor(Color.RED);
-            g2.setFont(g2.getFont().deriveFont(72f)); 
-            String gameOverText = "GAME OVER";
-            int textWidth = (int)g2.getFontMetrics().stringWidth(gameOverText);
-            int textHeight = (int)g2.getFontMetrics().getHeight();
-            
-            int x = (screenWidth - textWidth) / 2;
-            int y = (screenHeight + textHeight) / 2;
-            
-            g2.drawString(gameOverText, x, y);
-           
-            g2.setColor(Color.BLACK);
-            g2.drawString(gameOverText, x + 5, y + 5);
-            
-        } else if (gameWon) {
-            g2.setColor(Color.YELLOW);  
-            g2.setFont(g2.getFont().deriveFont(72f));  
-            String winText = "YOU WON!";
-            int textWidth = (int)g2.getFontMetrics().stringWidth(winText);
-            int textHeight = (int)g2.getFontMetrics().getHeight();
-          
-            int x = (screenWidth - textWidth) / 2;
-            int y = (screenHeight + textHeight) / 2;
-            
-            g2.setColor(Color.BLACK);
-            g2.drawString(winText, x + 5, y + 5);
-            g2.setColor(Color.GREEN);  
-            g2.drawString(winText, x, y);
-            
-        } else {
-            player.draw(g2);
-            int heartSize = 30;
-            int startX = 20;
-            int startY = 30; 
-
-            g2.setFont(g2.getFont().deriveFont(18f)); 
-            g2.setColor(Color.WHITE);
-            g2.drawString("PV:", startX, startY - 5); 
-
-            for (int i = 0; i < 3; i++) { 
-                int heartX = startX + i * (heartSize + 5); 
-                int heartY = startY;
-                
-                if (heartFull != null && heartEmpty != null) {
-                    if (i < player.health) {
-                        g2.drawImage(heartFull, heartX, heartY, heartSize, heartSize, null);
-                    } else {
-                        g2.drawImage(heartEmpty, heartX, heartY, heartSize, heartSize, null);
-                    }
-                } else {
-                    if (i < player.health) {
-                        g2.setColor(Color.RED); 
-                    } else {
-                        g2.setColor(Color.GRAY);
-                    }
-                    g2.fillOval(heartX, heartY, heartSize, heartSize);
-                    g2.setColor(Color.BLACK);
-                    g2.drawOval(heartX, heartY, heartSize, heartSize);
-                }
-                g2.setColor(Color.WHITE);
-            }
-
-            
-            for (int i = 0; i < nbMonsters; i++) {
-              if (monsters[i] != null && monsters[i].alive) { 
-                    monsters[i].draw(g2);
-                }
+        int x = (screenWidth - textWidth) / 2;
+        int y = (screenHeight + textHeight) / 2;
+        
+        g2.drawString(gameOverText, x, y);
+       
+        g2.setColor(Color.BLACK);
+        g2.drawString(gameOverText, x + 5, y + 5);
+        
+    } else if (gameWon) {
+        g2.setColor(Color.YELLOW);  
+        g2.setFont(g2.getFont().deriveFont(72f));  
+        String winText = "YOU WON!";
+        int textWidth = (int)g2.getFontMetrics().stringWidth(winText);
+        int textHeight = (int)g2.getFontMetrics().getHeight();
+      
+        int x = (screenWidth - textWidth) / 2;
+        int y = (screenHeight + textHeight) / 2;
+        
+        g2.setColor(Color.BLACK);
+        g2.drawString(winText, x + 5, y + 5);
+        g2.setColor(Color.GREEN);  
+        g2.drawString(winText, x, y);
+        
+    } else {
+        // Dessinez d'abord les monstres
+        for (int i = 0; i < nbMonsters; i++) {
+            if (monsters[i] != null && monsters[i].alive) { 
+                monsters[i].draw(g2);
             }
         }
         
-        g2.dispose();
+        // Puis le joueur
+        player.draw(g2);
+        
+        // Enfin l'UI
+        int heartSize = 30;
+        int startX = 20;
+        int startY = 30; 
+
+        g2.setFont(g2.getFont().deriveFont(18f)); 
+        g2.setColor(Color.WHITE);
+        g2.drawString("PV:", startX, startY - 5); 
+
+        for (int i = 0; i < 3; i++) { 
+            int heartX = startX + i * (heartSize + 5); 
+            int heartY = startY;
+            
+            if (heartFull != null && heartEmpty != null) {
+                if (i < player.health) {
+                    g2.drawImage(heartFull, heartX, heartY, heartSize, heartSize, null);
+                } else {
+                    g2.drawImage(heartEmpty, heartX, heartY, heartSize, heartSize, null);
+                }
+            } else {
+                if (i < player.health) {
+                    g2.setColor(Color.RED); 
+                } else {
+                    g2.setColor(Color.GRAY);
+                }
+                g2.fillOval(heartX, heartY, heartSize, heartSize);
+                g2.setColor(Color.BLACK);
+                g2.drawOval(heartX, heartY, heartSize, heartSize);
+            }
+            g2.setColor(Color.WHITE);
+        }
+
+        int keySize = 30;
+        int keyX = 20;
+        int keyY = startY + 60;
+
+        if (labyrinthM.imgTresor != null) {
+            g2.drawImage(labyrinthM.imgTresor, keyX, keyY, keySize, keySize, null);
+        } else {
+            g2.setColor(Color.YELLOW);
+            g2.fillRect(keyX, keyY, keySize, keySize);
+        }
+
+        g2.setFont(g2.getFont().deriveFont(22f));
+        g2.setColor(Color.WHITE);
+        g2.drawString("x " + player.keyCount, keyX + keySize + 10, keyY + 24);
     }
+    
+    g2.dispose();
+}
 
     public int getOriginalTileSize() {
         return originalTileSize;

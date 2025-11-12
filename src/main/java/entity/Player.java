@@ -21,6 +21,8 @@ public final class Player extends Entity {
     public String state = "walking"; 
     public boolean hasHitThisSwing = false; 
     public int attackSpriteCounter = 0; 
+    public int keyCount = 0;  // nombre de clés que le joueur possède
+
 
     // Images d'attaque
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2,
@@ -32,6 +34,10 @@ public final class Player extends Entity {
 
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
+
+        solidAreaDefaultX = 8;
+        solidAreaDefaultY = 16; 
+        
         setDefaultValues();
         getPlayerImage();
         health = 3;

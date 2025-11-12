@@ -1,12 +1,13 @@
 package main;
 
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.awt.Font;
-import java.awt.Point;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import tile.TileManager;
 
@@ -14,7 +15,7 @@ public class Labyrinthe extends TileManager {
     
     public Point pointDepart;
     public Point pointArrivee;
-    private BufferedImage imgTresor;
+    public BufferedImage imgTresor;
     private BufferedImage[] doorFrames;  
     private int doorSpriteCounter = 0;
     private int doorSpriteNum = 1; // 1=closed, 2=opening, 3=open
@@ -22,7 +23,14 @@ public class Labyrinthe extends TileManager {
     
     public Labyrinthe(GamePanel gp) {
         super(gp); 
-        loadMap("/maps/map01.txt");  
+        loadMap("/maps/map01.txt");
+        
+        mapTileNum[23][7] = 6;   
+        mapTileNum[37][43] = 6;  
+    
+        if (tile[6] != null) {
+            tile[6].collision = false;  
+        } 
         setPoints(); 
         try {
             doorFrames = new BufferedImage[3];
@@ -99,16 +107,44 @@ public class Labyrinthe extends TileManager {
             g2.drawString("PORTE", departScreenX + 5, departScreenY + doorHeight / 2);
         }
         
-        if (imgTresor != null) {
-            g2.drawImage(imgTresor, arriveeScreenX, arriveeScreenY, gp.tileSize, gp.tileSize, null);
-        } else {
-            g2.setColor(Color.YELLOW);
-            g2.fillRect(arriveeScreenX + 4, arriveeScreenY + 4, gp.tileSize - 8, gp.tileSize - 8); 
-            g2.setColor(Color.ORANGE);
-            g2.fillRect(arriveeScreenX, arriveeScreenY, 4, gp.tileSize);
-            g2.setColor(Color.BLACK);
-            g2.setFont(new Font("Arial", Font.BOLD, 10));
-            g2.drawString("CLE", arriveeScreenX + 5, arriveeScreenY + 20);
+        // --- Première clé (à pointArrivee) ---
+        int key1Col = (int) (pointArrivee.x / gp.tileSize);
+        int key1Row = (int) (pointArrivee.y / gp.tileSize);
+        if (mapTileNum[key1Col][key1Row] == 6) {
+            int arriveeScreenXKey = pointArrivee.x - gp.player.worldx + gp.player.screenX;
+            int arriveeScreenYKey = pointArrivee.y - gp.player.worldy + gp.player.screenY;
+            
+            if (imgTresor != null) {
+                g2.drawImage(imgTresor, arriveeScreenXKey, arriveeScreenYKey, gp.tileSize, gp.tileSize, null);
+            } else {
+                g2.setColor(Color.YELLOW);
+                g2.fillRect(arriveeScreenXKey + 4, arriveeScreenYKey + 4, gp.tileSize - 8, gp.tileSize - 8); 
+                g2.setColor(Color.ORANGE);
+                g2.fillRect(arriveeScreenXKey, arriveeScreenYKey, 4, gp.tileSize);
+                g2.setColor(Color.BLACK);
+                g2.setFont(new Font("Arial", Font.BOLD, 10));
+                g2.drawString("CLE", arriveeScreenXKey + 5, arriveeScreenYKey + 20);
+            }
+        }
+
+        // --- Deuxième clé ---
+        int secondKeyCol = 23;
+        int secondKeyRow = 7;
+        if (mapTileNum[secondKeyCol][secondKeyRow] == 6) {
+            int secondKeyScreenX = secondKeyCol * gp.tileSize - gp.player.worldx + gp.player.screenX;
+            int secondKeyScreenY = secondKeyRow * gp.tileSize - gp.player.worldy + gp.player.screenY;
+
+            if (imgTresor != null) {
+                g2.drawImage(imgTresor, secondKeyScreenX, secondKeyScreenY, gp.tileSize, gp.tileSize, null);
+            } else {
+                g2.setColor(Color.YELLOW);
+                g2.fillRect(secondKeyScreenX + 4, secondKeyScreenY + 4, gp.tileSize - 8, gp.tileSize - 8);
+                g2.setColor(Color.ORANGE);
+                g2.fillRect(secondKeyScreenX, secondKeyScreenY, 4, gp.tileSize);
+                g2.setColor(Color.BLACK);
+                g2.setFont(new Font("Arial", Font.BOLD, 10));
+                g2.drawString("CLE", secondKeyScreenX + 5, secondKeyScreenY + 20);
+            }
         }
     }
 }

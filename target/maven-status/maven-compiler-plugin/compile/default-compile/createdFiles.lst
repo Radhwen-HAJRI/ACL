@@ -1,9 +1,3 @@
 entity\Player.class
-main\KeyHandler.class
-main\GamePanel.class
-tile\Tile.class
 main\main.class
-entity\Monster.class
-tile\TileManager.class
 entity\Entity.class
-main\Labyrinthe.class
