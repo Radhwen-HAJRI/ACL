@@ -7,6 +7,10 @@ public class KeyHandler implements KeyListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed;
     public boolean attackPressed;
 
+    public boolean enterPressed;
+    public boolean upMenuPressed;
+    public boolean downMenuPressed;
+
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -33,6 +37,16 @@ public class KeyHandler implements KeyListener {
             attackPressed = true;
         }
         System.out.println("Touche appuyée : " + e.getKeyCode());
+        if (code == KeyEvent.VK_ENTER) {
+            enterPressed = true;
+        }
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+            upMenuPressed = true;
+        }
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+            downMenuPressed = true;
+        }
+
        
     }
 
@@ -55,6 +69,11 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
             rightPressed = false;
         }
+
+        if (code == KeyEvent.VK_ENTER) enterPressed = false;
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) upMenuPressed = false;
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) downMenuPressed = false;
+
 
     }
 

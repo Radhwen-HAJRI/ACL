@@ -30,11 +30,11 @@ public class Labyrinthe extends TileManager {
     
     public Labyrinthe(GamePanel gp) {
         super(gp); 
-        loadMap("/maps/map01.txt");
+        loadMap("/maps/map01.txt",0);
         
         // Remplacer l'ancienne clé par des pièces
-        mapTileNum[23][7] = 9;
-        mapTileNum[37][43] = 6;
+        mapTileNum[gp.currentMap][23][7] = 9;
+        mapTileNum[gp.currentMap][37][43] = 6;
     
         if (tile[6] != null) {
             tile[6].collision = false;
@@ -81,7 +81,7 @@ public class Labyrinthe extends TileManager {
         List<Point> validPositions = new ArrayList<>();
         for (int col = 0; col < gp.maxWorldCol; col++) {
             for (int row = 0; row < gp.maxWorldRow; row++) {
-                int tileType = mapTileNum[col][row];
+                int tileType = mapTileNum[gp.currentMap][col][row];
                 // Vérifier si c'est une tuile 0 ou 3
                 if (tileType == 0 || tileType == 3) {
                     // Éviter les positions trop proches du départ et de l'arrivée
@@ -104,7 +104,7 @@ public class Labyrinthe extends TileManager {
             coinPositions.add(new Point(coinPos.x * gp.tileSize, coinPos.y * gp.tileSize));
             
             // Marquer cette position comme pièce dans la carte
-            mapTileNum[coinPos.x][coinPos.y] = 9;
+            mapTileNum[gp.currentMap][coinPos.x][coinPos.y] = 9;
             
             // Retirer cette position pour éviter les doublons
             validPositions.remove(randomIndex);
@@ -137,7 +137,7 @@ public class Labyrinthe extends TileManager {
     }
     
     public int[][] getGrille() {
-        return mapTileNum; 
+        return mapTileNum[gp.currentMap]; 
     }
     
     @Override
@@ -180,7 +180,7 @@ public class Labyrinthe extends TileManager {
         // Clé de victoire
         int keyCol = (int) (pointArrivee.x / gp.tileSize);
         int keyRow = (int) (pointArrivee.y / gp.tileSize);
-        if (mapTileNum[keyCol][keyRow] == 6) {
+        if (mapTileNum[gp.currentMap][keyCol][keyRow] == 6) {
             int arriveeScreenXKey = pointArrivee.x - gp.player.worldx + gp.player.screenX;
             int arriveeScreenYKey = pointArrivee.y - gp.player.worldy + gp.player.screenY;
             
@@ -202,7 +202,7 @@ public class Labyrinthe extends TileManager {
             int coinCol = coin.x / gp.tileSize;
             int coinRow = coin.y / gp.tileSize;
             
-            if (mapTileNum[coinCol][coinRow] == 9) {
+            if (mapTileNum[gp.currentMap][coinCol][coinRow] == 9) {
                 int coinScreenX = coin.x - gp.player.worldx + gp.player.screenX;
                 int coinScreenY = coin.y - gp.player.worldy + gp.player.screenY;
 

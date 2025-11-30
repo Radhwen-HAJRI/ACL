@@ -8,3 +8,4 @@ tile\TileManager.class
 entity\Entity.class
 main\Labyrinthe.class
 main\SoundManager.class
+main\GamePanel$GameState.class
