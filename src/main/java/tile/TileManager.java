@@ -81,7 +81,7 @@ public class TileManager {
             loadTile(38, "wall.png", true);
             loadTile(39, "earth.png", false);
             loadTile(40, "wall.png", true);
-            loadTile(41, "lava.png", true);
+            loadTile(41, "lava.png", false);
             loadTile(42, "tree.png", true);
             loadTile(43, "tree.png", true);
 
