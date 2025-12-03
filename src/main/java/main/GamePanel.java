@@ -55,7 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
     
 
 
-    Monster[] monsters;
+    public Monster[] monsters;
     int nbMonsters;
 
     int FPS = 60;
@@ -115,33 +115,7 @@ public class GamePanel extends JPanel implements Runnable {
         Random rand = new Random();
         nbMonsters = 7 + rand.nextInt(8);
         System.out.println("Nombre de monstres créés : " + nbMonsters);
-        
-        monsters = new Monster[nbMonsters];
-        for (int i = 0; i < nbMonsters; i++) {
-            monsters[i] = new Monster(this);
-            
-        if (rand.nextBoolean()) {
-            monsters[i].isChaser = true;
-        }
-        
-        boolean foundSpot = false;
-        while (!foundSpot) {
-            
-            int col = rand.nextInt(this.maxWorldCol);
-            int row = rand.nextInt(this.maxWorldRow);
-     
-            int tileNum = this.labyrinthM.mapTileNum[currentMap][col][row];
-            
-            if (this.labyrinthM.tile[tileNum] != null && !this.labyrinthM.tile[tileNum].collision) {
-                
-                monsters[i].worldx = col * this.tileSize;
-                monsters[i].worldy = row * this.tileSize;
-              
-                foundSpot = true; 
-            }
-            
-        }
-    }
+        spawnMonsters(); 
     }
 
     public boolean canMoveHere(int nextX, int nextY) {
@@ -172,6 +146,44 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread.start();
     }
 
+    public void spawnMonsters() {
+        // On recrée le tableau pour le nouveau niveau
+        monsters = new Monster[nbMonsters];
+        Random rand = new Random();
+
+        for (int i = 0; i < nbMonsters; i++) {
+            monsters[i] = new Monster(this);
+            
+            // On garde votre logique aléatoire pour les Chasers
+            if (rand.nextBoolean()) {
+                monsters[i].isChaser = true;
+            }
+            
+            boolean foundSpot = false;
+            while (!foundSpot) {
+                int col = rand.nextInt(this.maxWorldCol);
+                int row = rand.nextInt(this.maxWorldRow);
+         
+                // IMPORTANT : On utilise 'currentMap' ici !
+                int tileNum = this.labyrinthM.mapTileNum[currentMap][col][row];
+                
+                // Si ce n'est pas un mur
+                if (this.labyrinthM.tile[tileNum] != null && !this.labyrinthM.tile[tileNum].collision) {
+                    
+                    // Sécurité : Pas trop près du joueur (5 cases de distance min)
+                    int distPlayerX = Math.abs((col * tileSize) - player.worldx);
+                    int distPlayerY = Math.abs((row * tileSize) - player.worldy);
+
+                    if (distPlayerX > tileSize * 5 || distPlayerY > tileSize * 5) {
+                        monsters[i].worldx = col * this.tileSize;
+                        monsters[i].worldy = row * this.tileSize;
+                        foundSpot = true; 
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void run() {
         double drawInterval = 1000000000.0 / FPS;
@@ -198,7 +210,8 @@ public class GamePanel extends JPanel implements Runnable {
             return;
         }
 
-        int attackDistance =  this.tileSize  ;
+        // On garde la GRANDE DISTANCE que vous vouliez (3 cases)
+        int attackRange = this.tileSize * 1; 
 
         for (int i = 0; i < nbMonsters; i++) {
             if (monsters[i] != null && monsters[i].alive) {
@@ -206,14 +219,16 @@ public class GamePanel extends JPanel implements Runnable {
                 int dx = Math.abs(player.worldx - monsters[i].worldx);
                 int dy = Math.abs(player.worldy - monsters[i].worldy);
 
-                if (dx < this.tileSize && dy < this.tileSize && 
-                    (dx*dx + dy*dy) < (attackDistance * attackDistance)) {
+                if (dx < attackRange && dy < attackRange) {
                     
-                    monsters[i].health--; 
-                    System.out.println("Monstre touché ! Vie restante : " + monsters[i].health);
+                    // ON REVIENT À LA LOGIQUE NORMALE
+                    monsters[i].health--; // Enlève 1 PV
+                    // Comme il n'a que 1 PV (défini dans Monster.java), il mourra tout de suite (1 - 1 = 0)
+                    
+                    System.out.println("Monstre touché !");
                     player.hasHitThisSwing = true; 
                     
-                    break; 
+                    // Le nettoyage (alive = false) se fera automatiquement dans update()
                 }
             }
         }
@@ -254,10 +269,19 @@ public class GamePanel extends JPanel implements Runnable {
         if (transitioning) {
             if (System.currentTimeMillis() - transitionStart > 1000) {
 
-                currentMap = 1;
+                // 1. On change de niveau
+                currentMap++; // (ou currentMap = 1 si vous préférez tester)
 
-                player.worldx = 10*tileSize;
-                player.worldy = 10*tileSize;
+                // 2. IMPORTANT : On recalcule les points de départ et d'arrivée
+                // pour ce nouveau niveau
+                labyrinthM.setPoints(); 
+
+                // 3. On place le joueur au NOUVEAU point de départ
+                player.worldx = (int) labyrinthM.getPointDepart().x;
+                player.worldy = (int) labyrinthM.getPointDepart().y;
+
+                // 4. On replace les monstres
+                spawnMonsters();
 
                 transitioning = false;
             }

@@ -1,3 +1,4 @@
+
 package entity;
 
 import java.awt.Graphics2D;
@@ -16,7 +17,7 @@ public class Monster extends Entity {
 
     GamePanel gp;
     public boolean isChaser = false;
-    public int detectionRange = 300; // Ajout d'une valeur par défaut
+    public int detectionRange = 300;
     Random random = new Random();
     private int actionLockCounter = 0;
     private final int moveDelay = 60;
@@ -27,7 +28,7 @@ public class Monster extends Entity {
     public ArrayList<BufferedImage> runAnimLeft;
     public ArrayList<BufferedImage> attackAnimLeft;
 
-    public int health = 3;
+    public int health = 1;
     public boolean alive = true;
 
     public String state = "wandering";
@@ -36,7 +37,7 @@ public class Monster extends Entity {
     public Monster(GamePanel gp) {
         super();
         this.gp = gp;
-        this.attackRange = gp.tileSize * 2;
+        this.attackRange = gp.tileSize * 2; // Portée d'attaque (2 cases)
         
         // Initialiser les listes
         runAnim = new ArrayList<>();
@@ -57,12 +58,14 @@ public class Monster extends Entity {
 
     public void getMonsterImage() {
         try {
+            // Chargement course
             for (int i = 1; i <= 6; i++) {
                 BufferedImage runFrame = ImageIO.read(getClass().getResourceAsStream("/monsters/run_" + i + ".png"));
                 runAnim.add(runFrame);
                 runAnimLeft.add(flipImage(runFrame));
             }
 
+            // Chargement attaque
             for (int i = 1; i <= 5; i++) {
                 BufferedImage attackFrame = ImageIO.read(getClass().getResourceAsStream("/monsters/attack_" + i + ".png"));
                 attackAnim.add(attackFrame);
@@ -95,7 +98,6 @@ public class Monster extends Entity {
     }
 
     public void update() {
-
         if (!alive) { return; }
 
         // Calcul de la distance avec le joueur
@@ -110,20 +112,28 @@ public class Monster extends Entity {
         }
     }
 
+    // --- CŒUR DE L'IA ---
     private void updateChaserAI(double distance) {
         if (state.equals("attacking")) {
+            // === MODE ATTAQUE (GLISSADE) ===
+            updateChasingMovement(); 
+            updateAttacking();
+
             if (distance > attackRange) {
                 setState("chasing");
             }
-            updateAttacking();
 
         } else if (state.equals("chasing")) {
+            // === MODE POURSUITE ===
             if (distance < attackRange) {
                 setState("attacking");
-            } else if (distance > detectionRange) {
+            } 
+            else if (distance > detectionRange) {
                 setState("wandering");
-            } else {
+            } 
+            else {
                 updateChasingMovement();
+                updateAnimation(); 
             }
 
         } else if (state.equals("wandering")) {
@@ -135,6 +145,7 @@ public class Monster extends Entity {
         }
     }
 
+    // --- MOUVEMENT SANS ANIMATION ---
     private void updateChasingMovement() {
         int dx = gp.player.worldx - this.worldx;
         int dy = gp.player.worldy - this.worldy;
@@ -150,7 +161,6 @@ public class Monster extends Entity {
             secondaryDirection = (dx > 0) ? "right" : "left";
         }
 
-        // Tente de bouger dans la direction principale
         int nextWorldX = worldx;
         int nextWorldY = worldy;
 
@@ -161,15 +171,13 @@ public class Monster extends Entity {
             case "right": nextWorldX += speed; break;
         }
 
-        if (gp.canMoveHere(nextWorldX, nextWorldY)) {
+        if (gp.canMoveHere(nextWorldX, nextWorldY) && !isMonsterCollision(nextWorldX, nextWorldY)) {
             worldx = nextWorldX;
             worldy = nextWorldY;
             direction = primaryDirection;
-            updateAnimation();
-            return;
+            return; 
         }
 
-        // Tente la direction secondaire
         nextWorldX = worldx;
         nextWorldY = worldy;
         switch (secondaryDirection) {
@@ -179,12 +187,39 @@ public class Monster extends Entity {
             case "right": nextWorldX += speed; break;
         }
         
-        if (gp.canMoveHere(nextWorldX, nextWorldY)) {
+        if (gp.canMoveHere(nextWorldX, nextWorldY) && !isMonsterCollision(nextWorldX, nextWorldY)) {
             worldx = nextWorldX;
             worldy = nextWorldY;
             direction = secondaryDirection;
-            updateAnimation();
         }
+    }
+
+    // --- ANIMATION D'ATTAQUE (BOUCLE) ---
+    private void updateAttacking() {
+        spriteCounter++;
+        if (spriteCounter > 8) { 
+            spriteNum++;
+            if (spriteNum >= attackAnim.size()) {
+                spriteNum = 0;
+            }
+            spriteCounter = 0;
+        }
+    }
+
+    // --- ANCIENNES MÉTHODES ---
+
+    private boolean isMonsterCollision(int nextX, int nextY) {
+        for (Monster m : gp.monsters) {
+            if (m == null || m == this || !m.alive) {
+                continue; 
+            }
+            int dx = Math.abs(nextX - m.worldx);
+            int dy = Math.abs(nextY - m.worldy);
+            if (dx < gp.tileSize && dy < gp.tileSize) {
+                return true; 
+            }
+        }
+        return false; 
     }
 
     private void updateWandererAI(double distance) {
@@ -214,7 +249,7 @@ public class Monster extends Entity {
             case "right": nextWorldX += speed; break;
         }
 
-        if (gp.canMoveHere(nextWorldX, nextWorldY)) {
+        if (gp.canMoveHere(nextWorldX, nextWorldY) && !isMonsterCollision(nextWorldX, nextWorldY)) {
             worldx = nextWorldX;
             worldy = nextWorldY;
             updateAnimation();
@@ -231,18 +266,6 @@ public class Monster extends Entity {
         }
     }
 
-    private void updateAttacking() {
-        spriteCounter++;
-        if (spriteCounter > 8) {
-            spriteNum = spriteNum + 1;
-            if (spriteNum >= attackAnim.size()) {
-                spriteNum = 0;
-                setState("wandering");
-            }
-            spriteCounter = 0;
-        }
-    }
-
     private void updateAnimation() {
         spriteCounter++;
         if (spriteCounter > 10) {
@@ -254,7 +277,6 @@ public class Monster extends Entity {
     }
 
     public void draw(Graphics2D g2) {
-
         if (!alive) { return; }
         BufferedImage image = null;
         ArrayList<BufferedImage> currentAnim = null;

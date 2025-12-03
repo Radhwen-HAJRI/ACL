@@ -19,8 +19,10 @@ public class Labyrinthe extends TileManager {
     public Point pointDepart;
     public Point pointArrivee;
     public BufferedImage imgTresor;
+    public BufferedImage imgFinalTreasure;
     public BufferedImage imgCoin;
-    private BufferedImage[] doorFrames;  
+    private BufferedImage[] doorFrames; 
+    private BufferedImage[] explosionFrames; 
     private int doorSpriteCounter = 0;
     private int doorSpriteNum = 1;
     private final int doorAnimationDelay = 20;
@@ -48,29 +50,55 @@ public class Labyrinthe extends TileManager {
         initializeCoins();
         
         try {
+            // Chargement de la porte (Niveau 1)
             doorFrames = new BufferedImage[3];
             doorFrames[0] = ImageIO.read(getClass().getResourceAsStream("/door/door_closed.png"));
             doorFrames[1] = ImageIO.read(getClass().getResourceAsStream("/door/door_opening.png"));
             doorFrames[2] = ImageIO.read(getClass().getResourceAsStream("/door/door_opening.png"));
+
+            // --- AJOUT : Chargement de l'explosion (Niveau 2) ---
+            explosionFrames = new BufferedImage[10];
+            for (int i = 0; i < 10; i++) {
+                // Adaptez le nom du dossier et des fichiers ici !
+                // Exemple : /explosion/exp_1.png, exp_2.png...
+                explosionFrames[i] = ImageIO.read(getClass().getResourceAsStream("/Explosion_depart/Explosion_" + (i+1) + ".png"));
+            }
+            // ----------------------------------------------------
+
             imgTresor = ImageIO.read(getClass().getResourceAsStream("/tiles/key.png"));
             imgCoin = ImageIO.read(getClass().getResourceAsStream("/tiles/coin.png"));
-            System.out.println("Porte animée, clé et pièces chargées !");
+            imgFinalTreasure = ImageIO.read(getClass().getResourceAsStream("/tiles/tresor.png"));
         } catch (IOException e) {
             e.printStackTrace();
-            doorFrames = null;
-            imgTresor = null;
-            imgCoin = null;
-            System.out.println("Fallback : Images manquantes");
         }
     }
     
-    private void setPoints() {
-        int startCol = 10;  
-        int startRow = 7;  
-        pointDepart = new Point(startCol * gp.tileSize, startRow * gp.tileSize);
+    // 1. Mettez "public" pour qu'on puisse l'appeler depuis GamePanel
+    public void setPoints() {
+        int startCol = 0;
+        int startRow = 0;
+        int endCol = 0;
+        int endRow = 0;
+
+        // --- NIVEAU 1 ---
+        if (gp.currentMap == 0) {
+            startCol = 10; 
+            startRow = 7;
+            
+            endCol = 37; 
+            endRow = 43;
+        } 
+        else if (gp.currentMap == 1) {
+            
+            startCol = 5;  // <--- Mettez ici une colonne sûre du niveau 2
+            startRow = 5;  // <--- Mettez ici une ligne sûre du niveau 2
+            
+            endCol = 45;   // <--- Où voulez-vous la porte/clé du niveau 2 ?
+            endRow = 45;
+        }
         
-        int endCol = 37;  
-        int endRow = 43;    
+        // Application des coordonnées
+        pointDepart = new Point(startCol * gp.tileSize, startRow * gp.tileSize);
         pointArrivee = new Point(endCol * gp.tileSize, endRow * gp.tileSize);
     }
     
@@ -149,51 +177,83 @@ public class Labyrinthe extends TileManager {
         int arriveeScreenX = pointArrivee.x - gp.player.worldx + gp.player.screenX;
         int arriveeScreenY = pointArrivee.y - gp.player.worldy + gp.player.screenY;
         
-        doorSpriteCounter++;
-        if (doorSpriteCounter > doorAnimationDelay) {
-            doorSpriteNum = (doorSpriteNum % 3) + 1;
-            doorSpriteCounter = 0;
-        }
-        int doorWidth = gp.tileSize * 3;  
-        int doorHeight = gp.tileSize * 3;
-        int offsetX = (gp.tileSize - doorWidth) / 2;  
-        int offsetY = (gp.tileSize - doorHeight) / 2; 
-        if (doorFrames != null) {
-            BufferedImage currentFrame = doorFrames[doorSpriteNum - 1];
-            if (currentFrame != null) {
-                g2.drawImage(currentFrame, departScreenX + offsetX, departScreenY + offsetY, doorWidth, doorHeight, null);
-            } else {
-                g2.setColor(Color.BLACK);
-                g2.fillRect(departScreenX + offsetX, departScreenY + offsetY, doorWidth, doorHeight);
-                g2.setColor(Color.WHITE);
-                g2.setFont(new Font("Arial", Font.BOLD, 14)); 
-                g2.drawString("PORTE", departScreenX + 5, departScreenY + doorHeight / 2);
+       BufferedImage currentImage = null;
+        int animationSpeed = 15; // Vitesse de l'animation
+
+        // CAS 1 : NIVEAU 1 (La Porte)
+        if (gp.currentMap == 0) {
+            // Logique porte (3 images)
+            if (doorFrames != null) {
+                doorSpriteCounter++;
+                if (doorSpriteCounter > animationSpeed) {
+                    doorSpriteNum = (doorSpriteNum % 3) + 1; // Boucle 1, 2, 3
+                    doorSpriteCounter = 0;
+                }
+                currentImage = doorFrames[doorSpriteNum - 1];
             }
-        } else {
+        } 
+        // CAS 2 : NIVEAU 2 (L'Explosion)
+        else if (gp.currentMap == 1) {
+            // Logique explosion (10 images)
+            if (explosionFrames != null) {
+                doorSpriteCounter++;
+                if (doorSpriteCounter > 10) { // Un peu plus rapide que la porte
+                    doorSpriteNum = (doorSpriteNum % 10) + 1; // Boucle 1 à 10
+                    doorSpriteCounter = 0;
+                }
+                // Protection index au cas où
+                int index = doorSpriteNum - 1;
+                if (index >= 0 && index < 10) {
+                    currentImage = explosionFrames[index];
+                }
+            }
+        }
+
+        
+        // On dessine l'image choisie (Porte OU Explosion)
+        if (currentImage != null) {
+            // Taille de l'image (3x la tuile comme avant ?)
+            int width = gp.tileSize * 3;
+            int height = gp.tileSize * 3;
+            int offsetX = (gp.tileSize - width) / 2;
+            int offsetY = (gp.tileSize - height) / 2;
+            
+            g2.drawImage(currentImage, departScreenX + offsetX, departScreenY + offsetY, width, height, null);
+        } 
+        else {
+            // Fallback (Carré noir si pas d'image)
             g2.setColor(Color.BLACK);
-            g2.fillRect(departScreenX + offsetX, departScreenY + offsetY, doorWidth, doorHeight);
-            g2.setColor(Color.WHITE);
-            g2.setFont(new Font("Arial", Font.BOLD, 14));
-            g2.drawString("PORTE", departScreenX + 5, departScreenY + doorHeight / 2);
+            g2.fillRect(departScreenX, departScreenY, gp.tileSize, gp.tileSize);
         }
         
-        // Clé de victoire
+  // --- DESSIN DE L'OBJECTIF DE FIN ---
+        
         int keyCol = (int) (pointArrivee.x / gp.tileSize);
         int keyRow = (int) (pointArrivee.y / gp.tileSize);
+        
+        // On vérifie si l'objet est toujours là (tile 6 = l'objectif)
         if (mapTileNum[gp.currentMap][keyCol][keyRow] == 6) {
+            
             int arriveeScreenXKey = pointArrivee.x - gp.player.worldx + gp.player.screenX;
             int arriveeScreenYKey = pointArrivee.y - gp.player.worldy + gp.player.screenY;
             
-            if (imgTresor != null) {
-                g2.drawImage(imgTresor, arriveeScreenXKey, arriveeScreenYKey, gp.tileSize, gp.tileSize, null);
+            // Choix de l'image selon le niveau
+            BufferedImage objectiveImage = null;
+            
+            if (gp.currentMap == 0) {
+                objectiveImage = imgTresor; // Niveau 1 = La Clé
             } else {
+                objectiveImage = imgFinalTreasure; // Niveau 2 = Le Trésor
+            }
+            
+            // Dessin
+            if (objectiveImage != null) {
+                // On peut le dessiner un peu plus gros s'il le faut (ex: le trésor)
+                g2.drawImage(objectiveImage, arriveeScreenXKey, arriveeScreenYKey, gp.tileSize, gp.tileSize, null);
+            } else {
+                // Fallback (Carré jaune si image manquante)
                 g2.setColor(Color.YELLOW);
-                g2.fillRect(arriveeScreenXKey + 4, arriveeScreenYKey + 4, gp.tileSize - 8, gp.tileSize - 8); 
-                g2.setColor(Color.ORANGE);
-                g2.fillRect(arriveeScreenXKey, arriveeScreenYKey, 4, gp.tileSize);
-                g2.setColor(Color.BLACK);
-                g2.setFont(new Font("Arial", Font.BOLD, 10));
-                g2.drawString("CLE", arriveeScreenXKey + 5, arriveeScreenYKey + 20);
+                g2.fillRect(arriveeScreenXKey, arriveeScreenYKey, gp.tileSize, gp.tileSize);
             }
         }
 
