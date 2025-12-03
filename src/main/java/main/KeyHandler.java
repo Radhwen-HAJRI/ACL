@@ -11,6 +11,9 @@ public class KeyHandler implements KeyListener {
     public boolean upMenuPressed;
     public boolean downMenuPressed;
 
+    // 👉 AJOUT : variable manquante
+    public boolean key1Pressed;
+
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -47,7 +50,10 @@ public class KeyHandler implements KeyListener {
             downMenuPressed = true;
         }
 
-       
+        // 👉 AJOUT : gestion de la touche "1"
+        if (code == KeyEvent.VK_1) {
+            key1Pressed = true;
+        }
     }
 
     @Override
@@ -66,15 +72,14 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
             rightPressed = false;
         }
-        if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
-            rightPressed = false;
-        }
 
         if (code == KeyEvent.VK_ENTER) enterPressed = false;
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) upMenuPressed = false;
         if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) downMenuPressed = false;
 
-
+        // 👉 AJOUT : relâchement touche "1"
+        if (code == KeyEvent.VK_1) {
+            key1Pressed = false;
+        }
     }
-
 }

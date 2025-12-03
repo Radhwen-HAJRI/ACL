@@ -46,7 +46,7 @@ public class TileManager {
             loadTile(3, "earth.png", false);
             loadTile(4, "tree.png", true);
             loadTile(5, "sand.png", false);
-            loadTile(6, "key.png", false);
+            loadTile(6, "tp.png", false);
             loadTile(7, "door.png", true);
             loadTile(8, "minidoor.png", false);
             loadTile(9, "coin.png", false);
@@ -84,6 +84,7 @@ public class TileManager {
             loadTile(41, "lava.png", true);
             loadTile(42, "tree.png", true);
             loadTile(43, "tree.png", true);
+            loadTile(44, "tp.png", false);
 
         } catch (IOException e) {
             e.printStackTrace();
