@@ -8,6 +8,8 @@ import java.io.InputStream;
 public class SoundManager {
     private Clip[] clips;
     private String[] soundNames = {"move", "hit", "win", "lose"}; 
+    private boolean muted = false;  
+    private float originalVolume = 0.0f;
 
     public SoundManager() {
         clips = new Clip[soundNames.length];
@@ -26,6 +28,10 @@ public class SoundManager {
                 AudioInputStream audioStream = AudioSystem.getAudioInputStream(bufferedIn);
                 clips[i] = AudioSystem.getClip();
                 clips[i].open(audioStream);
+                try {
+                    FloatControl vol = (FloatControl) clips[i].getControl(FloatControl.Type.MASTER_GAIN);
+                    originalVolume = vol.getValue();  
+                } catch (Exception ignored) {}
                 System.out.println("Son chargé: " + soundNames[i]);
             }
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
@@ -44,6 +50,34 @@ public class SoundManager {
         }
         clip.setFramePosition(0);
         clip.start();  
+    }
+
+    public void toggleMute() {
+        muted = !muted; 
+        if (muted) {
+            setVolume(-80.0f);
+            System.out.println("Sons mutés");
+        } else {
+            setVolume(originalVolume);  
+            System.out.println("Sons activés");
+        }
+    }
+
+    public boolean isMuted() {
+        return muted;
+    }
+
+    private void setVolume(float volumeDb) {
+        for (Clip clip : clips) {
+            if (clip != null) {
+                try {
+                    FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                    volumeControl.setValue(volumeDb);
+                } catch (Exception e) {
+                    System.out.println("Erreur volume: " + e.getMessage());
+                }
+            }
+        }
     }
 
     // Méthodes pratiques par nom

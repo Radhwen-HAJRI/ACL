@@ -7,7 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;
+import java.util.Random;  
+import java.awt.Font;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -43,8 +44,8 @@ public class GamePanel extends JPanel implements Runnable {
     public enum GameState { MENU, PLAYING, GAMEOVER, WON }
     public GameState gameState = GameState.MENU;
 
-    private String[] menuOptions = {"NEW GAME", "LOAD GAME", "QUIT"};
-    private int currentMenuIndex = 0;
+    private String[] menuOptions = {"NEW GAME", "SOUND ON/OFF", "QUIT"};
+    private int currentMenuIndex = 0; // 0=NEW, 1=SOUND, 2=QUIT
 
     
 
@@ -59,7 +60,7 @@ public class GamePanel extends JPanel implements Runnable {
     int FPS = 60;
     Labyrinthe labyrinthM = new Labyrinthe(this);
     
-    private BufferedImage heartFull, heartEmpty;
+    private BufferedImage heartFull, heartEmpty, menuBg;
     public SoundManager soundManager = new SoundManager();
 
     int squareX = 100;
@@ -68,6 +69,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     boolean gameOver = false;  
     boolean gameWon = false;
+
+    private int gameOverTimer = 0; 
+    private final int gameOverDelay = 180;
 
     boolean transitioning = false;
     long transitionStart = 0;
@@ -91,6 +95,12 @@ public class GamePanel extends JPanel implements Runnable {
         } catch (IOException e) {
             heartFull = null;
             heartEmpty = null;
+        }
+
+        try {
+            menuBg = ImageIO.read(getClass().getResourceAsStream("/tiles/menu_bg.jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         int centerCol = maxWorldCol / 2;
@@ -233,7 +243,14 @@ public class GamePanel extends JPanel implements Runnable {
             keyH.enterPressed = false;
             switch (currentMenuIndex) {
                 case 0: gameState = GameState.PLAYING; break;
-                case 1: gameState = GameState.PLAYING; break;
+                case 1: 
+                    soundManager.toggleMute();
+                    if (soundManager.isMuted()) {
+                        menuOptions[1] = "SOUND OFF";  // État OFF
+                    } else {
+                        menuOptions[1] = "SOUND ON";   // État ON
+                    }
+                    break;
                 case 2: System.exit(0); break;
             }
         }
@@ -256,6 +273,18 @@ public class GamePanel extends JPanel implements Runnable {
                 transitioning = false;
             }
             return;
+        }
+
+        // Timer auto-retour menu après game over
+        if (gameOver && gameState == GameState.GAMEOVER || gameWon && gameState == GameState.WON) {  
+            gameOverTimer++;
+            if (gameOverTimer >= gameOverDelay) {
+                gameState = GameState.MENU;  //Retour menu
+                gameOver = false; 
+                gameWon = false;
+                gameOverTimer = 0; 
+                System.out.println("Retour auto au menu après délai !");
+            }
         }
         
         if (gameState == GameState.MENU) {
@@ -310,6 +339,7 @@ public class GamePanel extends JPanel implements Runnable {
                         
                         if (player.health <= 0) {
                             gameOver = true;
+                            gameState = GameState.GAMEOVER;
                             soundManager.playLose(); 
                             return;
                         }
@@ -355,16 +385,25 @@ public class GamePanel extends JPanel implements Runnable {
             g2.setColor(Color.BLACK);
             g2.fillRect(0, 0, screenWidth, screenHeight);
 
-            g2.setFont(g2.getFont().deriveFont(48f));
-            g2.setColor(Color.WHITE);
-            String title = "RedOne Labyrinth";
-            int titleWidth = g2.getFontMetrics().stringWidth(title);
-            g2.drawString(title, (screenWidth - titleWidth) / 2, 100);
+            if (menuBg != null) g2.drawImage(menuBg, 0, 0, screenWidth, screenHeight, null);
+
+            g2.setColor(Color.BLACK);
+            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48f));  // Gros bold
+            String title = "RedOne Labyrinthe";
+            int titleWidth = (int) g2.getFontMetrics().stringWidth(title);
+            int titleX = (screenWidth - titleWidth) / 2;
+            int titleY = 100; 
+            
+            // Ombre titre (effet 3D)
+            g2.setColor(Color.GRAY);
+            g2.drawString(title, titleX + 3, titleY + 3);
+            g2.setColor(Color.BLACK);
+            g2.drawString(title, titleX, titleY);
 
             g2.setFont(g2.getFont().deriveFont(32f));
             for (int i = 0; i < menuOptions.length; i++) {
                 if (i == currentMenuIndex) g2.setColor(Color.YELLOW);
-                else g2.setColor(Color.WHITE);
+                else g2.setColor(Color.BLACK);
                 String text = menuOptions[i];
                 int textWidth = g2.getFontMetrics().stringWidth(text);
                 g2.drawString(text, (screenWidth - textWidth) / 2, 250 + i * 50);
@@ -372,7 +411,7 @@ public class GamePanel extends JPanel implements Runnable {
             return;
         }
 
-        if (gameOver) {
+        if (gameState == GameState.GAMEOVER) {
             g2.setColor(Color.RED);
             g2.setFont(g2.getFont().deriveFont(72f)); 
             String gameOverText = "GAME OVER";
@@ -383,8 +422,15 @@ public class GamePanel extends JPanel implements Runnable {
             int y = (screenHeight + textHeight) / 2;
             
             g2.drawString(gameOverText, x, y);
+
+            int remainingSeconds = (gameOverDelay - gameOverTimer) / 60;
+            if (remainingSeconds > 0) {
+                g2.setColor(Color.WHITE);
+                g2.setFont(g2.getFont().deriveFont(24f));
+                g2.drawString("Retour menu dans " + remainingSeconds + "s...", screenWidth / 2 - 100, screenHeight / 2 + 50);
+            }
             
-        } else if (gameWon) {
+        } else if (gameState == GameState.WON) {
             g2.setColor(Color.YELLOW);  
             g2.setFont(g2.getFont().deriveFont(72f));  
             String winText = "YOU WON!";
