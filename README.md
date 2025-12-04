@@ -1,16 +1,35 @@
 #  Balade dans un Labyrinthe - Sprint 02 
 
-Ce projet est un jeu d'aventure 2D développé en Java où le joueur incarne un héros explorant un labyrinthe tout en évitant des monstres.
+Ce projet est un jeu d'aventure 2D développé en Java où le joueur incarne un héros explorant un labyrinthe tout en évitant des monstres intelligents.
 
 ##  Déroulement du Jeu
 
-Incarnez un héros et explorez un labyrinthe mystérieux. Le but est de vous déplacer (avec les touches **WASD**  ou bien les touches fléchées du clavier) à travers les chemins (l'herbe) tout en évitant les obstacles infranchissables (l'eau).
+Incarnez un héros et explorez un labyrinthe mystérieux divisé en 2 niveaux progressifs. Le but est de naviguer à travers les chemins (herbe/terre) avec les touches WASD ou fléchées, tout en évitant les obstacles (eau/murs/arbres). Collectez des pièces (coins jaunes) et la clé (tile bleu) pour progresser.
 
-Pour attequer le monstre et le tuer , le joueur doit appuyer au moins 3 fois sur la touche espace du clavier à une case prés du monstre : ET LE MONSRE DISPARAIT ! 
-
-Des monstres rôdent également dans le labyrinthe et se déplacent de manière aléatoire. Si vous entrez en collision avec l'un d'eux, votre aventure prend fin et un écran "Game Over" s'affiche. Votre objectif est de naviguer prudemment , d'éviter la rencontre fatale de collecter le maximum de "coins" et d'atteindre le point d'arrivée ! .
+- Niveau 1 : Collectez au moins 10 pièces + clé pour passer au niveau 2.
+- Niveau 2 : Atteignez le trésor final pour gagner.
+- Attaques : Appuyez sur ESPACE près d'un monstre (3 fois max par swing) pour l'attaquer et le tuer.
+- Monstres : Ils errent aléatoirement ou vous chassent (IA basique). Collision = -1 PV (3 max, HUD cœurs).
+- Fin : 0 PV = Game Over (overlay rouge, auto-retour menu après 3s). Victoire = "YOU WON!" (overlay jaune).
+- Menu : NEW GAME (reset complet), SOUND ON/OFF (toggle sons), QUIT. 
+- Sons pour mouvement, hit, win/lose.
  
 ---
+## Captures d'écran
+
+Menu Principal
+![alt text](menu.png)
+Menu avec fond stylé et options (NEW GAME, SOUND ON/OFF, QUIT).
+
+Gameplay Niveau 1
+![alt text](niveau1.png)
+
+Gameplay Niveau 2
+![alt text](niveau2.png)
+
+HUD (Head-Up-Display)
+![alt text](hud.png)
+Points de vie (rouge plein/gris vide) et score selon le nombre de pièces collectés
 
 ##  Installation et Lancement
 
@@ -59,3 +78,10 @@ java -cp target/labyrinthe-1.0-SNAPSHOT.jar main.main
 Langage : Java
 
 Version du JDK : OpenJDK 25
+
+Outils : Maven (build), Swing (rendu), Java Sound API (sons).
+Structure :
+
+* Packages :main (GamePanel, KeyHandler, SoundManager), entity (Player, Monster), tile (TileManager, Labyrinthe).
+* Ressources :/resources/tiles/ (images), /sounds/ (WAV), /maps/ (map01.txt, map02.txt).
+* Fonctionnalités clés : Caméra follow, collisions solides, IA monstres (chase/attack), HUD dynamique, menu toggle son, reset multi-niveaux.
