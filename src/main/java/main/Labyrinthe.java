@@ -50,20 +50,15 @@ public class Labyrinthe extends TileManager {
         initializeCoins();
         
         try {
-            // Chargement de la porte (Niveau 1)
             doorFrames = new BufferedImage[3];
             doorFrames[0] = ImageIO.read(getClass().getResourceAsStream("/door/door_closed.png"));
             doorFrames[1] = ImageIO.read(getClass().getResourceAsStream("/door/door_opening.png"));
             doorFrames[2] = ImageIO.read(getClass().getResourceAsStream("/door/door_opening.png"));
 
-            // --- AJOUT : Chargement de l'explosion (Niveau 2) ---
             explosionFrames = new BufferedImage[10];
             for (int i = 0; i < 10; i++) {
-                // Adaptez le nom du dossier et des fichiers ici !
-                // Exemple : /explosion/exp_1.png, exp_2.png...
                 explosionFrames[i] = ImageIO.read(getClass().getResourceAsStream("/Explosion_depart/Explosion_" + (i+1) + ".png"));
             }
-            // ----------------------------------------------------
 
             imgTresor = ImageIO.read(getClass().getResourceAsStream("/tiles/key.png"));
             imgCoin = ImageIO.read(getClass().getResourceAsStream("/tiles/coin.png"));
@@ -73,14 +68,12 @@ public class Labyrinthe extends TileManager {
         }
     }
     
-    // 1. Mettez "public" pour qu'on puisse l'appeler depuis GamePanel
     public void setPoints() {
         int startCol = 0;
         int startRow = 0;
         int endCol = 0;
         int endRow = 0;
 
-        // --- NIVEAU 1 ---
         if (gp.currentMap == 0) {
             startCol = 10; 
             startRow = 7;
@@ -90,11 +83,11 @@ public class Labyrinthe extends TileManager {
         } 
         else if (gp.currentMap == 1) {
             
-            startCol = 5;  // <--- Mettez ici une colonne sûre du niveau 2
-            startRow = 5;  // <--- Mettez ici une ligne sûre du niveau 2
+            startCol = 5;  
+            startRow = 5;  
             
-            endCol = 45;   // <--- Où voulez-vous la porte/clé du niveau 2 ?
-            endRow = 45;
+            endCol = 44; 
+            endRow = 36;
         }
         
         // Application des coordonnées
@@ -102,7 +95,7 @@ public class Labyrinthe extends TileManager {
         pointArrivee = new Point(endCol * gp.tileSize, endRow * gp.tileSize);
     }
     
-    private void initializeCoins() {
+    public void initializeCoins() {
         coinPositions = new ArrayList<>();
         
         // Trouver toutes les positions valides (tuiles 0 et 3)
@@ -113,6 +106,8 @@ public class Labyrinthe extends TileManager {
                 // Vérifier si c'est une tuile 0 ou 3
                 if (tileType == 0 || tileType == 3) {
                     // Éviter les positions trop proches du départ et de l'arrivée
+                    Point arriveeTile = new Point(pointArrivee.x / gp.tileSize, pointArrivee.y / gp.tileSize);  // ← Coords tile arrivee
+                    if (col == arriveeTile.x && row == arriveeTile.y) continue;
                     if (!isTooCloseToSpecialPositions(col, row)) {
                         validPositions.add(new Point(col, row));
                     }
@@ -226,38 +221,31 @@ public class Labyrinthe extends TileManager {
             g2.fillRect(departScreenX, departScreenY, gp.tileSize, gp.tileSize);
         }
         
-  // --- DESSIN DE L'OBJECTIF DE FIN ---
         
         int keyCol = (int) (pointArrivee.x / gp.tileSize);
         int keyRow = (int) (pointArrivee.y / gp.tileSize);
         
-        // On vérifie si l'objet est toujours là (tile 6 = l'objectif)
-        if (mapTileNum[gp.currentMap][keyCol][keyRow] == 6) {
             
-            int arriveeScreenXKey = pointArrivee.x - gp.player.worldx + gp.player.screenX;
-            int arriveeScreenYKey = pointArrivee.y - gp.player.worldy + gp.player.screenY;
-            
-            // Choix de l'image selon le niveau
-            BufferedImage objectiveImage = null;
-            
-            if (gp.currentMap == 0) {
-                objectiveImage = imgTresor; // Niveau 1 = La Clé
-            } else {
-                objectiveImage = imgFinalTreasure; // Niveau 2 = Le Trésor
-            }
-            
-            // Dessin
-            if (objectiveImage != null) {
-                // On peut le dessiner un peu plus gros s'il le faut (ex: le trésor)
-                g2.drawImage(objectiveImage, arriveeScreenXKey, arriveeScreenYKey, gp.tileSize, gp.tileSize, null);
-            } else {
-                // Fallback (Carré jaune si image manquante)
-                g2.setColor(Color.YELLOW);
-                g2.fillRect(arriveeScreenXKey, arriveeScreenYKey, gp.tileSize, gp.tileSize);
-            }
+        int arriveeScreenXKey = pointArrivee.x - gp.player.worldx + gp.player.screenX;
+        int arriveeScreenYKey = pointArrivee.y - gp.player.worldy + gp.player.screenY;
+        
+        BufferedImage objectiveImage = null;
+        
+        if (gp.currentMap == 0) {
+            objectiveImage = imgTresor; // Niveau 1 = La Clé
+        } else {
+            objectiveImage = imgFinalTreasure; // Niveau 2 = Le Trésor
         }
+        
+        // Dessin
+        if (objectiveImage != null) {
+            g2.drawImage(objectiveImage, arriveeScreenXKey, arriveeScreenYKey, gp.tileSize, gp.tileSize, null);
+        } else {
+            g2.setColor(Color.YELLOW);
+            g2.fillRect(arriveeScreenXKey, arriveeScreenYKey, gp.tileSize, gp.tileSize);
+        }
+        
 
-        // Dessiner les pièces
         for (Point coin : coinPositions) {
             int coinCol = coin.x / gp.tileSize;
             int coinRow = coin.y / gp.tileSize;

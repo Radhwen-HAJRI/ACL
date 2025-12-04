@@ -242,7 +242,9 @@ public class GamePanel extends JPanel implements Runnable {
         if (keyH.enterPressed) {
             keyH.enterPressed = false;
             switch (currentMenuIndex) {
-                case 0: gameState = GameState.PLAYING; break;
+                case 0: 
+                    gameState = GameState.PLAYING;
+                    break;
                 case 1: 
                     soundManager.toggleMute();
                     if (soundManager.isMuted()) {
@@ -287,6 +289,11 @@ public class GamePanel extends JPanel implements Runnable {
                 gameOver = false; 
                 gameWon = false;
                 gameOverTimer = 0; 
+                player.health = 3;  
+                player.invincibleCounter = 0;  
+                soundManager.playWin();  
+
+                labyrinthM.setPoints();
                 System.out.println("Retour auto au menu après délai !");
             }
         }
@@ -358,13 +365,17 @@ public class GamePanel extends JPanel implements Runnable {
         int dy = Math.abs(player.worldy - (int)labyrinthM.pointArrivee.y);
 
         if (dx < this.tileSize && dy < this.tileSize && player.keyCount > 0) {
-            if (player.coinCount >= 10 && !transitioning) {
+            if (currentMap == 1) {  // Seulement win sur map 2
+                gameWon = true;
+                gameState = GameState.WON;
+                soundManager.playWin();
+            } else if (currentMap == 0 && player.coinCount >= 10 && !transitioning) {
                 transitioning = true;
                 transitionStart = System.currentTimeMillis();
                 soundManager.playWin();
                 player.coinCount -= 10;
                 showMissingCoinsMessage = false;
-            } else if (player.coinCount < 10) {
+            } else if (currentMap == 0 && player.coinCount < 10) {
                 showMissingCoinsMessage = true;
                 missingCoinsMessage = "Il te manque " + (10 - player.coinCount) + " pièces !";
                 missingCoinsMessageStart = System.currentTimeMillis();
