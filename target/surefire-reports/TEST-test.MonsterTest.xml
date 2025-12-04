@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="test.MonsterTest" time="2.559" tests="4" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="test.MonsterTest" time="2.497" tests="4" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="25"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -16,7 +16,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="FR"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-25\bin"/>
-    <property name="sun.java.command" value="C:\Users\DELL\AppData\Local\Temp\surefire3191477876660777941\surefirebooter-20251204164939530_3.jar C:\Users\DELL\AppData\Local\Temp\surefire3191477876660777941 2025-12-04T16-49-39_378-jvmRun1 surefire-20251204164939530_1tmp surefire_0-20251204164939530_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\DELL\AppData\Local\Temp\surefire5155405129239415172\surefirebooter-20251204170838402_3.jar C:\Users\DELL\AppData\Local\Temp\surefire5155405129239415172 2025-12-04T17-08-38_280-jvmRun1 surefire-20251204170838402_1tmp surefire_0-20251204170838402_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\DELL\Documents\ACL3\ACL\target\test-classes;C:\Users\DELL\Documents\ACL3\ACL\target\classes;C:\Users\DELL\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.0\junit-jupiter-5.10.0.jar;C:\Users\DELL\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.0\junit-jupiter-api-5.10.0.jar;C:\Users\DELL\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\DELL\.m2\repository\org\junit\platform\junit-platform-commons\1.10.0\junit-platform-commons-1.10.0.jar;C:\Users\DELL\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\DELL\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.0\junit-jupiter-params-5.10.0.jar;C:\Users\DELL\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.0\junit-jupiter-engine-5.10.0.jar;C:\Users\DELL\.m2\repository\org\junit\platform\junit-platform-engine\1.10.0\junit-platform-engine-1.10.0.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -31,7 +31,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\DELL\AppData\Local\Temp\surefire3191477876660777941\surefirebooter-20251204164939530_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\DELL\AppData\Local\Temp\surefire5155405129239415172\surefirebooter-20251204170838402_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="25.0.1+8-LTS-27"/>
@@ -60,7 +60,7 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="69.0"/>
   </properties>
-  <testcase name="testMonsterImagesLoaded" classname="test.MonsterTest" time="0.873">
+  <testcase name="testMonsterImagesLoaded" classname="test.MonsterTest" time="0.989">
     <system-out><![CDATA[Positions valides trouvées: 222
 Pièces placées: 15
 Son chargé: move
@@ -69,7 +69,7 @@ Son chargé: win
 Son chargé: lose
 ]]></system-out>
   </testcase>
-  <testcase name="testStateChange" classname="test.MonsterTest" time="0.681">
+  <testcase name="testStateChange" classname="test.MonsterTest" time="0.498">
     <system-out><![CDATA[Positions valides trouvées: 222
 Pièces placées: 15
 Son chargé: move
@@ -78,7 +78,7 @@ Son chargé: win
 Son chargé: lose
 ]]></system-out>
   </testcase>
-  <testcase name="testMonsterInitialization" classname="test.MonsterTest" time="0.486">
+  <testcase name="testMonsterInitialization" classname="test.MonsterTest" time="0.433">
     <system-out><![CDATA[Positions valides trouvées: 222
 Pièces placées: 15
 Son chargé: move
@@ -87,7 +87,7 @@ Son chargé: win
 Son chargé: lose
 ]]></system-out>
   </testcase>
-  <testcase name="testChaserMonsterInitialization" classname="test.MonsterTest" time="0.498">
+  <testcase name="testChaserMonsterInitialization" classname="test.MonsterTest" time="0.555">
     <system-out><![CDATA[Positions valides trouvées: 222
 Pièces placées: 15
 Son chargé: move

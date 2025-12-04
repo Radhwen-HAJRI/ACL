@@ -263,6 +263,10 @@ public class GamePanel extends JPanel implements Runnable {
 
                 currentMap++;
 
+                player.health = 3;  
+                player.invincibleCounter = 0;  
+                soundManager.playWin();  
+
                 labyrinthM.setPoints(); 
 
                 player.worldx = (int) labyrinthM.getPointDepart().x;
