@@ -26,7 +26,7 @@ Incarnez un héros et explorez un labyrinthe mystérieux divisé en 2 niveaux pr
 **Gameplay Niveau 2**
 ![alt text](images/niveau2.png)
 
-**HUD (Head-Up-Display): ** Points de vie (rouge plein/gris vide) et score selon le nombre de pièces collectés
+**HUD (Head-Up-Display):** Points de vie (rouge plein/gris vide) et score selon le nombre de pièces collectés
 
 ![alt text](images/hud.png)
 
