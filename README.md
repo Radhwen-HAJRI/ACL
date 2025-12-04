@@ -17,19 +17,19 @@ Incarnez un héros et explorez un labyrinthe mystérieux divisé en 2 niveaux pr
 ---
 ## Captures d'écran
 
-Menu Principal
+**Menu Principal**
 ![alt text](images/menu.png)
-Menu avec fond stylé et options (NEW GAME, SOUND ON/OFF, QUIT).
 
-Gameplay Niveau 1
+**Gameplay Niveau 1**
 ![alt text](images/niveau1.png)
 
-Gameplay Niveau 2
+**Gameplay Niveau 2**
 ![alt text](images/niveau2.png)
 
-HUD (Head-Up-Display)
+**HUD (Head-Up-Display): ** Points de vie (rouge plein/gris vide) et score selon le nombre de pièces collectés
+
 ![alt text](images/hud.png)
-Points de vie (rouge plein/gris vide) et score selon le nombre de pièces collectés
+
 
 ##  Installation et Lancement
 
