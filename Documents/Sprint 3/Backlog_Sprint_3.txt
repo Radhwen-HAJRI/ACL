@@ -1,1 +1,28 @@
+Backlog Sprint 3
+---------------------------------------------------------------------------------------------------------------------------------------
+Fonctionnalité                      | Critères d’acceptation                                                                 | Sous-tâches techniques                                                  | Estimation | Responsable
+----------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------- | ------------
+Ajout de 3 nouveaux niveaux         | Le jeu contient 3 niveaux supplémentaires. Chaque niveau possède un point de départ    | - Créer les maps : map2.txt, map3.txt           .                         | 5 pts      | Radhwen
+                                    | et un point d’arrivée. Le passage au niveau suivant se fait uniquement si les          | - Définir les positions de spawn et d’arrivée.                           |            |
+                                    | conditions sont remplies.                                                               | - Charger la map suivante après victoire.                                |            |
+                                    |                                                                                         | - Reset du joueur et des monstres à chaque niveau.                       |            |
+----------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------- | ------------
+Menu de début                       | À l’ouverture du jeu, un menu s’affiche avec “Jouer” et “Quitter”. Le jeu démarre       | - Créer MenuPanel (JPanel).                                              | 3 pts      | Maram
+                                    | uniquement quand le joueur clique sur “Jouer”.                                          | - Bouton “Jouer” → lancer GamePanel.                                     |            |
+                                    |                                                                                         | - Bouton “Quitter” → fermer application.                                 |            |
+----------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------- | ------------
+Option Rejouer en fin de jeu        | Un écran “Rejouer / Quitter” apparaît après une victoire finale ou un Game Over.         | - Ajouter écran de fin.                                                  | 2 pts      | Nada
+                                    | “Rejouer” réinitialise complètement la partie au niveau 1.                              | - Bouton “Rejouer” → reset total (niveau, vies, score, coins…).          |            |
+                                    |                                                                                         | - Étendre méthode reset().                                               |            |
+----------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------- | ------------
+Conditions de passage entre niveaux | Le joueur ne peut changer de niveau que s’il a collecté le nombre minimum de coins.    | - Ajouter coinCount dans Player.                                         | 3 pts      | Radhwen
+(minimum de coins collectés)        | Si les coins sont insuffisants, un message “Coins insuffisants !” s’affiche.            | - Définir coinMin par niveau.                                            |            |
+                                    |                                                                                         | - Vérifier condition lors de la collision avec l’arrivée.                 |            |
+                                    |                                                                                         | - Afficher message si refus du passage.                                  |            |
+----------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------- | ------------
+Amélioration du son                 | Les sons sont plus nets, mieux gérés et adaptés au gameplay : mouvements, collisions,   | - Remplacer/améliorer les WAV existants.                                 | 2 pts      | Maram
+                                    | passages de niveaux, menu, collecte de coins.                                            | - Ajouter gestion du volume dans SoundManager.                           |            |
+                                    |                                                                                         | - Ajouter nouveaux sons : menu, niveau, coins.                           |            |
+                                    |                                                                                         | - Optimiser latence et transitions.                                      |            |
+---------------------------------------------------------------------------------------------------------------------------------------
 
