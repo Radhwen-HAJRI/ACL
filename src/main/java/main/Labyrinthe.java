@@ -273,4 +273,25 @@ public class Labyrinthe extends TileManager {
         coinPositions.removeIf(coin -> 
             coin.x / gp.tileSize == col && coin.y / gp.tileSize == row);
     }
+
+    // Ajoutez ceci à la fin de Labyrinthe.java
+    public void resetMaps() {
+        // 1. On recharge la carte brute du niveau 1 pour effacer les modifications (pièces mangées)
+        loadMap("/maps/map01.txt", 0);
+        
+        // 2. On remet les éléments spéciaux (comme fait dans votre constructeur)
+        // On utilise l'index 0 car on sait qu'on reset pour le niveau 1
+        mapTileNum[0][23][7] = 9; 
+        mapTileNum[0][37][43] = 6;
+        
+        // 3. On s'assure que les collisions sont désactivées pour ces tuiles
+        if (tile[6] != null) tile[6].collision = false;
+        if (tile[9] != null) tile[9].collision = false;
+
+        // 4. On recalcule les points de départ/arrivée
+        setPoints();
+
+        // 5. On génère de nouvelles pièces aléatoires
+        initializeCoins();
+    }
 }

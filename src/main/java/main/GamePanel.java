@@ -9,11 +9,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;  
 import java.awt.Font;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import entity.Monster; 
+import entity.Fire ;
 import entity.Player;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -56,6 +58,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     public Monster[] monsters;
     int nbMonsters;
+    
+    public ArrayList <Fire> fires = new ArrayList<>();
 
     int FPS = 60;
     Labyrinthe labyrinthM = new Labyrinthe(this);
@@ -123,6 +127,7 @@ public class GamePanel extends JPanel implements Runnable {
         Random rand = new Random();
         nbMonsters = 7 + rand.nextInt(8);
         spawnMonsters(); 
+        spawnFires();
     }
 
     public boolean canMoveHere(int nextX, int nextY) {
@@ -186,6 +191,41 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+// AJOUT FEU : Méthode pour générer les feux
+    public void spawnFires() {
+        fires.clear(); 
+        
+       
+        if (currentMap != 1) {
+            return;
+        }
+
+        Random rand = new Random();
+        int nbFires = 20; 
+
+        for (int i = 0; i < nbFires; i++) {
+            boolean foundSpot = false;
+            while (!foundSpot) {
+                int col = rand.nextInt(this.maxWorldCol);
+                int row = rand.nextInt(this.maxWorldRow);
+                
+                int tileNum = this.labyrinthM.mapTileNum[currentMap][col][row];
+                if (this.labyrinthM.tile[tileNum] != null && !this.labyrinthM.tile[tileNum].collision) {
+                    
+                    int fireX = col * tileSize;
+                    int fireY = row * tileSize;
+                    int distPlayer = (int) Math.sqrt(Math.pow(fireX - player.worldx, 2) + Math.pow(fireY - player.worldy, 2));
+
+                    int distEnd = (int) Math.sqrt(Math.pow(fireX - labyrinthM.pointArrivee.x, 2) + Math.pow(fireY - labyrinthM.pointArrivee.y, 2));
+
+                    if (distPlayer > tileSize * 3 && distEnd > tileSize * 2) {
+                        fires.add(new Fire(this, fireX, fireY));
+                        foundSpot = true;
+                    }
+                }
+            }
+        }
+    }
     @Override
     public void run() {
         double drawInterval = 1000000000.0 / FPS;
@@ -275,6 +315,7 @@ public class GamePanel extends JPanel implements Runnable {
                 player.worldy = (int) labyrinthM.getPointDepart().y;
 
                 spawnMonsters();
+                spawnFires();
 
                 transitioning = false;
             }
@@ -291,7 +332,19 @@ public class GamePanel extends JPanel implements Runnable {
                 gameOverTimer = 0; 
                 player.health = 3;  
                 player.invincibleCounter = 0;  
+                player.coinCount = 0; 
                 soundManager.playWin();  
+                currentMap = 0; // On force le retour au Niveau 1 (Map 0)
+                
+                labyrinthM.resetMaps();
+
+                labyrinthM.setPoints();
+                player.worldx = (int) labyrinthM.getPointDepart().x;
+                player.worldy = (int) labyrinthM.getPointDepart().y;
+                
+                spawnMonsters(); 
+                spawnFires();
+                System.out.println("Retour auto au menu après délai !");
 
                 labyrinthM.setPoints();
                 System.out.println("Retour auto au menu après délai !");
@@ -320,7 +373,26 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
         }
+        for (Fire fire : fires) {
+            fire.update();
+            
+            if (player.invincibleCounter == 0) {
+                int dx = Math.abs(player.worldx - fire.worldx);
+                int dy = Math.abs(player.worldy - fire.worldy);
+                int hitRange = this.tileSize / 2; 
 
+                if (dx < hitRange && dy < hitRange) {
+                    player.health--;
+                    player.invincibleCounter = player.invincibleDuration; 
+                    soundManager.playHit(); 
+                    if (player.health <= 0) {
+                        gameOver = true;
+                        gameState = GameState.GAMEOVER;
+                        soundManager.playLose();
+                    }
+                }
+            }
+        }
         int playerCol = player.worldx / tileSize;
         int playerRow = player.worldy / tileSize;
         int tileNum = labyrinthM.mapTileNum[currentMap][playerCol][playerRow];
@@ -462,6 +534,10 @@ public class GamePanel extends JPanel implements Runnable {
                 if (monsters[i] != null && monsters[i].alive) { 
                     monsters[i].draw(g2);
                 }
+            }
+
+            for (Fire fire : fires) {
+            fire.draw(g2);
             }
             
             player.draw(g2);
