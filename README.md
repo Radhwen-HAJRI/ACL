@@ -1,4 +1,4 @@
-#  Balade dans un Labyrinthe - Sprint 02 
+#  Balade dans un Labyrinthe - Sprint 03 
 
 Ce projet est un jeu d'aventure 2D développé en Java où le joueur incarne un héros explorant un labyrinthe tout en évitant des monstres intelligents.
 
@@ -53,7 +53,7 @@ cd MesJeux
 ## 2. Cloner le dépôt Téléchargez le code source depuis GitHub.
 
 ```Bash
-git clone [https://github.com/Radhwen-HAJRI/ACL.git](https://github.com/Radhwen-HAJRI/ACL.git)
+git clone https://github.com/Radhwen-HAJRI/ACL.git
 ```
 ## 3. Accéder au dossier du projet Une fois le clonage terminé, déplacez-vous dans le dossier du projet.
 
