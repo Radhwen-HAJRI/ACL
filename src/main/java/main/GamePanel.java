@@ -2,20 +2,20 @@ package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;  
-import java.awt.Font;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import entity.Monster; 
-import entity.Fire ;
+import entity.Fire;
+import entity.Monster ;
 import entity.Player;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -305,11 +305,22 @@ public class GamePanel extends JPanel implements Runnable {
 
                 currentMap++;
 
+                // *** DÉBUT DE LA LOGIQUE DE TRANSITION POUR FERMER MAP 1 ***
+                
+                // 1. FERMETURE/RÉINITIALISATION DE L'ÉTAT DE LA MAP 0 (Map 1)
+                labyrinthM.loadMap("/maps/map01.txt", 0);
+                
+                // 2. Chargement de la Map 2 dans l'index 1
+                labyrinthM.loadMap("/maps/map02.txt", 1); 
+                
+                // 3. Réinitialisation des états du joueur et de la Map 2
                 player.health = 3;  
                 player.invincibleCounter = 0;  
                 soundManager.playWin();  
 
                 labyrinthM.setPoints(); 
+                labyrinthM.initializeCoins(); 
+                // *** FIN DES MODIFICATIONS ***
 
                 player.worldx = (int) labyrinthM.getPointDepart().x;
                 player.worldy = (int) labyrinthM.getPointDepart().y;
@@ -399,12 +410,24 @@ public class GamePanel extends JPanel implements Runnable {
         
         if (tileNum == 6) { 
             player.keyCount++; 
-            labyrinthM.mapTileNum[currentMap][playerCol][playerRow] = 0; 
+            // Remplacer la clé par le sol noir (tuile 10)
+            labyrinthM.mapTileNum[currentMap][playerCol][playerRow] = 10; 
         }
         
         if (tileNum == 9) { 
             player.coinCount++;
-            labyrinthM.mapTileNum[currentMap][playerCol][playerRow] = 0; 
+            
+            // *** CORRECTION DE L'EXIGENCE DE REMPLACEMENT ***
+            int replacementTile;
+            if (currentMap == 0) {
+                // Map 1: Remplacer par la tuile 0 (le chemin vert demandé)
+                replacementTile = 0; 
+            } else { 
+                // Map 2: Remplacer par la tuile 10 (le chemin noir demandé)
+                replacementTile = 10; 
+            }
+            labyrinthM.mapTileNum[currentMap][playerCol][playerRow] = replacementTile; 
+            
             labyrinthM.removeCoin(playerCol, playerRow);
         }
 
@@ -437,10 +460,21 @@ public class GamePanel extends JPanel implements Runnable {
         int dy = Math.abs(player.worldy - (int)labyrinthM.pointArrivee.y);
 
         if (dx < this.tileSize && dy < this.tileSize && player.keyCount > 0) {
-            if (currentMap == 1) {  // Seulement win sur map 2
-                gameWon = true;
-                gameState = GameState.WON;
-                soundManager.playWin();
+            
+            // *** MODIFICATION POUR VÉRIFIER LES 10 PIÈCES POUR LA VICTOIRE FINALE ***
+            if (currentMap == 1) { 
+                
+                if (player.coinCount >= 10) {
+                    gameWon = true;
+                    gameState = GameState.WON;
+                    soundManager.playWin();
+                } else {
+                    // Afficher le message d'erreur si les pièces manquent
+                    showMissingCoinsMessage = true;
+                    missingCoinsMessage = "Il te manque " + (10 - player.coinCount) + " pièces pour le trésor final !";
+                    missingCoinsMessageStart = System.currentTimeMillis();
+                }
+                
             } else if (currentMap == 0 && player.coinCount >= 10 && !transitioning) {
                 transitioning = true;
                 transitionStart = System.currentTimeMillis();
@@ -575,8 +609,10 @@ public class GamePanel extends JPanel implements Runnable {
             int coinX = 20;
             int coinY = startY + 60;
 
-            if (labyrinthM.imgCoin != null) {
-                g2.drawImage(labyrinthM.imgCoin, coinX, coinY, coinSize, coinSize, null);
+            BufferedImage displayedCoin = (labyrinthM.gp.currentMap == 1) ? labyrinthM.imgCoin2 : labyrinthM.imgCoin;
+
+            if (displayedCoin != null) {
+                g2.drawImage(displayedCoin, coinX, coinY, coinSize, coinSize, null);
             } else {
                 g2.setColor(new Color(255, 215, 0));
                 g2.fillOval(coinX, coinY, coinSize, coinSize);

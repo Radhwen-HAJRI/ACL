@@ -21,6 +21,7 @@ public class Labyrinthe extends TileManager {
     public BufferedImage imgTresor;
     public BufferedImage imgFinalTreasure;
     public BufferedImage imgCoin;
+    public BufferedImage imgCoin2; // Nouvelle variable pour la pièce noire
     private BufferedImage[] doorFrames; 
     private BufferedImage[] explosionFrames; 
     private int doorSpriteCounter = 0;
@@ -44,6 +45,11 @@ public class Labyrinthe extends TileManager {
         if (tile[9] != null) {
             tile[9].collision = false;
         }
+
+        // DÉSACTIVER COLLISION pour les tuiles de remplacement si elles existent (tuile 10 = sol noir)
+        if (tile.length > 10 && tile[10] != null) {
+            tile[10].collision = false;
+        }
         
         setPoints(); 
         random = new Random();
@@ -62,10 +68,18 @@ public class Labyrinthe extends TileManager {
 
             imgTresor = ImageIO.read(getClass().getResourceAsStream("/tiles/key.png"));
             imgCoin = ImageIO.read(getClass().getResourceAsStream("/tiles/coin.png"));
+            // CHARGEMENT DE LA NOUVELLE PIÈCE AVEC FOND NOIR
+            imgCoin2 = ImageIO.read(getClass().getResourceAsStream("/tiles/coin2.png"));
             imgFinalTreasure = ImageIO.read(getClass().getResourceAsStream("/tiles/tresor.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    // Ajouté pour permettre à GamePanel de charger la map 2
+    @Override
+    public void loadMap(String filePath, int mapIndex) {
+        super.loadMap(filePath, mapIndex);
     }
     
     public void setPoints() {
@@ -98,13 +112,14 @@ public class Labyrinthe extends TileManager {
     public void initializeCoins() {
         coinPositions = new ArrayList<>();
         
-        // Trouver toutes les positions valides (tuiles 0 et 3)
+        // Trouver toutes les positions valides (tuiles 0, 3 pour Map 1, et 10 pour Map 2)
         List<Point> validPositions = new ArrayList<>();
         for (int col = 0; col < gp.maxWorldCol; col++) {
             for (int row = 0; row < gp.maxWorldRow; row++) {
                 int tileType = mapTileNum[gp.currentMap][col][row];
-                // Vérifier si c'est une tuile 0 ou 3
-                if (tileType == 0 || tileType == 3) {
+                
+                // MODIFICATION : Inclure la tuile 10 (chemin Map 2)
+                if (tileType == 0 || tileType == 3 || tileType == 10) { 
                     // Éviter les positions trop proches du départ et de l'arrivée
                     Point arriveeTile = new Point(pointArrivee.x / gp.tileSize, pointArrivee.y / gp.tileSize);  // ← Coords tile arrivee
                     if (col == arriveeTile.x && row == arriveeTile.y) continue;
@@ -253,9 +268,16 @@ public class Labyrinthe extends TileManager {
             if (mapTileNum[gp.currentMap][coinCol][coinRow] == 9) {
                 int coinScreenX = coin.x - gp.player.worldx + gp.player.screenX;
                 int coinScreenY = coin.y - gp.player.worldy + gp.player.screenY;
+                
+                // *** UTILISATION DE LA NOUVELLE IMAGE SUR LA MAP 2 ***
+                BufferedImage coinImage = imgCoin;
+                if (gp.currentMap == 1) { 
+                    coinImage = imgCoin2;
+                }
+                // *******************************************************
 
-                if (imgCoin != null) {
-                    g2.drawImage(imgCoin, coinScreenX, coinScreenY, gp.tileSize, gp.tileSize, null);
+                if (coinImage != null) {
+                    g2.drawImage(coinImage, coinScreenX, coinScreenY, gp.tileSize, gp.tileSize, null);
                 } else {
                     g2.setColor(new Color(255, 215, 0));
                     g2.fillOval(coinScreenX + 4, coinScreenY + 4, gp.tileSize - 8, gp.tileSize - 8);
@@ -274,7 +296,6 @@ public class Labyrinthe extends TileManager {
             coin.x / gp.tileSize == col && coin.y / gp.tileSize == row);
     }
 
-    // Ajoutez ceci à la fin de Labyrinthe.java
     public void resetMaps() {
         // 1. On recharge la carte brute du niveau 1 pour effacer les modifications (pièces mangées)
         loadMap("/maps/map01.txt", 0);
@@ -287,6 +308,11 @@ public class Labyrinthe extends TileManager {
         // 3. On s'assure que les collisions sont désactivées pour ces tuiles
         if (tile[6] != null) tile[6].collision = false;
         if (tile[9] != null) tile[9].collision = false;
+
+        // On réapplique la correction pour la tuile de remplacement 10
+        if (tile.length > 10 && tile[10] != null) {
+            tile[10].collision = false;
+        }
 
         // 4. On recalcule les points de départ/arrivée
         setPoints();

@@ -85,6 +85,7 @@ public class TileManager {
             loadTile(42, "tree.png", true);
             loadTile(43, "tree.png", true);
             loadTile(44, "tp.png", false);
+            loadTile(45, "coin2.png", false);
 
         } catch (IOException e) {
             e.printStackTrace();
