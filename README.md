@@ -1,35 +1,77 @@
-#  Balade dans un Labyrinthe - Sprint 03 
+# 🏰 Balade dans un Labyrinthe - Sprint 04
 
-Ce projet est un jeu d'aventure 2D développé en Java où le joueur incarne un héros explorant un labyrinthe tout en évitant des monstres intelligents.
+![Java](https://img.shields.io/badge/Language-Java-orange) ![Build](https://img.shields.io/badge/Build-Maven-blue) ![Status](https://img.shields.io/badge/Status-Completed-green)
 
-##  Déroulement du Jeu
+> Un jeu d'aventure 2D développé en Java où le héros explore un labyrinthe mystérieux tout en évitant des monstres intelligents.
 
-Incarnez un héros et explorez un labyrinthe mystérieux divisé en 2 niveaux progressifs. Le but est de naviguer à travers les chemins (herbe/terre) avec les touches WASD ou fléchées, tout en évitant les obstacles (eau/murs/arbres). Collectez des pièces (coins jaunes) et la clé (tile bleu) pour progresser.
-
-- Niveau 1 : Collectez au moins 10 pièces + clé pour passer au niveau 2.
-- Niveau 2 : Atteignez le trésor final pour gagner.
-- Attaques : Appuyez sur ESPACE près d'un monstre (3 fois max par swing) pour l'attaquer et le tuer.
-- Monstres : Ils errent aléatoirement ou vous chassent (IA basique). Collision = -1 PV (3 max, HUD cœurs).
-- Fin : 0 PV = Game Over (overlay rouge, auto-retour menu après 3s). Victoire = "YOU WON!" (overlay jaune).
-- Menu : NEW GAME (reset complet), SOUND ON/OFF (toggle sons), QUIT. 
-- Sons pour mouvement, hit, win/lose.
- 
 ---
-## Captures d'écran
 
-**Menu Principal**
-![alt text](images/menu.png)
+## Description
 
-**Gameplay Niveau 1**
-![alt text](images/niveau1.png)
+Incarnez un héros intrépide et naviguez à travers **2 niveaux progressifs**. Le but est de trouver votre chemin à travers le labyrinthe, d'éviter les obstacles naturels (eau, murs, arbres, feu) et de survivre aux monstres.
 
-**Gameplay Niveau 2**
-![alt text](images/niveau2.png)
+### Objectifs
+* **Niveau 1 :** Collectez **10 pièces** (coins jaunes) et trouvez la **Clé** pour déverrouiller l'accès au niveau suivant.
+* **Niveau 2 :** Collectez **15 pièces**, survivez au labyrinthe final et atteignez le **Trésor** pour gagner la partie.
 
-**HUD (Head-Up-Display):** Points de vie (rouge plein/gris vide) et score selon le nombre de pièces collectés
+---
 
-![alt text](images/hud.png)
+## 🎮 Gameplay & Captures d'écran
 
+### Interface et Menu
+| Menu Principal | HUD (Interface) |
+|:---:|:---:|
+| <img src="images/menu.png" width="100%"> | <img src="images/hud.png" width="100%"> |
+| *Options : New Game, Sound Toggle, Quit* | *Vie (Cœurs) et Score (Pièces)* |
+
+### Exploration des Niveaux
+| Niveau 1 (La forêt) | Niveau 2 (Le Donjon) |
+|:---:|:---:|
+| <img src="images/niveau1.png" width="100%"> | <img src="images/niveau2.png" width="100%"> |
+| *Collecte des pièces et recherche de la clé* | *Navigation complexe vers le trésor* |
+
+---
+
+## 🕹️ Contrôles
+
+| Touche | Action |
+| :---: | :--- |
+| **W / ⬆️** | Avancer (Haut) |
+| **A / ⬅️** | Aller à Gauche |
+| **S / ⬇️** | Reculer (Bas) |
+| **D / ➡️** | Aller à Droite |
+| **ESPACE** | Attaquer (si proche d'un monstre) |
+| **ECHAP** | Pause / Menu |
+
+---
+
+## Mécaniques de Jeu
+
+* **Combat :** Appuyez sur `ESPACE` près d'un monstre pour l'attaquer (3 coups max par swing).
+* **Santé :** Collision avec un monstre = **-1 PV**. Vous avez 3 Cœurs.
+    * *0 PV* = Game Over (Overlay Rouge + Retour Menu automatique).
+* **IA Monstres :** Comportement aléatoire (errance) ou agressif (chasse le joueur si détecté).
+* **Audio :** Gestion des effets sonores (Pas, Coups, Victoire, Défaite) avec option Mute.
+
+---
+
+## Architecture Technique
+
+Le projet respecte une architecture structurée séparant la logique, l'affichage et les données.
+
+### Diagramme de Séquence (Boucle de Jeu)
+Ce diagramme illustre le cycle de vie d'une frame de jeu, de l'input utilisateur à l'affichage :
+
+<div align="center">
+  <img src="images/Diagramme_de_sequence_UML_Sprint4.png" width="80%" alt="Diagramme de Séquence UML">
+</div>
+
+### Structure du Code
+* **`main`** : Point d'entrée, gestion de la fenêtre (`GamePanel`) et des entrées (`KeyHandler`).
+* **`entity`** : Classes pour le Joueur (`Player`) et les ennemis (`Monster`).
+* **`tile`** : Gestion de la carte (`TileManager`) et logique du niveau (`Labyrinthe`).
+
+---
 
 ##  Installation et Lancement
 
