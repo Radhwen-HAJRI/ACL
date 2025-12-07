@@ -1,0 +1,60 @@
+Backlog_Sprint_4.txt
+------------------------------------------------------------------------
+  --------------------------------------------------------------------------------------------
+  Fonctionnalité   Critères             Sous-tâches techniques      Estimation   Responsable
+                   d’acceptation                                                 
+  ---------------- -------------------- --------------------------- ------------ -------------
+  Ajout du niveau  - Le jeu inclut un   - Créer map3.txt (grille    4 pts        Maram
+  3                niveau 3 avec point  50x50 : murs, chemins,                   
+                   de départ et         obstacles Feu).- Définir                 
+                   d’arrivée.-          spawn et arrivée dans                    
+                   Transition depuis le setPoints(2). - Implémenter              
+                   niveau 2.-           conditions de passage                    
+                   Difficulté augmentée (coins minimum, clé                      
+                   : plus de monstres + collectée).- Charger                     
+                   obstacles Feu.       map3.txt en transition                   
+                                        depuis le niveau 2.- Reset               
+                                        joueur (PV, clés, pièces)                
+                                        et monstres sur niveau 3.-               
+                                        Tester collisions et win                 
+                                        sur niveau 3.                            
+
+  Ajout des        - Les niveaux 2 et 3 - Adapter initializeCoins   3 pts        Radhwen
+  “coins” dans le  contiennent 15 coins pour niveaux 2/3 (scan                   
+  niveau 2 et 3    placés aléatoirement tuiles valides, éviter                   
+                   sur des positions    zones spéciales, 15                      
+                   valides              positions).- Appliquer la                
+                   (herbe/terre).-      tuile 9 sans effacer la clé              
+                   Coins collectables   (check ≠ arrivée).-                      
+                   et visibles.- Aucune Dessiner les coins                       
+                   pièce sur            (overlay).- Implémenter                  
+                   départ/arrivée.      collecte + removeCoin (maj               
+                                        coinCount).- Tester                      
+                                        collecte sur maps 2/3.                   
+
+  Ajout de         - Obstacles Feu      - Ajouter la tuile feu      3 pts        Nada
+  nouveaux         présents dans les    (feu.png) avec animation                 
+  obstacles dans   niveaux 2/3.-        (3–4 frames).- Intégrer                  
+  les niveaux 2 et Collision = perte de obstacles dans map2.txt /                
+  3                PV + animation.-     map3.txt (placement libre,               
+                   Obstacles non        clusters si besoin).- Gérer              
+                   traversables.        collision feu dans update()              
+                                        : perte de PV + i-frames.-               
+                                        Animation dans draw(). -                 
+                                        Tester perte PV + effet                  
+                                        visuel sur le joueur.                    
+
+  Correction du    - Menu stable : NEW  - Fix reset complet         2 pts        Nada
+  menu de début et GAME, SOUND ON/OFF,  (currentMap=0, reload map1,              
+  option “Rejouer” QUIT.- “Rejouer” =>  setPoints/initCoins(0)).-                
+                   reset total après    Améliorer esthétique du                  
+                   victoire/défaite.-   menu (background, couleurs,              
+                   Retour automatique   gradient).- Implémenter                  
+                   au menu après 3s en  retour automatique après                 
+                   cas de game over ou  délai (timer                             
+                   win.                 gameOverDelay).- Reset                   
+                                        joueur (spawn map1,                      
+                                        PV/coins/key=0) +                        
+                                        monstres.- Tester “Rejouer”              
+                                        après win/game over.                     
+  --------------------------------------------------------------------------------------------
