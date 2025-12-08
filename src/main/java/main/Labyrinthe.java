@@ -46,7 +46,7 @@ public class Labyrinthe extends TileManager {
             tile[9].collision = false;
         }
 
-        /
+        
         if (tile.length > 10 && tile[10] != null) {
             tile[10].collision = false;
         }
